@@ -151,6 +151,54 @@ def find_cameras(backend: CameraBackend = CameraBackend.opencv) -> None:
     _lerobot("lerobot-find-cameras", [backend.value])
 
 
+@app.command("scan-cameras")
+def scan_cameras(max_index: int = 8) -> None:
+    """Brute-force scan OpenCV indices 0..max_index.
+
+    Useful when `find-cameras opencv` misses a device because the platform
+    doesn't advertise it in the standard enumeration. Reads one frame from
+    each index it can open, so a "read_ok=True" line means the device is
+    actually usable, not just enumerated.
+    """
+    try:
+        import cv2  # noqa: WPS433 (deferred so import-time is cheap)
+    except ImportError:
+        typer.echo(
+            "[so101] ERROR: cv2 not importable. Run `uv sync` first.",
+            err=True,
+        )
+        raise typer.Exit(1)
+
+    typer.echo(f"[so101] scanning OpenCV indices 0..{max_index}")
+    found = 0
+    for i in range(max_index + 1):
+        cap = cv2.VideoCapture(i)
+        if not cap.isOpened():
+            cap.release()
+            continue
+        w = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+        h = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+        fps = cap.get(cv2.CAP_PROP_FPS)
+        ok, _ = cap.read()
+        cap.release()
+        typer.echo(
+            f"  [{i}] {w}x{h}@{fps:.1f}  read_ok={ok}"
+        )
+        if ok:
+            found += 1
+    if not found:
+        typer.echo(
+            "[so101] No usable cameras found. On Windows, check Device Manager "
+            "under 'Cameras' / 'Imaging devices'. On macOS, grant Terminal "
+            "camera permission in System Settings > Privacy & Security > Camera."
+        )
+    else:
+        typer.echo(
+            f"[so101] {found} usable camera(s). Set CAMERA_TYPE=opencv and "
+            f"CAM_INDEX=<index> in .env."
+        )
+
+
 @app.command("setup-motors")
 def setup_motors(role: Role) -> None:
     """First-time motor id / baudrate flashing (writes to motor EEPROM)."""

@@ -288,6 +288,16 @@ def record(
     upload: bool = typer.Option(
         True, "--upload/--no-upload", help="Push the finished dataset to HF Hub."
     ),
+    auto_name: bool = typer.Option(
+        False,
+        "--auto-name",
+        help="Auto-name as <prefix>-N by querying HF for the next free integer.",
+    ),
+    prefix: str = typer.Option(
+        "d-com",
+        "--prefix",
+        help="Prefix for --auto-name (default: 'd-com' -> 'd-com-0', 'd-com-1', ...).",
+    ),
 ) -> None:
     """Record a LeRobot v3 dataset by teleoperating the follower."""
     cfg = Config.load()
@@ -295,6 +305,29 @@ def record(
     leader_port = _require("LEADER_PORT", cfg.leader_port)
     _check_port_platform("FOLLOWER_PORT", follower_port)
     _check_port_platform("LEADER_PORT", leader_port)
+
+    # Auto-naming: query the Hub for the next free `<prefix>-N` under HF_USER.
+    dataset_name = cfg.dataset_name
+    if auto_name:
+        from so101.hf import next_dataset_name, resolve_token
+
+        token = resolve_token()
+        if not token:
+            typer.echo(
+                "[so101] ERROR: --auto-name requires HF_TOKEN in .env "
+                "(or `hf auth login`).",
+                err=True,
+            )
+            raise typer.Exit(2)
+        try:
+            dataset_name = next_dataset_name(cfg.hf_user, prefix, token=token)
+        except RuntimeError as exc:
+            typer.echo(f"[so101] ERROR: {exc}", err=True)
+            raise typer.Exit(2)
+        typer.echo(f"[so101] auto-name -> {cfg.hf_user}/{dataset_name}")
+
+    repo_id = f"{cfg.hf_user}/{dataset_name}"
+
     args = [
         "--robot.type=so101_follower",
         f"--robot.port={follower_port}",
@@ -303,7 +336,7 @@ def record(
         f"--teleop.port={leader_port}",
         f"--teleop.id={cfg.leader_id}",
         "--display_data=true",
-        f"--dataset.repo_id={cfg.repo_id}",
+        f"--dataset.repo_id={repo_id}",
         f"--dataset.num_episodes={cfg.num_episodes}",
         f"--dataset.episode_time_s={cfg.episode_time_sec}",
         f"--dataset.reset_time_s={cfg.reset_time_sec}",
@@ -315,7 +348,7 @@ def record(
         args.insert(3, cam)
     args.extend(ctx.args)
 
-    typer.echo(f"[so101] recording {cfg.num_episodes} episodes -> {cfg.repo_id}")
+    typer.echo(f"[so101] recording {cfg.num_episodes} episodes -> {repo_id}")
     typer.echo(f"[so101] task: {cfg.task_description}")
     _lerobot("lerobot-record", args)
 

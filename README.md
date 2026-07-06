@@ -49,9 +49,36 @@ POLICY_PATH=./outputs/train/act_so101/checkpoints/last/pretrained_model \
 | `so101 setup-motors {follower,leader}` | `lerobot-setup-motors` | Flash motor ids + baudrate (one time) |
 | `so101 calibrate {follower,leader}` | `lerobot-calibrate` | Range-of-motion calibration |
 | `so101 teleoperate [--with-cam]` | `lerobot-teleoperate` | Live leader-follower mirroring |
-| `so101 record [--no-upload]` | `lerobot-record` | Record LeRobot v3 dataset, optional Hub push |
+| `so101 record [--no-upload] [--auto-name] [--prefix P]` | `lerobot-record` | Record LeRobot v3 dataset, optional Hub push. `--auto-name` picks the next free `<prefix>-N` under HF_USER |
 | `so101 train` | `lerobot-train` | ACT policy training |
 | `so101 infer [--no-record]` | `lerobot-record --policy.path=...` | Policy-driven rollouts |
+
+## Recording datasets
+
+`so101 record` reads `HF_USER`, `DATASET_NAME`, `TASK_DESCRIPTION`, `NUM_EPISODES`, `EPISODE_TIME_SEC` and `RESET_TIME_SEC` from `.env`, drives the follower via the leader, and (by default) uploads the finished dataset to `https://huggingface.co/datasets/<HF_USER>/<DATASET_NAME>`.
+
+Uploads require `HF_TOKEN` in `.env` (or `hf auth login`). Get a token with **write** scope at [huggingface.co/settings/tokens](https://huggingface.co/settings/tokens).
+
+**Manual naming** (default): whatever `DATASET_NAME=` says wins.
+```
+DATASET_NAME=so101-pick-cube
+uv run so101 record
+# → chris241094/so101-pick-cube
+```
+
+**Auto-naming** with `--auto-name`: queries the HF Hub for existing datasets under `HF_USER` matching `<prefix>-<int>`, picks the next free integer. Prefix defaults to `d-com`.
+```
+uv run so101 record --auto-name              # → chris241094/d-com-0 (first time)
+uv run so101 record --auto-name              # → chris241094/d-com-1
+uv run so101 record --auto-name --prefix demo  # → chris241094/demo-0
+```
+
+Auto-naming queries the Hub live rather than counting locally, so recording sessions on multiple machines never collide on the same name.
+
+**Local-only test run** (skip upload for a dry run):
+```
+uv run so101 record --no-upload
+```
 
 ## Layout
 

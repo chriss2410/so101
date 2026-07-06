@@ -35,6 +35,11 @@ class Role(str, Enum):
     leader = "leader"
 
 
+class CameraBackend(str, Enum):
+    opencv = "opencv"
+    realsense = "realsense"
+
+
 # --- helpers ----------------------------------------------------------------
 
 
@@ -113,8 +118,9 @@ def init() -> None:
         typer.echo(f"[so101] wrote {env_path}")
     typer.echo(
         "[so101] Edit .env, then run:\n"
-        "  so101 find-port\n"
-        "  so101 setup-motors follower  (first-time only)\n"
+        "  so101 find-port                 # discover motor USB ports\n"
+        "  so101 find-cameras              # list USB webcams (or `realsense`)\n"
+        "  so101 setup-motors follower     # first-time only\n"
         "  so101 setup-motors leader\n"
         "  so101 calibrate follower\n"
         "  so101 calibrate leader\n"
@@ -129,6 +135,20 @@ def init() -> None:
 def find_port() -> None:
     """Discover the USB serial port of an arm's MotorBus."""
     _lerobot("lerobot-find-port", [])
+
+
+@app.command("find-cameras")
+def find_cameras(backend: CameraBackend = CameraBackend.opencv) -> None:
+    """List attached cameras.
+
+    Examples:
+      so101 find-cameras                # list USB webcams via OpenCV
+      so101 find-cameras realsense      # list Intel RealSense devices
+
+    Copy the resulting serial (RealSense) or index (OpenCV) into .env as
+    CAM_SERIAL or CAM_INDEX.
+    """
+    _lerobot("lerobot-find-cameras", [backend.value])
 
 
 @app.command("setup-motors")

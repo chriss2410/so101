@@ -13,6 +13,7 @@ uv run so101 init                # seeds .env from .env.example
 # edit so101/.env with FOLLOWER_PORT / LEADER_PORT / HF_USER
 
 uv run so101 find-port           # discover /dev/tty.usbmodem... for each arm
+uv run so101 find-cameras        # list webcams (or `realsense` for RealSense)
 uv run so101 setup-motors follower   # one-time only
 uv run so101 setup-motors leader
 uv run so101 calibrate follower
@@ -44,6 +45,7 @@ POLICY_PATH=./outputs/train/act_so101/checkpoints/last/pretrained_model \
 |---|---|---|
 | `so101 init` | (none) | Copies `.env.example` to `.env` |
 | `so101 find-port` | `lerobot-find-port` | Discover a MotorBus USB port |
+| `so101 find-cameras [opencv\|realsense]` | `lerobot-find-cameras` | List attached webcams / RealSense devices |
 | `so101 setup-motors {follower,leader}` | `lerobot-setup-motors` | Flash motor ids + baudrate (one time) |
 | `so101 calibrate {follower,leader}` | `lerobot-calibrate` | Range-of-motion calibration |
 | `so101 teleoperate [--with-cam]` | `lerobot-teleoperate` | Live leader-follower mirroring |
@@ -86,6 +88,27 @@ DEVICE=cpu
 For SO-101 this is fine: ACT is a small model, and at 30 Hz control / 100-step chunks the effective inference rate is under 1 Hz. Modern laptop CPUs handle that with room to spare. If profiling later shows you need GPU inference, the clean path is: train on the AWS L40S (via VTP or plain `lerobot-train`), export the checkpoint to ONNX, and run inference through `onnxruntime` with the DirectML execution provider - that decouples inference from LeRobot's PyTorch stack entirely and works on any DX12 AMD GPU.
 
 **WSL2 is not recommended** for record/teleop: [users report](https://zenn.dev/komination/articles/464cb07be1b77f) that `usbipd-win` adds enough latency to cause motor bus disconnects during calibration.
+
+## Cameras
+
+Two backends are supported, selected via `CAMERA_TYPE` in `.env`:
+
+**USB webcam (default):**
+```
+CAMERA_TYPE=opencv
+CAM_INDEX=0        # 0 = built-in, 1+ = external USB
+```
+
+**Intel RealSense (D405 / D415 / D435):**
+```
+CAMERA_TYPE=intelrealsense
+CAM_SERIAL=233522074606   # find via `so101 find-cameras realsense`
+CAM_USE_DEPTH=false       # true = record depth alongside RGB
+```
+
+The `intelrealsense` extra is pulled by default (`pyrealsense2` on Linux/Windows, `pyrealsense2-macosx` on macOS). Note: LeRobot's docs warn that RealSense on macOS is [unstable](https://github.com/IntelRealSense/librealsense/issues/12307) and may need `sudo` to acquire power state — Linux and Windows are the smooth paths.
+
+Set `CAMERA_TYPE=none` to record a state-only dataset.
 
 ## Notes
 

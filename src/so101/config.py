@@ -51,6 +51,13 @@ def _env_int(name: str, default: int) -> int:
     return int(raw) if raw else default
 
 
+def _env_bool(name: str, default: bool = False) -> bool:
+    raw = os.environ.get(name, "").strip().lower()
+    if not raw:
+        return default
+    return raw in {"1", "true", "yes", "y", "on"}
+
+
 @dataclass(frozen=True)
 class Config:
     follower_port: str
@@ -58,7 +65,10 @@ class Config:
     follower_id: str
     leader_id: str
 
-    cam_index: str  # str because "none" is a valid sentinel
+    camera_type: str  # "opencv" | "intelrealsense" | "none"
+    cam_index: str    # OpenCV: device index / path
+    cam_serial: str   # RealSense: device serial number
+    cam_use_depth: bool
     cam_width: int
     cam_height: int
     cam_fps: int
@@ -78,12 +88,21 @@ class Config:
     @classmethod
     def load(cls) -> "Config":
         _load_env()
+        # Back-compat: if CAMERA_TYPE isn't set but the old CAM_INDEX=none
+        # sentinel is, treat that as "no camera".
+        cam_type_raw = _env("CAMERA_TYPE", "").strip().lower()
+        cam_index_raw = _env("CAM_INDEX", "0")
+        if not cam_type_raw:
+            cam_type_raw = "none" if cam_index_raw.lower() == "none" else "opencv"
         return cls(
             follower_port=_env("FOLLOWER_PORT"),
             leader_port=_env("LEADER_PORT"),
             follower_id=_env("FOLLOWER_ID", "so101_follower_a"),
             leader_id=_env("LEADER_ID", "so101_leader_a"),
-            cam_index=_env("CAM_INDEX", "0"),
+            camera_type=cam_type_raw,
+            cam_index=cam_index_raw,
+            cam_serial=_env("CAM_SERIAL", "").strip(),
+            cam_use_depth=_env_bool("CAM_USE_DEPTH", False),
             cam_width=_env_int("CAM_WIDTH", 640),
             cam_height=_env_int("CAM_HEIGHT", 480),
             cam_fps=_env_int("CAM_FPS", 30),
@@ -94,7 +113,7 @@ class Config:
             episode_time_sec=_env_int("EPISODE_TIME_SEC", 30),
             reset_time_sec=_env_int("RESET_TIME_SEC", 10),
             policy_path=_env("POLICY_PATH", ""),
-            device=_env("DEVICE", "mps"),
+            device=_env("DEVICE", "cpu"),
         )
 
     @property
@@ -106,11 +125,37 @@ class Config:
         return f"{self.hf_user}/eval_{self.dataset_name}"
 
     def camera_flag(self) -> Optional[str]:
-        """The `--robot.cameras=...` argument, or None to omit."""
-        if self.cam_index.lower() == "none":
+        """Build the `--robot.cameras=...` argument for lerobot-record etc.
+
+        Returns None if the camera is disabled (CAMERA_TYPE=none), in which
+        case callers should omit the flag entirely so LeRobot records a
+        state-only dataset.
+        """
+        cam_type = self.camera_type.lower()
+        if cam_type in {"", "none"}:
             return None
-        return (
-            "--robot.cameras="
-            f"{{ front: {{type: opencv, index_or_path: {self.cam_index}, "
-            f"width: {self.cam_width}, height: {self.cam_height}, fps: {self.cam_fps}}}}}"
-        )
+
+        if cam_type == "opencv":
+            body = (
+                f"type: opencv, index_or_path: {self.cam_index}, "
+                f"width: {self.cam_width}, height: {self.cam_height}, "
+                f"fps: {self.cam_fps}"
+            )
+        elif cam_type == "intelrealsense":
+            if not self.cam_serial:
+                raise ValueError(
+                    "CAMERA_TYPE=intelrealsense requires CAM_SERIAL. "
+                    "Run `so101 find-cameras realsense` to list attached devices."
+                )
+            body = (
+                f"type: intelrealsense, serial_number_or_name: {self.cam_serial}, "
+                f"width: {self.cam_width}, height: {self.cam_height}, "
+                f"fps: {self.cam_fps}, use_depth: {str(self.cam_use_depth).lower()}"
+            )
+        else:
+            raise ValueError(
+                f"Unknown CAMERA_TYPE={self.camera_type!r}. "
+                f"Expected one of: opencv, intelrealsense, none."
+            )
+
+        return "--robot.cameras=" + "{ front: {" + body + "}}"

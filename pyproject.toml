@@ -6,7 +6,9 @@ readme = "README.md"
 requires-python = ">=3.12,<3.13"
 dependencies = [
     # LeRobot core + Feetech SDK (STS3215 motors on SO-101)
-    "lerobot[feetech]>=0.6.0",
+    # `intelrealsense` extra pulls pyrealsense2 (Linux/Windows) or
+    # pyrealsense2-macosx (macOS) for D405/D415/D435 support.
+    "lerobot[feetech,intelrealsense]>=0.6.0",
     # CLI
     "typer>=0.12.0",
     "python-dotenv>=1.0.0",

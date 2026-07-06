@@ -138,7 +138,12 @@ def find_port() -> None:
 
 
 @app.command("find-cameras")
-def find_cameras(backend: CameraBackend = CameraBackend.opencv) -> None:
+def find_cameras(
+    backend: CameraBackend = typer.Argument(
+        CameraBackend.opencv,
+        help="Which camera backend to enumerate.",
+    ),
+) -> None:
     """List attached cameras.
 
     Examples:

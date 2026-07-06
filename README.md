@@ -108,6 +108,20 @@ CAM_USE_DEPTH=false       # true = record depth alongside RGB
 
 The `intelrealsense` extra is pulled by default (`pyrealsense2` on Linux/Windows, `pyrealsense2-macosx` on macOS). Note: LeRobot's docs warn that RealSense on macOS is [unstable](https://github.com/IntelRealSense/librealsense/issues/12307) and may need `sudo` to acquire power state — Linux and Windows are the smooth paths.
 
+### RealSense: install the SDK once per machine
+
+`pyrealsense2` from pip only provides Python bindings — the actual USB driver stack is separate. If `so101 find-cameras realsense` returns nothing and the camera also doesn't appear as an OpenCV device, the SDK is missing.
+
+**Windows:** download the latest `Intel.RealSense.SDK-WIN10-<version>.exe` from [the librealsense releases page](https://github.com/IntelRealSense/librealsense/releases/latest), run it with default options, then plug the camera into a **USB 3** port (blue plastic inside, or marked "SS" / "10Gb"). Launch **RealSense Viewer** from the Start menu to confirm the camera streams. `so101 find-cameras realsense` will then work.
+
+**Linux:** `sudo apt install librealsense2-utils librealsense2-dkms` (Ubuntu) or install from [Intel's repo](https://github.com/IntelRealSense/librealsense/blob/master/doc/distribution_linux.md). Run `realsense-viewer` to confirm.
+
+**Troubleshooting the "SDK installed, still 0 devices" case:**
+- USB **3** port, not USB 2 (blue plastic vs black). Direct to laptop, no hub.
+- **Flip the USB-C connector** on the camera side. RealSense has a known polarity bug.
+- Some C-C cables are USB 2 only; use the cable that came with the camera.
+- Windows Device Manager should show it under **Cameras** as *"Intel(R) RealSense(TM) Depth Camera 4XX"* (multiple entries). If it shows up under **Universal Serial Bus controllers** with a warning triangle, the driver install failed — re-run the SDK installer.
+
 Set `CAMERA_TYPE=none` to record a state-only dataset.
 
 ## Notes

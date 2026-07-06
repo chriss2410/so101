@@ -1,0 +1,116 @@
+"""Runtime configuration loaded from `.env` (falls back to `.env.example`).
+
+Every field can be overridden by an environment variable of the same name so
+that inline overrides work like they did in the shell version:
+
+    NUM_EPISODES=5 so101 record
+"""
+
+from __future__ import annotations
+
+import os
+from dataclasses import dataclass, field
+from pathlib import Path
+from typing import Optional
+
+from dotenv import load_dotenv
+
+
+def _project_root() -> Path:
+    # src/so101/config.py -> so101/
+    return Path(__file__).resolve().parents[2]
+
+
+def _load_env() -> Path:
+    """Load .env if present; fall back to .env.example with a warning."""
+    root = _project_root()
+    env_path = root / ".env"
+    if env_path.exists():
+        load_dotenv(env_path, override=False)
+        return env_path
+    example = root / ".env.example"
+    if example.exists():
+        # Only fill values that are not already in the environment; that way
+        # `.env.example` acts as a sane default when the user hasn't done
+        # `so101 init` yet, but real env vars still win.
+        load_dotenv(example, override=False)
+        print(
+            f"[so101] WARNING: {env_path} not found - using defaults from .env.example. "
+            f"Run `so101 init` to create a real .env.",
+            flush=True,
+        )
+    return env_path
+
+
+def _env(name: str, default: str = "") -> str:
+    return os.environ.get(name, default)
+
+
+def _env_int(name: str, default: int) -> int:
+    raw = os.environ.get(name)
+    return int(raw) if raw else default
+
+
+@dataclass(frozen=True)
+class Config:
+    follower_port: str
+    leader_port: str
+    follower_id: str
+    leader_id: str
+
+    cam_index: str  # str because "none" is a valid sentinel
+    cam_width: int
+    cam_height: int
+    cam_fps: int
+
+    hf_user: str
+    dataset_name: str
+    task_description: str
+    num_episodes: int
+    episode_time_sec: int
+    reset_time_sec: int
+
+    policy_path: str
+    device: str
+
+    project_root: Path = field(default_factory=_project_root)
+
+    @classmethod
+    def load(cls) -> "Config":
+        _load_env()
+        return cls(
+            follower_port=_env("FOLLOWER_PORT"),
+            leader_port=_env("LEADER_PORT"),
+            follower_id=_env("FOLLOWER_ID", "so101_follower_a"),
+            leader_id=_env("LEADER_ID", "so101_leader_a"),
+            cam_index=_env("CAM_INDEX", "0"),
+            cam_width=_env_int("CAM_WIDTH", 640),
+            cam_height=_env_int("CAM_HEIGHT", 480),
+            cam_fps=_env_int("CAM_FPS", 30),
+            hf_user=_env("HF_USER", "your-hf-username"),
+            dataset_name=_env("DATASET_NAME", "so101-pick-cube"),
+            task_description=_env("TASK_DESCRIPTION", "Pick up the cube"),
+            num_episodes=_env_int("NUM_EPISODES", 20),
+            episode_time_sec=_env_int("EPISODE_TIME_SEC", 30),
+            reset_time_sec=_env_int("RESET_TIME_SEC", 10),
+            policy_path=_env("POLICY_PATH", ""),
+            device=_env("DEVICE", "mps"),
+        )
+
+    @property
+    def repo_id(self) -> str:
+        return f"{self.hf_user}/{self.dataset_name}"
+
+    @property
+    def eval_repo_id(self) -> str:
+        return f"{self.hf_user}/eval_{self.dataset_name}"
+
+    def camera_flag(self) -> Optional[str]:
+        """The `--robot.cameras=...` argument, or None to omit."""
+        if self.cam_index.lower() == "none":
+            return None
+        return (
+            "--robot.cameras="
+            f"{{ front: {{type: opencv, index_or_path: {self.cam_index}, "
+            f"width: {self.cam_width}, height: {self.cam_height}, fps: {self.cam_fps}}}}}"
+        )

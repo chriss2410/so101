@@ -1,0 +1,17 @@
+# macOS
+.DS_Store
+
+# uv virtualenv (deps rebuilt from uv.lock)
+.venv/
+
+# secrets / local config
+.env
+
+# LeRobot / training outputs
+outputs/
+wandb/
+
+# Python
+__pycache__/
+*.pyc
+*.egg-info/

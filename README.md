@@ -4,6 +4,12 @@ Minimal uv-managed project for teleoperating, recording and running inference on
 
 Two arms are needed: a **leader** (moved by hand) and a **follower** (the robot). A USB webcam on the workspace is the default sensor.
 
+## Documentation
+
+- **[docs/WORKFLOW.md](docs/WORKFLOW.md)** — the full pipeline (teleop → record → train → deploy) with detailed step-by-step, `.env` reference, calibration sanity checks
+- **[docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)** — remote inference runbook: AWS box, policy server, gRPC transport, troubleshooting
+- **[docs/DAY_2.md](docs/DAY_2.md)** — day-2 cheatsheet: shortest path back to a working inference loop when picking this up cold
+
 ## Quick start
 
 ```bash

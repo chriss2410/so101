@@ -702,5 +702,28 @@ def infer_remote(ctx: typer.Context) -> None:
         raise typer.Exit(completed.returncode)
 
 
+@app.command()
+def ui(
+    host: str = typer.Option("127.0.0.1", "--host", help="Bind address for the Gradio server."),
+    port: int = typer.Option(7861, "--port", help="Port for the Gradio server."),
+) -> None:
+    """Launch the Gradio inference dashboard.
+
+    Small operator UI on top of `so101 infer-remote`: live camera preview,
+    record/reset start position, and a timed inference button with
+    per-run overrides for fps / actions-per-chunk / etc.
+    """
+    try:
+        from so101.ui import launch
+    except ImportError as exc:
+        typer.echo(
+            f"[so101] ERROR: gradio is not installed ({exc}).\n"
+            f"[so101] Run `uv sync` to pick up the new UI dependency.",
+            err=True,
+        )
+        raise typer.Exit(1)
+    launch(host=host, port=port)
+
+
 if __name__ == "__main__":
     app()

@@ -49,7 +49,7 @@ POLICY_PATH=./outputs/train/act_so101/checkpoints/last/pretrained_model \
 | `so101 setup-motors {follower,leader}` | `lerobot-setup-motors` | Flash motor ids + baudrate (one time) |
 | `so101 calibrate {follower,leader}` | `lerobot-calibrate` | Range-of-motion calibration |
 | `so101 teleoperate [--with-cam]` | `lerobot-teleoperate` | Live leader-follower mirroring |
-| `so101 record [--no-upload] [--auto-name] [--prefix P]` | `lerobot-record` | Record LeRobot v3 dataset, optional Hub push. `--auto-name` picks the next free `<prefix>-N` under HF_USER |
+| `so101 record [--name N] [--no-upload] [--auto-name] [--prefix P]` | `lerobot-record` | Record LeRobot v3 dataset, optional Hub push. `--name` sets a one-off dataset name; `--auto-name` picks the next free `<prefix>-N` under HF_USER |
 | `so101 train` | `lerobot-train` | ACT policy training |
 | `so101 infer [--no-record]` | `lerobot-rollout --policy.pretrained_path=...` | Policy-driven rollouts (local inference) |
 | `so101 serve <start\|stop\|status\|logs\|restart>` | SSH + `serve.sh` on GPU box | Manage the remote policy server |
@@ -68,6 +68,12 @@ uv run so101 record
 # → chris241094/so101-pick-cube
 ```
 
+**One-off custom name** with `--name` (overrides `.env`, no edit needed):
+```
+uv run so101 record --name cup-stack-v2
+# → chris241094/cup-stack-v2
+```
+
 **Auto-naming** with `--auto-name`: queries the HF Hub for existing datasets under `HF_USER` matching `<prefix>-<int>`, picks the next free integer. Prefix defaults to `d-com`.
 ```
 uv run so101 record --auto-name              # → chris241094/d-com-0 (first time)
@@ -75,12 +81,19 @@ uv run so101 record --auto-name              # → chris241094/d-com-1
 uv run so101 record --auto-name --prefix demo  # → chris241094/demo-0
 ```
 
-Auto-naming queries the Hub live rather than counting locally, so recording sessions on multiple machines never collide on the same name.
+Auto-naming queries both the Hub and the local LeRobot cache, so it also skips slots that LeRobot previously renamed to `<prefix>-N_YYYYMMDD_HHMMSS` on a cache collision. Precedence for the three modes: `--name` > `--auto-name` > `DATASET_NAME`. Passing both `--name` and `--auto-name` errors out.
 
 **Local-only test run** (skip upload for a dry run):
 ```
 uv run so101 record --no-upload
 ```
+
+At the end of every recording, `so101 record` prints the dataset URL and a LeRobot visualizer link, e.g.
+```
+[so101] Dataset:    https://huggingface.co/datasets/chris241094/cup-stack-v2
+[so101] Visualizer: https://huggingface.co/spaces/lerobot/visualize_dataset?path=chris241094/cup-stack-v2
+```
+If LeRobot appended a `_YYYYMMDD_HHMMSS` suffix (local cache collision), the printed name reflects the actual uploaded id, not the requested one.
 
 ## Remote inference (policy on AWS GPU, arm on Mac)
 

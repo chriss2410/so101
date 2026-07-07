@@ -1,0 +1,1041 @@
+DEBUG 2026-07-07 10:57:49 rt_utils.py:248 Third-party plugin import summary: imported=[] failed=[]
+DEBUG 2026-07-07 10:57:49 d_metavar.py:22 Metavar for type None: None
+DEBUG 2026-07-07 10:57:49 formatter.py:52 action type: None, Result: , nargs: 0, default metavar: None
+DEBUG 2026-07-07 10:57:49 d_metavar.py:22 Metavar for type <class 'str'>: str
+DEBUG 2026-07-07 10:57:49 formatter.py:52 action type: <class 'str'>, Result: str, nargs: None, default metavar: None
+DEBUG 2026-07-07 10:57:49 _wrapper.py:168 wrapped field at policy_type has a default value of None
+DEBUG 2026-07-07 10:57:49 _wrapper.py:168 wrapped field at pretrained_name_or_path has a default value of None
+DEBUG 2026-07-07 10:57:49 _wrapper.py:168 wrapped field at actions_per_chunk has a default value of None
+DEBUG 2026-07-07 10:57:49 _wrapper.py:168 wrapped field at task has a default value of 
+DEBUG 2026-07-07 10:57:49 _wrapper.py:168 wrapped field at server_address has a default value of localhost:8080
+DEBUG 2026-07-07 10:57:49 _wrapper.py:168 wrapped field at policy_device has a default value of cpu
+DEBUG 2026-07-07 10:57:49 _wrapper.py:168 wrapped field at client_device has a default value of cpu
+DEBUG 2026-07-07 10:57:49 _wrapper.py:168 wrapped field at chunk_size_threshold has a default value of 0.5
+DEBUG 2026-07-07 10:57:49 _wrapper.py:168 wrapped field at fps has a default value of 30
+DEBUG 2026-07-07 10:57:49 _wrapper.py:168 wrapped field at aggregate_fn_name has a default value of weighted_average
+DEBUG 2026-07-07 10:57:49 _wrapper.py:168 wrapped field at debug_visualize_queue_size has a default value of False
+DEBUG 2026-07-07 10:57:49 _wrapper.py:309 Arg options for field 'policy_type': {'required': False, 'dest': 'policy_type', 'default': None, 'help': 'Policy configuration', 'type': <class 'str'>}
+DEBUG 2026-07-07 10:57:49 _wrapper.py:309 Arg options for field 'pretrained_name_or_path': {'required': False, 'dest': 'pretrained_name_or_path', 'default': None, 'type': <class 'str'>}
+DEBUG 2026-07-07 10:57:49 d_metavar.py:22 Metavar for type <class 'str'>: str
+DEBUG 2026-07-07 10:57:49 formatter.py:52 action type: <class 'str'>, Result: str, nargs: None, default metavar: None
+DEBUG 2026-07-07 10:57:49 _wrapper.py:168 wrapped field at robot.port has a default value of None
+DEBUG 2026-07-07 10:57:49 _wrapper.py:168 wrapped field at robot.disable_torque_on_disconnect has a default value of True
+DEBUG 2026-07-07 10:57:49 _wrapper.py:201 wrapped field at robot.max_relative_target has a default value of None
+DEBUG 2026-07-07 10:57:49 _wrapper.py:201 wrapped field at robot.cameras has a default value of {}
+DEBUG 2026-07-07 10:57:49 _wrapper.py:168 wrapped field at robot.use_degrees has a default value of True
+DEBUG 2026-07-07 10:57:49 _wrapper.py:201 wrapped field at robot.id has a default value of None
+DEBUG 2026-07-07 10:57:49 _wrapper.py:201 wrapped field at robot.calibration_dir has a default value of None
+DEBUG 2026-07-07 10:57:49 _wrapper.py:168 wrapped field at robot.port has a default value of None
+DEBUG 2026-07-07 10:57:49 _wrapper.py:168 wrapped field at robot.disable_torque_on_disconnect has a default value of True
+DEBUG 2026-07-07 10:57:49 _wrapper.py:201 wrapped field at robot.max_relative_target has a default value of None
+DEBUG 2026-07-07 10:57:49 _wrapper.py:201 wrapped field at robot.cameras has a default value of {}
+DEBUG 2026-07-07 10:57:49 _wrapper.py:168 wrapped field at robot.use_degrees has a default value of True
+DEBUG 2026-07-07 10:57:49 _wrapper.py:201 wrapped field at robot.id has a default value of None
+DEBUG 2026-07-07 10:57:49 _wrapper.py:201 wrapped field at robot.calibration_dir has a default value of None
+DEBUG 2026-07-07 10:57:49 _wrapper.py:201 wrapped field at robot.id has a default value of None
+DEBUG 2026-07-07 10:57:49 _wrapper.py:201 wrapped field at robot.calibration_dir has a default value of None
+DEBUG 2026-07-07 10:57:49 _wrapper.py:168 wrapped field at robot.left_arm_config.port has a default value of None
+DEBUG 2026-07-07 10:57:49 _wrapper.py:168 wrapped field at robot.left_arm_config.disable_torque_on_disconnect has a default value of True
+DEBUG 2026-07-07 10:57:49 _wrapper.py:201 wrapped field at robot.left_arm_config.max_relative_target has a default value of None
+DEBUG 2026-07-07 10:57:49 _wrapper.py:201 wrapped field at robot.left_arm_config.cameras has a default value of {}
+DEBUG 2026-07-07 10:57:49 _wrapper.py:168 wrapped field at robot.left_arm_config.use_degrees has a default value of True
+DEBUG 2026-07-07 10:57:49 _wrapper.py:168 wrapped field at robot.right_arm_config.port has a default value of None
+DEBUG 2026-07-07 10:57:49 _wrapper.py:168 wrapped field at robot.right_arm_config.disable_torque_on_disconnect has a default value of True
+DEBUG 2026-07-07 10:57:49 _wrapper.py:201 wrapped field at robot.right_arm_config.max_relative_target has a default value of None
+DEBUG 2026-07-07 10:57:49 _wrapper.py:201 wrapped field at robot.right_arm_config.cameras has a default value of {}
+DEBUG 2026-07-07 10:57:49 _wrapper.py:168 wrapped field at robot.right_arm_config.use_degrees has a default value of True
+DEBUG 2026-07-07 10:57:49 _wrapper.py:201 wrapped field at robot.cameras has a default value of {}
+DEBUG 2026-07-07 10:57:49 _wrapper.py:201 wrapped field at robot.id has a default value of None
+DEBUG 2026-07-07 10:57:49 _wrapper.py:201 wrapped field at robot.calibration_dir has a default value of None
+DEBUG 2026-07-07 10:57:49 _wrapper.py:168 wrapped field at robot.port has a default value of None
+DEBUG 2026-07-07 10:57:49 _wrapper.py:168 wrapped field at robot.disable_torque_on_disconnect has a default value of True
+DEBUG 2026-07-07 10:57:49 _wrapper.py:201 wrapped field at robot.max_relative_target has a default value of None
+DEBUG 2026-07-07 10:57:49 _wrapper.py:201 wrapped field at robot.cameras has a default value of {}
+DEBUG 2026-07-07 10:57:49 _wrapper.py:168 wrapped field at robot.use_degrees has a default value of False
+DEBUG 2026-07-07 10:57:49 _wrapper.py:201 wrapped field at robot.id has a default value of None
+DEBUG 2026-07-07 10:57:49 _wrapper.py:201 wrapped field at robot.calibration_dir has a default value of None
+DEBUG 2026-07-07 10:57:49 _wrapper.py:168 wrapped field at robot.port has a default value of None
+DEBUG 2026-07-07 10:57:49 _wrapper.py:168 wrapped field at robot.disable_torque_on_disconnect has a default value of True
+DEBUG 2026-07-07 10:57:49 _wrapper.py:201 wrapped field at robot.max_relative_target has a default value of None
+DEBUG 2026-07-07 10:57:49 _wrapper.py:201 wrapped field at robot.cameras has a default value of {}
+DEBUG 2026-07-07 10:57:49 _wrapper.py:168 wrapped field at robot.use_degrees has a default value of False
+DEBUG 2026-07-07 10:57:49 docstring.py:65 Couldn't find the attribute docstring: could not find class definition
+DEBUG 2026-07-07 10:57:49 _wrapper.py:309 Arg options for field 'port': {'required': False, 'dest': 'robot.port', 'default': None, 'type': <class 'str'>}
+DEBUG 2026-07-07 10:57:49 docstring.py:65 Couldn't find the attribute docstring: could not find class definition
+DEBUG 2026-07-07 10:57:49 _wrapper.py:309 Arg options for field 'disable_torque_on_disconnect': {'required': False, 'dest': 'robot.disable_torque_on_disconnect', 'default': True, 'help': ' ', 'type': <class 'bool'>}
+DEBUG 2026-07-07 10:57:49 docstring.py:65 Couldn't find the attribute docstring: could not find class definition
+DEBUG 2026-07-07 10:57:49 _wrapper.py:309 Arg options for field 'max_relative_target': {'required': False, 'dest': 'robot.max_relative_target', 'default': None, 'type': typing.Union[float, typing.Dict[str, float], NoneType]}
+DEBUG 2026-07-07 10:57:49 docstring.py:65 Couldn't find the attribute docstring: could not find class definition
+DEBUG 2026-07-07 10:57:49 _wrapper.py:309 Arg options for field 'cameras': {'required': False, 'dest': 'robot.cameras', 'default': {}, 'help': ' ', 'type': typing.Dict[str, lerobot.cameras.configs.CameraConfig]}
+DEBUG 2026-07-07 10:57:49 docstring.py:65 Couldn't find the attribute docstring: could not find class definition
+DEBUG 2026-07-07 10:57:49 _wrapper.py:309 Arg options for field 'use_degrees': {'required': False, 'dest': 'robot.use_degrees', 'default': True, 'help': ' ', 'type': <class 'bool'>}
+DEBUG 2026-07-07 10:57:49 _wrapper.py:309 Arg options for field 'id': {'required': False, 'dest': 'robot.id', 'default': None, 'help': 'Allows to distinguish between different robots of the same type', 'type': typing.Optional[str]}
+DEBUG 2026-07-07 10:57:49 _wrapper.py:309 Arg options for field 'calibration_dir': {'required': False, 'dest': 'robot.calibration_dir', 'default': None, 'help': 'Directory to store calibration file', 'type': typing.Optional[pathlib.Path]}
+DEBUG 2026-07-07 10:57:49 docstring.py:65 Couldn't find the attribute docstring: could not find class definition
+DEBUG 2026-07-07 10:57:49 _wrapper.py:309 Arg options for field 'port': {'required': False, 'dest': 'robot.port', 'default': None, 'type': <class 'str'>}
+DEBUG 2026-07-07 10:57:49 docstring.py:65 Couldn't find the attribute docstring: could not find class definition
+DEBUG 2026-07-07 10:57:49 _wrapper.py:309 Arg options for field 'disable_torque_on_disconnect': {'required': False, 'dest': 'robot.disable_torque_on_disconnect', 'default': True, 'help': ' ', 'type': <class 'bool'>}
+DEBUG 2026-07-07 10:57:49 docstring.py:65 Couldn't find the attribute docstring: could not find class definition
+DEBUG 2026-07-07 10:57:49 _wrapper.py:309 Arg options for field 'max_relative_target': {'required': False, 'dest': 'robot.max_relative_target', 'default': None, 'type': typing.Union[float, typing.Dict[str, float], NoneType]}
+DEBUG 2026-07-07 10:57:49 docstring.py:65 Couldn't find the attribute docstring: could not find class definition
+DEBUG 2026-07-07 10:57:49 _wrapper.py:309 Arg options for field 'cameras': {'required': False, 'dest': 'robot.cameras', 'default': {}, 'help': ' ', 'type': typing.Dict[str, lerobot.cameras.configs.CameraConfig]}
+DEBUG 2026-07-07 10:57:49 docstring.py:65 Couldn't find the attribute docstring: could not find class definition
+DEBUG 2026-07-07 10:57:49 _wrapper.py:309 Arg options for field 'use_degrees': {'required': False, 'dest': 'robot.use_degrees', 'default': True, 'help': ' ', 'type': <class 'bool'>}
+DEBUG 2026-07-07 10:57:49 _wrapper.py:309 Arg options for field 'id': {'required': False, 'dest': 'robot.id', 'default': None, 'help': 'Allows to distinguish between different robots of the same type', 'type': typing.Optional[str]}
+DEBUG 2026-07-07 10:57:49 _wrapper.py:309 Arg options for field 'calibration_dir': {'required': False, 'dest': 'robot.calibration_dir', 'default': None, 'help': 'Directory to store calibration file', 'type': typing.Optional[pathlib.Path]}
+DEBUG 2026-07-07 10:57:49 _wrapper.py:309 Arg options for field 'id': {'required': False, 'dest': 'robot.id', 'default': None, 'help': 'Allows to distinguish between different robots of the same type', 'type': typing.Optional[str]}
+DEBUG 2026-07-07 10:57:49 _wrapper.py:309 Arg options for field 'calibration_dir': {'required': False, 'dest': 'robot.calibration_dir', 'default': None, 'help': 'Directory to store calibration file', 'type': typing.Optional[pathlib.Path]}
+DEBUG 2026-07-07 10:57:49 d_metavar.py:22 Metavar for type <class 'str'>: str
+DEBUG 2026-07-07 10:57:49 formatter.py:52 action type: <class 'str'>, Result: str, nargs: None, default metavar: None
+DEBUG 2026-07-07 10:57:49 _wrapper.py:309 Arg options for field 'port': {'required': False, 'dest': 'robot.left_arm_config.port', 'default': None, 'help': 'Port to connect to the arm', 'type': <class 'str'>}
+DEBUG 2026-07-07 10:57:49 _wrapper.py:309 Arg options for field 'disable_torque_on_disconnect': {'required': False, 'dest': 'robot.left_arm_config.disable_torque_on_disconnect', 'default': True, 'help': ' ', 'type': <class 'bool'>}
+DEBUG 2026-07-07 10:57:49 _wrapper.py:309 Arg options for field 'max_relative_target': {'required': False, 'dest': 'robot.left_arm_config.max_relative_target', 'default': None, 'help': '`max_relative_target` limits the magnitude of the relative positional target vector for safety purposes.\nSet this to a positive scalar to have the same value for all motors, or a dictionary that maps motor\nnames to the max_relative_target value for that motor.', 'type': typing.Union[float, typing.Dict[str, float], NoneType]}
+DEBUG 2026-07-07 10:57:49 _wrapper.py:309 Arg options for field 'cameras': {'required': False, 'dest': 'robot.left_arm_config.cameras', 'default': {}, 'help': 'cameras', 'type': typing.Dict[str, lerobot.cameras.configs.CameraConfig]}
+DEBUG 2026-07-07 10:57:49 _wrapper.py:309 Arg options for field 'use_degrees': {'required': False, 'dest': 'robot.left_arm_config.use_degrees', 'default': True, 'help': 'Set to `True` for backward compatibility with previous policies/dataset', 'type': <class 'bool'>}
+DEBUG 2026-07-07 10:57:49 d_metavar.py:22 Metavar for type <class 'str'>: str
+DEBUG 2026-07-07 10:57:49 formatter.py:52 action type: <class 'str'>, Result: str, nargs: None, default metavar: None
+DEBUG 2026-07-07 10:57:49 _wrapper.py:309 Arg options for field 'port': {'required': False, 'dest': 'robot.right_arm_config.port', 'default': None, 'help': 'Port to connect to the arm', 'type': <class 'str'>}
+DEBUG 2026-07-07 10:57:49 _wrapper.py:309 Arg options for field 'disable_torque_on_disconnect': {'required': False, 'dest': 'robot.right_arm_config.disable_torque_on_disconnect', 'default': True, 'help': ' ', 'type': <class 'bool'>}
+DEBUG 2026-07-07 10:57:49 _wrapper.py:309 Arg options for field 'max_relative_target': {'required': False, 'dest': 'robot.right_arm_config.max_relative_target', 'default': None, 'help': '`max_relative_target` limits the magnitude of the relative positional target vector for safety purposes.\nSet this to a positive scalar to have the same value for all motors, or a dictionary that maps motor\nnames to the max_relative_target value for that motor.', 'type': typing.Union[float, typing.Dict[str, float], NoneType]}
+DEBUG 2026-07-07 10:57:49 _wrapper.py:309 Arg options for field 'cameras': {'required': False, 'dest': 'robot.right_arm_config.cameras', 'default': {}, 'help': 'cameras', 'type': typing.Dict[str, lerobot.cameras.configs.CameraConfig]}
+DEBUG 2026-07-07 10:57:49 _wrapper.py:309 Arg options for field 'use_degrees': {'required': False, 'dest': 'robot.right_arm_config.use_degrees', 'default': True, 'help': 'Set to `True` for backward compatibility with previous policies/dataset', 'type': <class 'bool'>}
+DEBUG 2026-07-07 10:57:49 _wrapper.py:309 Arg options for field 'cameras': {'required': False, 'dest': 'robot.cameras', 'default': {}, 'help': 'Top-level cameras not attached to a specific side. Keys are kept as-is in\nobservations (no `left_`/`right_` prefix). Per-arm cameras (declared on\n`{left,right}_arm_config.cameras`) are prefixed.', 'type': typing.Dict[str, lerobot.cameras.configs.CameraConfig]}
+DEBUG 2026-07-07 10:57:49 _wrapper.py:309 Arg options for field 'id': {'required': False, 'dest': 'robot.id', 'default': None, 'help': 'Allows to distinguish between different robots of the same type', 'type': typing.Optional[str]}
+DEBUG 2026-07-07 10:57:49 _wrapper.py:309 Arg options for field 'calibration_dir': {'required': False, 'dest': 'robot.calibration_dir', 'default': None, 'help': 'Directory to store calibration file', 'type': typing.Optional[pathlib.Path]}
+DEBUG 2026-07-07 10:57:49 _wrapper.py:309 Arg options for field 'port': {'required': False, 'dest': 'robot.port', 'default': None, 'help': 'Port to connect to the arm', 'type': <class 'str'>}
+DEBUG 2026-07-07 10:57:49 _wrapper.py:309 Arg options for field 'disable_torque_on_disconnect': {'required': False, 'dest': 'robot.disable_torque_on_disconnect', 'default': True, 'help': ' ', 'type': <class 'bool'>}
+DEBUG 2026-07-07 10:57:49 _wrapper.py:309 Arg options for field 'max_relative_target': {'required': False, 'dest': 'robot.max_relative_target', 'default': None, 'help': '`max_relative_target` limits the magnitude of the relative positional target vector for safety purposes.\nSet this to a positive scalar to have the same value for all motors, or a dictionary that maps motor\nnames to the max_relative_target value for that motor.', 'type': typing.Union[float, typing.Dict[str, float], NoneType]}
+DEBUG 2026-07-07 10:57:49 _wrapper.py:309 Arg options for field 'cameras': {'required': False, 'dest': 'robot.cameras', 'default': {}, 'help': 'cameras', 'type': typing.Dict[str, lerobot.cameras.configs.CameraConfig]}
+DEBUG 2026-07-07 10:57:49 _wrapper.py:309 Arg options for field 'use_degrees': {'required': False, 'dest': 'robot.use_degrees', 'default': False, 'help': 'Set to `True` for backward compatibility with previous policies/dataset', 'type': <class 'bool'>}
+DEBUG 2026-07-07 10:57:49 _wrapper.py:309 Arg options for field 'id': {'required': False, 'dest': 'robot.id', 'default': None, 'help': 'Allows to distinguish between different robots of the same type', 'type': typing.Optional[str]}
+DEBUG 2026-07-07 10:57:49 _wrapper.py:309 Arg options for field 'calibration_dir': {'required': False, 'dest': 'robot.calibration_dir', 'default': None, 'help': 'Directory to store calibration file', 'type': typing.Optional[pathlib.Path]}
+DEBUG 2026-07-07 10:57:49 _wrapper.py:309 Arg options for field 'port': {'required': False, 'dest': 'robot.port', 'default': None, 'help': 'Port to connect to the arm', 'type': <class 'str'>}
+DEBUG 2026-07-07 10:57:49 _wrapper.py:309 Arg options for field 'disable_torque_on_disconnect': {'required': False, 'dest': 'robot.disable_torque_on_disconnect', 'default': True, 'help': ' ', 'type': <class 'bool'>}
+DEBUG 2026-07-07 10:57:49 _wrapper.py:309 Arg options for field 'max_relative_target': {'required': False, 'dest': 'robot.max_relative_target', 'default': None, 'help': '`max_relative_target` limits the magnitude of the relative positional target vector for safety purposes.\nSet this to a positive scalar to have the same value for all motors, or a dictionary that maps motor\nnames to the max_relative_target value for that motor.', 'type': typing.Union[float, typing.Dict[str, float], NoneType]}
+DEBUG 2026-07-07 10:57:49 _wrapper.py:309 Arg options for field 'cameras': {'required': False, 'dest': 'robot.cameras', 'default': {}, 'help': 'cameras', 'type': typing.Dict[str, lerobot.cameras.configs.CameraConfig]}
+DEBUG 2026-07-07 10:57:49 _wrapper.py:309 Arg options for field 'use_degrees': {'required': False, 'dest': 'robot.use_degrees', 'default': False, 'help': 'Set to `True` for backward compatibility with previous policies/dataset', 'type': <class 'bool'>}
+DEBUG 2026-07-07 10:57:49 _wrapper.py:309 Arg options for field 'actions_per_chunk': {'required': False, 'dest': 'actions_per_chunk', 'default': None, 'help': 'Policies typically output K actions at max, but we can use less to avoid wasting bandwidth (as actions\nwould be aggregated on the client side anyway, depending on the value of `chunk_size_threshold`)', 'type': <class 'int'>}
+DEBUG 2026-07-07 10:57:49 _wrapper.py:309 Arg options for field 'task': {'required': False, 'dest': 'task', 'default': '', 'help': "Task instruction for the robot to execute (e.g., 'fold my tshirt')", 'type': <class 'str'>}
+DEBUG 2026-07-07 10:57:49 _wrapper.py:309 Arg options for field 'server_address': {'required': False, 'dest': 'server_address', 'default': 'localhost:8080', 'help': 'Network configuration', 'type': <class 'str'>}
+DEBUG 2026-07-07 10:57:49 _wrapper.py:309 Arg options for field 'policy_device': {'required': False, 'dest': 'policy_device', 'default': 'cpu', 'help': 'Device configuration', 'type': <class 'str'>}
+DEBUG 2026-07-07 10:57:49 ocstring.py:253 Warning: Unable to parse attribute docstring:         default="cpu",
+DEBUG 2026-07-07 10:57:49 _wrapper.py:309 Arg options for field 'client_device': {'required': False, 'dest': 'client_device', 'default': 'cpu', 'help': ' ', 'type': <class 'str'>}
+DEBUG 2026-07-07 10:57:49 _wrapper.py:309 Arg options for field 'chunk_size_threshold': {'required': False, 'dest': 'chunk_size_threshold', 'default': 0.5, 'help': '\n\nControl behavior configuration', 'type': <class 'float'>}
+DEBUG 2026-07-07 10:57:49 _wrapper.py:309 Arg options for field 'fps': {'required': False, 'dest': 'fps', 'default': 30, 'help': ' ', 'type': <class 'int'>}
+DEBUG 2026-07-07 10:57:49 ocstring.py:253 Warning: Unable to parse attribute docstring:         default="weighted_average",
+DEBUG 2026-07-07 10:57:49 _wrapper.py:309 Arg options for field 'aggregate_fn_name': {'required': False, 'dest': 'aggregate_fn_name', 'default': 'weighted_average', 'help': 'Aggregate function configuration (CLI-compatible)', 'type': <class 'str'>}
+DEBUG 2026-07-07 10:57:49 ocstring.py:253 Warning: Unable to parse attribute docstring:         default=False, metadata={"help": "Visualize the action queue size"}
+DEBUG 2026-07-07 10:57:49 _wrapper.py:309 Arg options for field 'debug_visualize_queue_size': {'required': False, 'dest': 'debug_visualize_queue_size', 'default': False, 'help': '\n\n\nDebug configuration', 'type': <class 'bool'>}
+DEBUG 2026-07-07 10:57:49 gparsing.py:143 
+POST PROCESSING
+
+DEBUG 2026-07-07 10:57:49 gparsing.py:144 (raw) parsed args: Namespace(task='Pick up the cup and stack it into the other one.', server_address='52.59.241.221:7860', policy_type='act', pretrained_name_or_path='chris241094/act-d-com-0', policy_device='cuda', client_device='cpu', fps='30', actions_per_chunk='20', chunk_size_threshold='0.5', aggregate_fn_name='weighted_average', **{'robot.type': 'so101_follower', 'robot.port': '/dev/tty.usbmodem5A680089941', 'robot.id': 'so101_follower_a', 'robot.cameras': '{ front: {type: opencv, index_or_path: 0, width: 640, height: 480, fps: 30}}'})
+DEBUG 2026-07-07 10:57:50 decoding.py:112 from_dict for <class 'lerobot.async_inference.configs.RobotClientConfig'>
+DEBUG 2026-07-07 10:57:50 decoding.py:132 Decode name = policy_type, type = <class 'str'>
+DEBUG 2026-07-07 10:57:50 decoding.py:132 Decode name = pretrained_name_or_path, type = <class 'str'>
+DEBUG 2026-07-07 10:57:50 decoding.py:132 Decode name = robot, type = <class 'lerobot.robots.config.RobotConfig'>
+DEBUG 2026-07-07 10:57:50 decoding.py:112 from_dict for <class 'lerobot.robots.so_follower.config_so_follower.SOFollowerRobotConfig'>
+DEBUG 2026-07-07 10:57:50 decoding.py:132 Decode name = port, type = <class 'str'>
+DEBUG 2026-07-07 10:57:50 decoding.py:132 Decode name = cameras, type = dict[str, lerobot.cameras.configs.CameraConfig]
+DEBUG 2026-07-07 10:57:50 decoding.py:261 Decoding a Dict field: dict[str, lerobot.cameras.configs.CameraConfig]
+DEBUG 2026-07-07 10:57:50 decoding.py:112 from_dict for <class 'lerobot.cameras.opencv.configuration_opencv.OpenCVCameraConfig'>
+DEBUG 2026-07-07 10:57:50 decoding.py:132 Decode name = fps, type = typing.Optional[int]
+DEBUG 2026-07-07 10:57:50 decoding.py:293 Decoding a Union field: typing.Optional[int]
+DEBUG 2026-07-07 10:57:50 decoding.py:132 Decode name = width, type = typing.Optional[int]
+DEBUG 2026-07-07 10:57:50 decoding.py:132 Decode name = height, type = typing.Optional[int]
+DEBUG 2026-07-07 10:57:50 decoding.py:132 Decode name = index_or_path, type = typing.Union[int, pathlib.Path]
+DEBUG 2026-07-07 10:57:50 decoding.py:293 Decoding a Union field: typing.Union[int, pathlib.Path]
+DEBUG 2026-07-07 10:57:50 decoding.py:132 Decode name = id, type = typing.Optional[str]
+DEBUG 2026-07-07 10:57:50 decoding.py:293 Decoding a Union field: typing.Optional[str]
+DEBUG 2026-07-07 10:57:50 decoding.py:132 Decode name = actions_per_chunk, type = <class 'int'>
+DEBUG 2026-07-07 10:57:50 decoding.py:132 Decode name = task, type = <class 'str'>
+DEBUG 2026-07-07 10:57:50 decoding.py:132 Decode name = server_address, type = <class 'str'>
+DEBUG 2026-07-07 10:57:50 decoding.py:132 Decode name = policy_device, type = <class 'str'>
+DEBUG 2026-07-07 10:57:50 decoding.py:132 Decode name = client_device, type = <class 'str'>
+DEBUG 2026-07-07 10:57:50 decoding.py:132 Decode name = chunk_size_threshold, type = <class 'float'>
+DEBUG 2026-07-07 10:57:50 decoding.py:132 Decode name = fps, type = <class 'int'>
+DEBUG 2026-07-07 10:57:50 decoding.py:132 Decode name = aggregate_fn_name, type = <class 'str'>
+INFO 2026-07-07 10:57:50 t_client.py:486 {'actions_per_chunk': 20,
+ 'aggregate_fn_name': 'weighted_average',
+ 'chunk_size_threshold': 0.5,
+ 'client_device': 'cpu',
+ 'debug_visualize_queue_size': False,
+ 'fps': 30,
+ 'policy_device': 'cuda',
+ 'policy_type': 'act',
+ 'pretrained_name_or_path': 'chris241094/act-d-com-0',
+ 'robot': {'calibration_dir': None,
+           'cameras': {'front': {'backend': <Cv2Backends.ANY: 0>,
+                                 'color_mode': <ColorMode.RGB: 'rgb'>,
+                                 'fourcc': None,
+                                 'fps': 30,
+                                 'height': 480,
+                                 'index_or_path': 0,
+                                 'rotation': <Cv2Rotation.NO_ROTATION: 0>,
+                                 'warmup_s': 1,
+                                 'width': 640}},
+           'disable_torque_on_disconnect': True,
+           'id': 'so101_follower_a',
+           'max_relative_target': None,
+           'port': '/dev/tty.usbmodem5A680089941',
+           'use_degrees': True},
+ 'server_address': '52.59.241.221:7860',
+ 'task': 'Pick up the cup and stack it into the other one.'}
+DEBUG 2026-07-07 10:57:50 decoding.py:261 Decoding a Dict field: typing.Dict[str, lerobot.motors.motors_bus.MotorCalibration]
+DEBUG 2026-07-07 10:57:50 decoding.py:112 from_dict for <class 'lerobot.motors.motors_bus.MotorCalibration'>
+DEBUG 2026-07-07 10:57:50 decoding.py:132 Decode name = id, type = <class 'int'>
+DEBUG 2026-07-07 10:57:50 decoding.py:132 Decode name = drive_mode, type = <class 'int'>
+DEBUG 2026-07-07 10:57:50 decoding.py:132 Decode name = homing_offset, type = <class 'int'>
+DEBUG 2026-07-07 10:57:50 decoding.py:132 Decode name = range_min, type = <class 'int'>
+DEBUG 2026-07-07 10:57:50 decoding.py:132 Decode name = range_max, type = <class 'int'>
+DEBUG 2026-07-07 10:57:50 decoding.py:112 from_dict for <class 'lerobot.motors.motors_bus.MotorCalibration'>
+DEBUG 2026-07-07 10:57:50 decoding.py:132 Decode name = id, type = <class 'int'>
+DEBUG 2026-07-07 10:57:50 decoding.py:132 Decode name = drive_mode, type = <class 'int'>
+DEBUG 2026-07-07 10:57:50 decoding.py:132 Decode name = homing_offset, type = <class 'int'>
+DEBUG 2026-07-07 10:57:50 decoding.py:132 Decode name = range_min, type = <class 'int'>
+DEBUG 2026-07-07 10:57:50 decoding.py:132 Decode name = range_max, type = <class 'int'>
+DEBUG 2026-07-07 10:57:50 decoding.py:112 from_dict for <class 'lerobot.motors.motors_bus.MotorCalibration'>
+DEBUG 2026-07-07 10:57:50 decoding.py:132 Decode name = id, type = <class 'int'>
+DEBUG 2026-07-07 10:57:50 decoding.py:132 Decode name = drive_mode, type = <class 'int'>
+DEBUG 2026-07-07 10:57:50 decoding.py:132 Decode name = homing_offset, type = <class 'int'>
+DEBUG 2026-07-07 10:57:50 decoding.py:132 Decode name = range_min, type = <class 'int'>
+DEBUG 2026-07-07 10:57:50 decoding.py:132 Decode name = range_max, type = <class 'int'>
+DEBUG 2026-07-07 10:57:50 decoding.py:112 from_dict for <class 'lerobot.motors.motors_bus.MotorCalibration'>
+DEBUG 2026-07-07 10:57:50 decoding.py:132 Decode name = id, type = <class 'int'>
+DEBUG 2026-07-07 10:57:50 decoding.py:132 Decode name = drive_mode, type = <class 'int'>
+DEBUG 2026-07-07 10:57:50 decoding.py:132 Decode name = homing_offset, type = <class 'int'>
+DEBUG 2026-07-07 10:57:50 decoding.py:132 Decode name = range_min, type = <class 'int'>
+DEBUG 2026-07-07 10:57:50 decoding.py:132 Decode name = range_max, type = <class 'int'>
+DEBUG 2026-07-07 10:57:50 decoding.py:112 from_dict for <class 'lerobot.motors.motors_bus.MotorCalibration'>
+DEBUG 2026-07-07 10:57:50 decoding.py:132 Decode name = id, type = <class 'int'>
+DEBUG 2026-07-07 10:57:50 decoding.py:132 Decode name = drive_mode, type = <class 'int'>
+DEBUG 2026-07-07 10:57:50 decoding.py:132 Decode name = homing_offset, type = <class 'int'>
+DEBUG 2026-07-07 10:57:50 decoding.py:132 Decode name = range_min, type = <class 'int'>
+DEBUG 2026-07-07 10:57:50 decoding.py:132 Decode name = range_max, type = <class 'int'>
+DEBUG 2026-07-07 10:57:50 decoding.py:112 from_dict for <class 'lerobot.motors.motors_bus.MotorCalibration'>
+DEBUG 2026-07-07 10:57:50 decoding.py:132 Decode name = id, type = <class 'int'>
+DEBUG 2026-07-07 10:57:50 decoding.py:132 Decode name = drive_mode, type = <class 'int'>
+DEBUG 2026-07-07 10:57:50 decoding.py:132 Decode name = homing_offset, type = <class 'int'>
+DEBUG 2026-07-07 10:57:50 decoding.py:132 Decode name = range_min, type = <class 'int'>
+DEBUG 2026-07-07 10:57:50 decoding.py:132 Decode name = range_max, type = <class 'int'>
+DEBUG 2026-07-07 10:57:50 ort_utils.py:65 Detected feetech-servo-sdk version: 1.0.0
+DEBUG 2026-07-07 10:57:50 ort_utils.py:65 Detected pyserial version: 3.5
+DEBUG 2026-07-07 10:57:50 ort_utils.py:65 Detected deepdiff version: 8.6.2
+DEBUG 2026-07-07 10:57:50 tors_bus.py:527 FeetechMotorsBus connected.
+INFO 2026-07-07 10:57:51 a_opencv.py:179 OpenCVCamera(0) connected.
+INFO 2026-07-07 10:57:51 follower.py:109 so101_follower_a SOFollower connected.
+INFO 2026-07-07 10:57:51 t_client.py:114 Initializing client to connect to server at 52.59.241.221:7860
+INFO 2026-07-07 10:57:51 t_client.py:133 Robot connected and ready
+DEBUG 2026-07-07 10:57:51 t_client.py:150 Connected to policy server in 0.0954s
+INFO 2026-07-07 10:57:51 t_client.py:156 Sending policy instructions to policy server
+DEBUG 2026-07-07 10:57:51 t_client.py:157 Policy type: act | Pretrained name or path: chris241094/act-d-com-0 | Device: cuda
+INFO 2026-07-07 10:57:53 t_client.py:495 Starting action receiver thread...
+INFO 2026-07-07 10:57:53 t_client.py:462 Control loop thread starting
+INFO 2026-07-07 10:57:53 t_client.py:273 Action receiving thread starting
+DEBUG 2026-07-07 10:57:53 follower.py:188 so101_follower_a SOFollower read state: 2.0ms
+DEBUG 2026-07-07 10:57:53 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:57:53 t_client.py:198 Observation serialization time: 0.000350s
+DEBUG 2026-07-07 10:57:53 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+DEBUG 2026-07-07 10:57:53 ort/utils.py:69 [CLIENT] Observation Sent 922116/922116 bytes with state 3
+DEBUG 2026-07-07 10:57:53 ort/utils.py:71 [CLIENT] Observation Published 0.8793983459472656 MB
+DEBUG 2026-07-07 10:57:53 t_client.py:209 Sent observation #0 | 
+DEBUG 2026-07-07 10:57:53 t_client.py:434 QUEUE SIZE: 0 (Must go: True)
+DEBUG 2026-07-07 10:57:53 t_client.py:477 Control loop (ms): 319.92
+DEBUG 2026-07-07 10:57:53 follower.py:188 so101_follower_a SOFollower read state: 1.2ms
+DEBUG 2026-07-07 10:57:53 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:57:53 t_client.py:198 Observation serialization time: 0.000315s
+DEBUG 2026-07-07 10:57:53 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+DEBUG 2026-07-07 10:57:53 ort/utils.py:69 [CLIENT] Observation Sent 922116/922116 bytes with state 3
+DEBUG 2026-07-07 10:57:53 ort/utils.py:71 [CLIENT] Observation Published 0.8793983459472656 MB
+DEBUG 2026-07-07 10:57:53 t_client.py:209 Sent observation #0 | 
+DEBUG 2026-07-07 10:57:53 t_client.py:434 QUEUE SIZE: 0 (Must go: False)
+DEBUG 2026-07-07 10:57:53 t_client.py:477 Control loop (ms): 78.13
+DEBUG 2026-07-07 10:57:53 follower.py:188 so101_follower_a SOFollower read state: 1.1ms
+DEBUG 2026-07-07 10:57:53 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:57:53 t_client.py:198 Observation serialization time: 0.000117s
+DEBUG 2026-07-07 10:57:53 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+DEBUG 2026-07-07 10:57:53 ort/utils.py:69 [CLIENT] Observation Sent 922116/922116 bytes with state 3
+DEBUG 2026-07-07 10:57:53 ort/utils.py:71 [CLIENT] Observation Published 0.8793983459472656 MB
+DEBUG 2026-07-07 10:57:53 t_client.py:209 Sent observation #0 | 
+DEBUG 2026-07-07 10:57:53 t_client.py:434 QUEUE SIZE: 0 (Must go: False)
+DEBUG 2026-07-07 10:57:53 t_client.py:477 Control loop (ms): 58.01
+DEBUG 2026-07-07 10:57:53 follower.py:188 so101_follower_a SOFollower read state: 1.1ms
+DEBUG 2026-07-07 10:57:53 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:57:53 t_client.py:198 Observation serialization time: 0.000238s
+DEBUG 2026-07-07 10:57:53 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+DEBUG 2026-07-07 10:57:53 ort/utils.py:69 [CLIENT] Observation Sent 922116/922116 bytes with state 3
+DEBUG 2026-07-07 10:57:53 ort/utils.py:71 [CLIENT] Observation Published 0.8793983459472656 MB
+DEBUG 2026-07-07 10:57:53 t_client.py:209 Sent observation #0 | 
+DEBUG 2026-07-07 10:57:53 t_client.py:434 QUEUE SIZE: 0 (Must go: False)
+DEBUG 2026-07-07 10:57:53 t_client.py:477 Control loop (ms): 60.28
+DEBUG 2026-07-07 10:57:53 follower.py:188 so101_follower_a SOFollower read state: 1.0ms
+DEBUG 2026-07-07 10:57:53 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:57:53 t_client.py:198 Observation serialization time: 0.000105s
+DEBUG 2026-07-07 10:57:53 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+DEBUG 2026-07-07 10:57:53 ort/utils.py:69 [CLIENT] Observation Sent 922116/922116 bytes with state 3
+DEBUG 2026-07-07 10:57:53 ort/utils.py:71 [CLIENT] Observation Published 0.8793983459472656 MB
+DEBUG 2026-07-07 10:57:53 t_client.py:209 Sent observation #0 | 
+DEBUG 2026-07-07 10:57:53 t_client.py:434 QUEUE SIZE: 0 (Must go: False)
+DEBUG 2026-07-07 10:57:53 t_client.py:477 Control loop (ms): 61.30
+DEBUG 2026-07-07 10:57:53 follower.py:188 so101_follower_a SOFollower read state: 1.2ms
+DEBUG 2026-07-07 10:57:53 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:57:53 t_client.py:198 Observation serialization time: 0.000167s
+DEBUG 2026-07-07 10:57:53 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+DEBUG 2026-07-07 10:57:53 ort/utils.py:69 [CLIENT] Observation Sent 922116/922116 bytes with state 3
+DEBUG 2026-07-07 10:57:53 ort/utils.py:71 [CLIENT] Observation Published 0.8793983459472656 MB
+DEBUG 2026-07-07 10:57:53 t_client.py:209 Sent observation #0 | 
+DEBUG 2026-07-07 10:57:53 t_client.py:434 QUEUE SIZE: 0 (Must go: False)
+DEBUG 2026-07-07 10:57:53 t_client.py:477 Control loop (ms): 63.43
+DEBUG 2026-07-07 10:57:53 follower.py:188 so101_follower_a SOFollower read state: 1.1ms
+DEBUG 2026-07-07 10:57:53 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:57:53 t_client.py:198 Observation serialization time: 0.000218s
+DEBUG 2026-07-07 10:57:53 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+DEBUG 2026-07-07 10:57:53 ort/utils.py:69 [CLIENT] Observation Sent 922116/922116 bytes with state 3
+DEBUG 2026-07-07 10:57:53 ort/utils.py:71 [CLIENT] Observation Published 0.8793983459472656 MB
+DEBUG 2026-07-07 10:57:53 t_client.py:209 Sent observation #0 | 
+DEBUG 2026-07-07 10:57:53 t_client.py:434 QUEUE SIZE: 0 (Must go: False)
+DEBUG 2026-07-07 10:57:53 t_client.py:477 Control loop (ms): 60.71
+DEBUG 2026-07-07 10:57:53 follower.py:188 so101_follower_a SOFollower read state: 1.1ms
+DEBUG 2026-07-07 10:57:53 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:57:53 t_client.py:198 Observation serialization time: 0.000147s
+DEBUG 2026-07-07 10:57:53 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+DEBUG 2026-07-07 10:57:53 ort/utils.py:69 [CLIENT] Observation Sent 922116/922116 bytes with state 3
+DEBUG 2026-07-07 10:57:53 ort/utils.py:71 [CLIENT] Observation Published 0.8793983459472656 MB
+DEBUG 2026-07-07 10:57:53 t_client.py:209 Sent observation #0 | 
+DEBUG 2026-07-07 10:57:53 t_client.py:434 QUEUE SIZE: 0 (Must go: False)
+DEBUG 2026-07-07 10:57:53 t_client.py:477 Control loop (ms): 63.68
+DEBUG 2026-07-07 10:57:53 follower.py:188 so101_follower_a SOFollower read state: 1.1ms
+DEBUG 2026-07-07 10:57:53 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:57:53 t_client.py:198 Observation serialization time: 0.000069s
+DEBUG 2026-07-07 10:57:53 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+DEBUG 2026-07-07 10:57:53 ort/utils.py:69 [CLIENT] Observation Sent 922116/922116 bytes with state 3
+DEBUG 2026-07-07 10:57:53 ort/utils.py:71 [CLIENT] Observation Published 0.8793983459472656 MB
+DEBUG 2026-07-07 10:57:54 t_client.py:292 Received actions on device: cpu
+DEBUG 2026-07-07 10:57:54 t_client.py:302 Actions kept on device: cpu
+DEBUG 2026-07-07 10:57:54 t_client.py:209 Sent observation #0 | 
+DEBUG 2026-07-07 10:57:54 t_client.py:434 QUEUE SIZE: 0 (Must go: False)
+DEBUG 2026-07-07 10:57:54 t_client.py:477 Control loop (ms): 57.01
+DEBUG 2026-07-07 10:57:54 t_client.py:477 Control loop (ms): 3.66
+DEBUG 2026-07-07 10:57:54 t_client.py:477 Control loop (ms): 0.41
+DEBUG 2026-07-07 10:57:54 t_client.py:477 Control loop (ms): 0.19
+DEBUG 2026-07-07 10:57:54 t_client.py:477 Control loop (ms): 0.19
+DEBUG 2026-07-07 10:57:54 t_client.py:477 Control loop (ms): 0.28
+DEBUG 2026-07-07 10:57:54 t_client.py:477 Control loop (ms): 0.35
+DEBUG 2026-07-07 10:57:54 t_client.py:477 Control loop (ms): 1.41
+DEBUG 2026-07-07 10:57:54 t_client.py:477 Control loop (ms): 0.64
+DEBUG 2026-07-07 10:57:54 t_client.py:477 Control loop (ms): 0.24
+DEBUG 2026-07-07 10:57:54 follower.py:188 so101_follower_a SOFollower read state: 1.3ms
+DEBUG 2026-07-07 10:57:54 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:57:54 t_client.py:198 Observation serialization time: 0.000108s
+DEBUG 2026-07-07 10:57:54 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+DEBUG 2026-07-07 10:57:54 ort/utils.py:69 [CLIENT] Observation Sent 922116/922116 bytes with state 3
+DEBUG 2026-07-07 10:57:54 ort/utils.py:71 [CLIENT] Observation Published 0.8793983459472656 MB
+DEBUG 2026-07-07 10:57:54 t_client.py:209 Sent observation #9 | 
+DEBUG 2026-07-07 10:57:54 t_client.py:434 QUEUE SIZE: 10 (Must go: False)
+DEBUG 2026-07-07 10:57:54 t_client.py:477 Control loop (ms): 62.02
+DEBUG 2026-07-07 10:57:54 follower.py:188 so101_follower_a SOFollower read state: 1.2ms
+DEBUG 2026-07-07 10:57:54 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:57:54 t_client.py:198 Observation serialization time: 0.000077s
+DEBUG 2026-07-07 10:57:54 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+DEBUG 2026-07-07 10:57:54 ort/utils.py:69 [CLIENT] Observation Sent 922116/922116 bytes with state 3
+DEBUG 2026-07-07 10:57:54 ort/utils.py:71 [CLIENT] Observation Published 0.8793983459472656 MB
+DEBUG 2026-07-07 10:57:54 t_client.py:292 Received actions on device: cpu
+DEBUG 2026-07-07 10:57:54 t_client.py:302 Actions kept on device: cpu
+DEBUG 2026-07-07 10:57:54 t_client.py:209 Sent observation #10 | 
+DEBUG 2026-07-07 10:57:54 t_client.py:434 QUEUE SIZE: 9 (Must go: False)
+DEBUG 2026-07-07 10:57:54 t_client.py:477 Control loop (ms): 62.15
+DEBUG 2026-07-07 10:57:54 t_client.py:477 Control loop (ms): 0.15
+DEBUG 2026-07-07 10:57:54 t_client.py:477 Control loop (ms): 0.18
+DEBUG 2026-07-07 10:57:54 t_client.py:477 Control loop (ms): 0.15
+DEBUG 2026-07-07 10:57:54 t_client.py:477 Control loop (ms): 0.17
+DEBUG 2026-07-07 10:57:54 t_client.py:477 Control loop (ms): 0.16
+DEBUG 2026-07-07 10:57:54 t_client.py:477 Control loop (ms): 0.19
+DEBUG 2026-07-07 10:57:54 t_client.py:477 Control loop (ms): 0.16
+DEBUG 2026-07-07 10:57:54 follower.py:188 so101_follower_a SOFollower read state: 1.3ms
+DEBUG 2026-07-07 10:57:54 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:57:54 t_client.py:198 Observation serialization time: 0.000077s
+DEBUG 2026-07-07 10:57:54 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+DEBUG 2026-07-07 10:57:54 ort/utils.py:69 [CLIENT] Observation Sent 922116/922116 bytes with state 3
+DEBUG 2026-07-07 10:57:54 ort/utils.py:71 [CLIENT] Observation Published 0.8793983459472656 MB
+DEBUG 2026-07-07 10:57:54 t_client.py:209 Sent observation #18 | 
+DEBUG 2026-07-07 10:57:54 t_client.py:434 QUEUE SIZE: 10 (Must go: False)
+DEBUG 2026-07-07 10:57:54 t_client.py:477 Control loop (ms): 62.09
+DEBUG 2026-07-07 10:57:54 follower.py:188 so101_follower_a SOFollower read state: 1.3ms
+DEBUG 2026-07-07 10:57:54 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:57:54 t_client.py:198 Observation serialization time: 0.000065s
+DEBUG 2026-07-07 10:57:54 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+DEBUG 2026-07-07 10:57:54 ort/utils.py:69 [CLIENT] Observation Sent 922116/922116 bytes with state 3
+DEBUG 2026-07-07 10:57:54 ort/utils.py:71 [CLIENT] Observation Published 0.8793983459472656 MB
+DEBUG 2026-07-07 10:57:54 t_client.py:209 Sent observation #19 | 
+DEBUG 2026-07-07 10:57:54 t_client.py:434 QUEUE SIZE: 9 (Must go: False)
+DEBUG 2026-07-07 10:57:54 t_client.py:477 Control loop (ms): 62.69
+DEBUG 2026-07-07 10:57:54 follower.py:188 so101_follower_a SOFollower read state: 1.2ms
+DEBUG 2026-07-07 10:57:54 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:57:54 t_client.py:198 Observation serialization time: 0.000082s
+DEBUG 2026-07-07 10:57:54 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+DEBUG 2026-07-07 10:57:54 ort/utils.py:69 [CLIENT] Observation Sent 922116/922116 bytes with state 3
+DEBUG 2026-07-07 10:57:54 ort/utils.py:71 [CLIENT] Observation Published 0.8793983459472656 MB
+DEBUG 2026-07-07 10:57:54 t_client.py:292 Received actions on device: cpu
+DEBUG 2026-07-07 10:57:54 t_client.py:302 Actions kept on device: cpu
+DEBUG 2026-07-07 10:57:54 t_client.py:209 Sent observation #20 | 
+DEBUG 2026-07-07 10:57:54 t_client.py:434 QUEUE SIZE: 8 (Must go: False)
+DEBUG 2026-07-07 10:57:54 t_client.py:477 Control loop (ms): 66.51
+DEBUG 2026-07-07 10:57:54 t_client.py:477 Control loop (ms): 0.13
+DEBUG 2026-07-07 10:57:54 t_client.py:477 Control loop (ms): 0.20
+DEBUG 2026-07-07 10:57:55 t_client.py:477 Control loop (ms): 0.21
+DEBUG 2026-07-07 10:57:55 t_client.py:477 Control loop (ms): 0.17
+DEBUG 2026-07-07 10:57:55 t_client.py:477 Control loop (ms): 0.17
+DEBUG 2026-07-07 10:57:55 t_client.py:477 Control loop (ms): 0.17
+DEBUG 2026-07-07 10:57:55 t_client.py:477 Control loop (ms): 0.17
+DEBUG 2026-07-07 10:57:55 follower.py:188 so101_follower_a SOFollower read state: 1.3ms
+DEBUG 2026-07-07 10:57:55 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:57:55 t_client.py:198 Observation serialization time: 0.000083s
+DEBUG 2026-07-07 10:57:55 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+DEBUG 2026-07-07 10:57:55 ort/utils.py:69 [CLIENT] Observation Sent 922116/922116 bytes with state 3
+DEBUG 2026-07-07 10:57:55 ort/utils.py:71 [CLIENT] Observation Published 0.8793983459472656 MB
+DEBUG 2026-07-07 10:57:55 t_client.py:209 Sent observation #28 | 
+DEBUG 2026-07-07 10:57:55 t_client.py:434 QUEUE SIZE: 10 (Must go: False)
+DEBUG 2026-07-07 10:57:55 t_client.py:477 Control loop (ms): 204.43
+DEBUG 2026-07-07 10:57:55 follower.py:188 so101_follower_a SOFollower read state: 1.3ms
+DEBUG 2026-07-07 10:57:55 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:57:55 t_client.py:198 Observation serialization time: 0.000074s
+DEBUG 2026-07-07 10:57:55 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+DEBUG 2026-07-07 10:57:55 ort/utils.py:69 [CLIENT] Observation Sent 922116/922116 bytes with state 3
+DEBUG 2026-07-07 10:57:55 ort/utils.py:71 [CLIENT] Observation Published 0.8793983459472656 MB
+DEBUG 2026-07-07 10:57:55 t_client.py:209 Sent observation #29 | 
+DEBUG 2026-07-07 10:57:55 t_client.py:434 QUEUE SIZE: 9 (Must go: False)
+DEBUG 2026-07-07 10:57:55 t_client.py:477 Control loop (ms): 82.71
+DEBUG 2026-07-07 10:57:55 follower.py:188 so101_follower_a SOFollower read state: 1.3ms
+DEBUG 2026-07-07 10:57:55 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:57:55 t_client.py:198 Observation serialization time: 0.000102s
+DEBUG 2026-07-07 10:57:55 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+DEBUG 2026-07-07 10:57:55 ort/utils.py:69 [CLIENT] Observation Sent 922116/922116 bytes with state 3
+DEBUG 2026-07-07 10:57:55 ort/utils.py:71 [CLIENT] Observation Published 0.8793983459472656 MB
+DEBUG 2026-07-07 10:57:55 t_client.py:209 Sent observation #30 | 
+DEBUG 2026-07-07 10:57:55 t_client.py:434 QUEUE SIZE: 8 (Must go: False)
+DEBUG 2026-07-07 10:57:55 t_client.py:477 Control loop (ms): 59.18
+DEBUG 2026-07-07 10:57:55 follower.py:188 so101_follower_a SOFollower read state: 1.3ms
+DEBUG 2026-07-07 10:57:55 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:57:55 t_client.py:198 Observation serialization time: 0.000067s
+DEBUG 2026-07-07 10:57:55 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+DEBUG 2026-07-07 10:57:55 ort/utils.py:69 [CLIENT] Observation Sent 922116/922116 bytes with state 3
+DEBUG 2026-07-07 10:57:55 ort/utils.py:71 [CLIENT] Observation Published 0.8793983459472656 MB
+DEBUG 2026-07-07 10:57:55 t_client.py:209 Sent observation #31 | 
+DEBUG 2026-07-07 10:57:55 t_client.py:434 QUEUE SIZE: 7 (Must go: False)
+DEBUG 2026-07-07 10:57:55 t_client.py:477 Control loop (ms): 67.45
+DEBUG 2026-07-07 10:57:55 follower.py:188 so101_follower_a SOFollower read state: 1.3ms
+DEBUG 2026-07-07 10:57:55 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:57:55 t_client.py:198 Observation serialization time: 0.000066s
+DEBUG 2026-07-07 10:57:55 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+DEBUG 2026-07-07 10:57:55 ort/utils.py:69 [CLIENT] Observation Sent 922116/922116 bytes with state 3
+DEBUG 2026-07-07 10:57:55 ort/utils.py:71 [CLIENT] Observation Published 0.8793983459472656 MB
+DEBUG 2026-07-07 10:57:55 t_client.py:292 Received actions on device: cpu
+DEBUG 2026-07-07 10:57:55 t_client.py:302 Actions kept on device: cpu
+DEBUG 2026-07-07 10:57:55 t_client.py:209 Sent observation #32 | 
+DEBUG 2026-07-07 10:57:55 t_client.py:434 QUEUE SIZE: 6 (Must go: False)
+DEBUG 2026-07-07 10:57:55 t_client.py:477 Control loop (ms): 58.83
+DEBUG 2026-07-07 10:57:55 t_client.py:477 Control loop (ms): 0.14
+DEBUG 2026-07-07 10:57:55 t_client.py:477 Control loop (ms): 0.15
+DEBUG 2026-07-07 10:57:55 t_client.py:477 Control loop (ms): 0.13
+DEBUG 2026-07-07 10:57:55 t_client.py:477 Control loop (ms): 0.17
+DEBUG 2026-07-07 10:57:55 t_client.py:477 Control loop (ms): 0.14
+DEBUG 2026-07-07 10:57:55 t_client.py:477 Control loop (ms): 0.16
+DEBUG 2026-07-07 10:57:55 t_client.py:477 Control loop (ms): 0.22
+DEBUG 2026-07-07 10:57:55 follower.py:188 so101_follower_a SOFollower read state: 1.2ms
+DEBUG 2026-07-07 10:57:55 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:57:55 t_client.py:198 Observation serialization time: 0.000080s
+DEBUG 2026-07-07 10:57:55 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+DEBUG 2026-07-07 10:57:55 ort/utils.py:69 [CLIENT] Observation Sent 922116/922116 bytes with state 3
+DEBUG 2026-07-07 10:57:55 ort/utils.py:71 [CLIENT] Observation Published 0.8793983459472656 MB
+DEBUG 2026-07-07 10:57:55 t_client.py:209 Sent observation #40 | 
+DEBUG 2026-07-07 10:57:55 t_client.py:434 QUEUE SIZE: 10 (Must go: False)
+DEBUG 2026-07-07 10:57:55 t_client.py:477 Control loop (ms): 62.87
+DEBUG 2026-07-07 10:57:56 follower.py:188 so101_follower_a SOFollower read state: 1.2ms
+DEBUG 2026-07-07 10:57:56 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:57:56 t_client.py:198 Observation serialization time: 0.000070s
+DEBUG 2026-07-07 10:57:56 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+DEBUG 2026-07-07 10:57:56 ort/utils.py:69 [CLIENT] Observation Sent 922116/922116 bytes with state 3
+DEBUG 2026-07-07 10:57:56 ort/utils.py:71 [CLIENT] Observation Published 0.8793983459472656 MB
+DEBUG 2026-07-07 10:57:56 t_client.py:209 Sent observation #41 | 
+DEBUG 2026-07-07 10:57:56 t_client.py:434 QUEUE SIZE: 9 (Must go: False)
+DEBUG 2026-07-07 10:57:56 t_client.py:477 Control loop (ms): 62.44
+DEBUG 2026-07-07 10:57:56 follower.py:188 so101_follower_a SOFollower read state: 1.3ms
+DEBUG 2026-07-07 10:57:56 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:57:56 t_client.py:198 Observation serialization time: 0.000079s
+DEBUG 2026-07-07 10:57:56 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+DEBUG 2026-07-07 10:57:56 ort/utils.py:69 [CLIENT] Observation Sent 922116/922116 bytes with state 3
+DEBUG 2026-07-07 10:57:56 ort/utils.py:71 [CLIENT] Observation Published 0.8793983459472656 MB
+DEBUG 2026-07-07 10:57:56 t_client.py:209 Sent observation #42 | 
+DEBUG 2026-07-07 10:57:56 t_client.py:434 QUEUE SIZE: 8 (Must go: False)
+DEBUG 2026-07-07 10:57:56 t_client.py:477 Control loop (ms): 62.63
+DEBUG 2026-07-07 10:57:56 follower.py:188 so101_follower_a SOFollower read state: 5.3ms
+DEBUG 2026-07-07 10:57:56 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:57:56 t_client.py:198 Observation serialization time: 0.007414s
+DEBUG 2026-07-07 10:57:56 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+DEBUG 2026-07-07 10:57:56 ort/utils.py:69 [CLIENT] Observation Sent 922116/922116 bytes with state 3
+DEBUG 2026-07-07 10:57:56 ort/utils.py:71 [CLIENT] Observation Published 0.8793983459472656 MB
+DEBUG 2026-07-07 10:57:56 t_client.py:209 Sent observation #43 | 
+DEBUG 2026-07-07 10:57:56 t_client.py:434 QUEUE SIZE: 7 (Must go: False)
+DEBUG 2026-07-07 10:57:56 t_client.py:477 Control loop (ms): 102.36
+DEBUG 2026-07-07 10:57:56 follower.py:188 so101_follower_a SOFollower read state: 1.2ms
+DEBUG 2026-07-07 10:57:56 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:57:56 t_client.py:198 Observation serialization time: 0.000074s
+DEBUG 2026-07-07 10:57:56 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+DEBUG 2026-07-07 10:57:56 ort/utils.py:69 [CLIENT] Observation Sent 922116/922116 bytes with state 3
+DEBUG 2026-07-07 10:57:56 ort/utils.py:71 [CLIENT] Observation Published 0.8793983459472656 MB
+DEBUG 2026-07-07 10:57:56 t_client.py:209 Sent observation #44 | 
+DEBUG 2026-07-07 10:57:56 t_client.py:434 QUEUE SIZE: 6 (Must go: False)
+DEBUG 2026-07-07 10:57:56 t_client.py:477 Control loop (ms): 63.61
+DEBUG 2026-07-07 10:57:56 follower.py:188 so101_follower_a SOFollower read state: 1.2ms
+DEBUG 2026-07-07 10:57:56 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:57:56 t_client.py:198 Observation serialization time: 0.000124s
+DEBUG 2026-07-07 10:57:56 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+DEBUG 2026-07-07 10:57:56 ort/utils.py:69 [CLIENT] Observation Sent 922116/922116 bytes with state 3
+DEBUG 2026-07-07 10:57:56 ort/utils.py:71 [CLIENT] Observation Published 0.8793983459472656 MB
+DEBUG 2026-07-07 10:57:56 t_client.py:209 Sent observation #45 | 
+DEBUG 2026-07-07 10:57:56 t_client.py:434 QUEUE SIZE: 5 (Must go: False)
+DEBUG 2026-07-07 10:57:56 t_client.py:477 Control loop (ms): 56.45
+DEBUG 2026-07-07 10:57:56 follower.py:188 so101_follower_a SOFollower read state: 1.2ms
+DEBUG 2026-07-07 10:57:56 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:57:56 t_client.py:198 Observation serialization time: 0.000074s
+DEBUG 2026-07-07 10:57:56 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+DEBUG 2026-07-07 10:57:56 ort/utils.py:69 [CLIENT] Observation Sent 922116/922116 bytes with state 3
+DEBUG 2026-07-07 10:57:56 ort/utils.py:71 [CLIENT] Observation Published 0.8793983459472656 MB
+DEBUG 2026-07-07 10:57:56 t_client.py:209 Sent observation #46 | 
+DEBUG 2026-07-07 10:57:56 t_client.py:434 QUEUE SIZE: 4 (Must go: False)
+DEBUG 2026-07-07 10:57:56 t_client.py:477 Control loop (ms): 74.88
+DEBUG 2026-07-07 10:57:56 follower.py:188 so101_follower_a SOFollower read state: 1.2ms
+DEBUG 2026-07-07 10:57:56 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:57:56 t_client.py:198 Observation serialization time: 0.000089s
+DEBUG 2026-07-07 10:57:56 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+DEBUG 2026-07-07 10:57:56 ort/utils.py:69 [CLIENT] Observation Sent 922116/922116 bytes with state 3
+DEBUG 2026-07-07 10:57:56 ort/utils.py:71 [CLIENT] Observation Published 0.8793983459472656 MB
+DEBUG 2026-07-07 10:57:56 t_client.py:292 Received actions on device: cpu
+DEBUG 2026-07-07 10:57:56 t_client.py:302 Actions kept on device: cpu
+DEBUG 2026-07-07 10:57:56 t_client.py:209 Sent observation #47 | 
+DEBUG 2026-07-07 10:57:56 t_client.py:434 QUEUE SIZE: 3 (Must go: False)
+DEBUG 2026-07-07 10:57:56 t_client.py:477 Control loop (ms): 62.70
+DEBUG 2026-07-07 10:57:56 t_client.py:477 Control loop (ms): 0.21
+DEBUG 2026-07-07 10:57:56 t_client.py:477 Control loop (ms): 0.18
+DEBUG 2026-07-07 10:57:56 t_client.py:477 Control loop (ms): 0.16
+DEBUG 2026-07-07 10:57:56 t_client.py:477 Control loop (ms): 0.24
+DEBUG 2026-07-07 10:57:56 t_client.py:477 Control loop (ms): 0.24
+DEBUG 2026-07-07 10:57:56 t_client.py:477 Control loop (ms): 0.29
+DEBUG 2026-07-07 10:57:56 t_client.py:477 Control loop (ms): 0.19
+DEBUG 2026-07-07 10:57:56 follower.py:188 so101_follower_a SOFollower read state: 1.2ms
+DEBUG 2026-07-07 10:57:56 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:57:56 t_client.py:198 Observation serialization time: 0.000074s
+DEBUG 2026-07-07 10:57:56 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+DEBUG 2026-07-07 10:57:56 ort/utils.py:69 [CLIENT] Observation Sent 922116/922116 bytes with state 3
+DEBUG 2026-07-07 10:57:56 ort/utils.py:71 [CLIENT] Observation Published 0.8793983459472656 MB
+DEBUG 2026-07-07 10:57:56 t_client.py:209 Sent observation #55 | 
+DEBUG 2026-07-07 10:57:56 t_client.py:434 QUEUE SIZE: 10 (Must go: False)
+DEBUG 2026-07-07 10:57:56 t_client.py:477 Control loop (ms): 71.23
+DEBUG 2026-07-07 10:57:56 follower.py:188 so101_follower_a SOFollower read state: 1.3ms
+DEBUG 2026-07-07 10:57:56 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:57:56 t_client.py:198 Observation serialization time: 0.000106s
+DEBUG 2026-07-07 10:57:56 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+DEBUG 2026-07-07 10:57:56 ort/utils.py:69 [CLIENT] Observation Sent 922116/922116 bytes with state 3
+DEBUG 2026-07-07 10:57:56 ort/utils.py:71 [CLIENT] Observation Published 0.8793983459472656 MB
+DEBUG 2026-07-07 10:57:56 t_client.py:209 Sent observation #56 | 
+DEBUG 2026-07-07 10:57:56 t_client.py:434 QUEUE SIZE: 9 (Must go: False)
+DEBUG 2026-07-07 10:57:56 t_client.py:477 Control loop (ms): 75.97
+DEBUG 2026-07-07 10:57:56 follower.py:188 so101_follower_a SOFollower read state: 1.3ms
+DEBUG 2026-07-07 10:57:56 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:57:56 t_client.py:198 Observation serialization time: 0.000109s
+DEBUG 2026-07-07 10:57:56 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+DEBUG 2026-07-07 10:57:56 ort/utils.py:69 [CLIENT] Observation Sent 922116/922116 bytes with state 3
+DEBUG 2026-07-07 10:57:56 ort/utils.py:71 [CLIENT] Observation Published 0.8793983459472656 MB
+DEBUG 2026-07-07 10:57:56 t_client.py:209 Sent observation #57 | 
+DEBUG 2026-07-07 10:57:56 t_client.py:434 QUEUE SIZE: 8 (Must go: False)
+DEBUG 2026-07-07 10:57:56 t_client.py:477 Control loop (ms): 61.38
+DEBUG 2026-07-07 10:57:56 follower.py:188 so101_follower_a SOFollower read state: 1.3ms
+DEBUG 2026-07-07 10:57:56 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:57:56 t_client.py:198 Observation serialization time: 0.000095s
+DEBUG 2026-07-07 10:57:56 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+DEBUG 2026-07-07 10:57:56 ort/utils.py:69 [CLIENT] Observation Sent 922116/922116 bytes with state 3
+DEBUG 2026-07-07 10:57:56 ort/utils.py:71 [CLIENT] Observation Published 0.8793983459472656 MB
+DEBUG 2026-07-07 10:57:57 t_client.py:209 Sent observation #58 | 
+DEBUG 2026-07-07 10:57:57 t_client.py:434 QUEUE SIZE: 7 (Must go: False)
+DEBUG 2026-07-07 10:57:57 t_client.py:477 Control loop (ms): 86.11
+DEBUG 2026-07-07 10:57:57 follower.py:188 so101_follower_a SOFollower read state: 1.3ms
+DEBUG 2026-07-07 10:57:57 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:57:57 t_client.py:198 Observation serialization time: 0.000114s
+DEBUG 2026-07-07 10:57:57 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+DEBUG 2026-07-07 10:57:57 ort/utils.py:69 [CLIENT] Observation Sent 922116/922116 bytes with state 3
+DEBUG 2026-07-07 10:57:57 ort/utils.py:71 [CLIENT] Observation Published 0.8793983459472656 MB
+DEBUG 2026-07-07 10:57:57 t_client.py:209 Sent observation #59 | 
+DEBUG 2026-07-07 10:57:57 t_client.py:434 QUEUE SIZE: 6 (Must go: False)
+DEBUG 2026-07-07 10:57:57 t_client.py:477 Control loop (ms): 84.31
+DEBUG 2026-07-07 10:57:57 follower.py:188 so101_follower_a SOFollower read state: 1.2ms
+DEBUG 2026-07-07 10:57:57 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:57:57 t_client.py:198 Observation serialization time: 0.000096s
+DEBUG 2026-07-07 10:57:57 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+DEBUG 2026-07-07 10:57:57 ort/utils.py:69 [CLIENT] Observation Sent 922116/922116 bytes with state 3
+DEBUG 2026-07-07 10:57:57 ort/utils.py:71 [CLIENT] Observation Published 0.8793983459472656 MB
+DEBUG 2026-07-07 10:57:57 t_client.py:209 Sent observation #60 | 
+DEBUG 2026-07-07 10:57:57 t_client.py:434 QUEUE SIZE: 5 (Must go: False)
+DEBUG 2026-07-07 10:57:57 t_client.py:477 Control loop (ms): 58.54
+DEBUG 2026-07-07 10:57:57 follower.py:188 so101_follower_a SOFollower read state: 1.2ms
+DEBUG 2026-07-07 10:57:57 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:57:57 t_client.py:198 Observation serialization time: 0.000090s
+DEBUG 2026-07-07 10:57:57 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+DEBUG 2026-07-07 10:57:57 ort/utils.py:69 [CLIENT] Observation Sent 922116/922116 bytes with state 3
+DEBUG 2026-07-07 10:57:57 ort/utils.py:71 [CLIENT] Observation Published 0.8793983459472656 MB
+DEBUG 2026-07-07 10:57:57 t_client.py:209 Sent observation #61 | 
+DEBUG 2026-07-07 10:57:57 t_client.py:434 QUEUE SIZE: 4 (Must go: False)
+DEBUG 2026-07-07 10:57:57 t_client.py:477 Control loop (ms): 63.91
+DEBUG 2026-07-07 10:57:57 follower.py:188 so101_follower_a SOFollower read state: 1.2ms
+DEBUG 2026-07-07 10:57:57 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:57:57 t_client.py:198 Observation serialization time: 0.000128s
+DEBUG 2026-07-07 10:57:57 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+DEBUG 2026-07-07 10:57:57 ort/utils.py:69 [CLIENT] Observation Sent 922116/922116 bytes with state 3
+DEBUG 2026-07-07 10:57:57 ort/utils.py:71 [CLIENT] Observation Published 0.8793983459472656 MB
+DEBUG 2026-07-07 10:57:57 t_client.py:209 Sent observation #62 | 
+DEBUG 2026-07-07 10:57:57 t_client.py:434 QUEUE SIZE: 3 (Must go: False)
+DEBUG 2026-07-07 10:57:57 t_client.py:477 Control loop (ms): 57.43
+DEBUG 2026-07-07 10:57:57 follower.py:188 so101_follower_a SOFollower read state: 1.2ms
+DEBUG 2026-07-07 10:57:57 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:57:57 t_client.py:198 Observation serialization time: 0.000116s
+DEBUG 2026-07-07 10:57:57 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+DEBUG 2026-07-07 10:57:57 ort/utils.py:69 [CLIENT] Observation Sent 922116/922116 bytes with state 3
+DEBUG 2026-07-07 10:57:57 ort/utils.py:71 [CLIENT] Observation Published 0.8793983459472656 MB
+DEBUG 2026-07-07 10:57:57 t_client.py:209 Sent observation #63 | 
+DEBUG 2026-07-07 10:57:57 t_client.py:434 QUEUE SIZE: 2 (Must go: False)
+DEBUG 2026-07-07 10:57:57 t_client.py:477 Control loop (ms): 60.62
+DEBUG 2026-07-07 10:57:57 follower.py:188 so101_follower_a SOFollower read state: 1.3ms
+DEBUG 2026-07-07 10:57:57 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:57:57 t_client.py:198 Observation serialization time: 0.000203s
+DEBUG 2026-07-07 10:57:57 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+DEBUG 2026-07-07 10:57:57 ort/utils.py:69 [CLIENT] Observation Sent 922116/922116 bytes with state 3
+DEBUG 2026-07-07 10:57:57 ort/utils.py:71 [CLIENT] Observation Published 0.8793983459472656 MB
+DEBUG 2026-07-07 10:57:57 t_client.py:209 Sent observation #64 | 
+DEBUG 2026-07-07 10:57:57 t_client.py:434 QUEUE SIZE: 1 (Must go: False)
+DEBUG 2026-07-07 10:57:57 t_client.py:477 Control loop (ms): 154.48
+DEBUG 2026-07-07 10:57:57 follower.py:188 so101_follower_a SOFollower read state: 1.2ms
+DEBUG 2026-07-07 10:57:57 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:57:57 t_client.py:198 Observation serialization time: 0.000188s
+DEBUG 2026-07-07 10:57:57 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+DEBUG 2026-07-07 10:57:57 ort/utils.py:69 [CLIENT] Observation Sent 922116/922116 bytes with state 3
+DEBUG 2026-07-07 10:57:57 ort/utils.py:71 [CLIENT] Observation Published 0.8793983459472656 MB
+DEBUG 2026-07-07 10:57:57 t_client.py:209 Sent observation #65 | 
+DEBUG 2026-07-07 10:57:57 t_client.py:434 QUEUE SIZE: 0 (Must go: True)
+DEBUG 2026-07-07 10:57:57 t_client.py:477 Control loop (ms): 331.06
+DEBUG 2026-07-07 10:57:57 follower.py:188 so101_follower_a SOFollower read state: 1.4ms
+DEBUG 2026-07-07 10:57:57 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:57:57 t_client.py:198 Observation serialization time: 0.000274s
+DEBUG 2026-07-07 10:57:57 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+DEBUG 2026-07-07 10:57:57 ort/utils.py:69 [CLIENT] Observation Sent 922116/922116 bytes with state 3
+DEBUG 2026-07-07 10:57:57 ort/utils.py:71 [CLIENT] Observation Published 0.8793983459472656 MB
+DEBUG 2026-07-07 10:57:57 t_client.py:292 Received actions on device: cpu
+DEBUG 2026-07-07 10:57:57 t_client.py:302 Actions kept on device: cpu
+DEBUG 2026-07-07 10:57:57 t_client.py:209 Sent observation #65 | 
+DEBUG 2026-07-07 10:57:57 t_client.py:434 QUEUE SIZE: 0 (Must go: False)
+DEBUG 2026-07-07 10:57:57 t_client.py:477 Control loop (ms): 118.69
+DEBUG 2026-07-07 10:57:57 t_client.py:477 Control loop (ms): 0.21
+DEBUG 2026-07-07 10:57:57 t_client.py:477 Control loop (ms): 0.33
+DEBUG 2026-07-07 10:57:58 t_client.py:477 Control loop (ms): 0.32
+DEBUG 2026-07-07 10:57:58 t_client.py:477 Control loop (ms): 0.39
+DEBUG 2026-07-07 10:57:58 t_client.py:477 Control loop (ms): 0.22
+DEBUG 2026-07-07 10:57:58 t_client.py:477 Control loop (ms): 0.25
+DEBUG 2026-07-07 10:57:58 t_client.py:477 Control loop (ms): 0.38
+DEBUG 2026-07-07 10:57:58 t_client.py:477 Control loop (ms): 0.40
+DEBUG 2026-07-07 10:57:58 follower.py:188 so101_follower_a SOFollower read state: 1.4ms
+DEBUG 2026-07-07 10:57:58 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:57:58 t_client.py:198 Observation serialization time: 0.000232s
+DEBUG 2026-07-07 10:57:58 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+DEBUG 2026-07-07 10:57:58 ort/utils.py:69 [CLIENT] Observation Sent 922116/922116 bytes with state 3
+DEBUG 2026-07-07 10:57:58 ort/utils.py:71 [CLIENT] Observation Published 0.8793983459472656 MB
+DEBUG 2026-07-07 10:57:58 t_client.py:209 Sent observation #74 | 
+DEBUG 2026-07-07 10:57:58 t_client.py:434 QUEUE SIZE: 10 (Must go: False)
+DEBUG 2026-07-07 10:57:58 t_client.py:477 Control loop (ms): 76.41
+DEBUG 2026-07-07 10:57:58 follower.py:188 so101_follower_a SOFollower read state: 1.3ms
+DEBUG 2026-07-07 10:57:58 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:57:58 t_client.py:198 Observation serialization time: 0.000454s
+DEBUG 2026-07-07 10:57:58 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+DEBUG 2026-07-07 10:57:58 ort/utils.py:69 [CLIENT] Observation Sent 922116/922116 bytes with state 3
+DEBUG 2026-07-07 10:57:58 ort/utils.py:71 [CLIENT] Observation Published 0.8793983459472656 MB
+DEBUG 2026-07-07 10:57:58 t_client.py:209 Sent observation #75 | 
+DEBUG 2026-07-07 10:57:58 t_client.py:434 QUEUE SIZE: 9 (Must go: False)
+DEBUG 2026-07-07 10:57:58 t_client.py:477 Control loop (ms): 69.13
+DEBUG 2026-07-07 10:57:58 follower.py:188 so101_follower_a SOFollower read state: 1.3ms
+DEBUG 2026-07-07 10:57:58 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:57:58 t_client.py:198 Observation serialization time: 0.000129s
+DEBUG 2026-07-07 10:57:58 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+DEBUG 2026-07-07 10:57:58 ort/utils.py:69 [CLIENT] Observation Sent 922116/922116 bytes with state 3
+DEBUG 2026-07-07 10:57:58 ort/utils.py:71 [CLIENT] Observation Published 0.8793983459472656 MB
+DEBUG 2026-07-07 10:57:58 t_client.py:209 Sent observation #76 | 
+DEBUG 2026-07-07 10:57:58 t_client.py:434 QUEUE SIZE: 8 (Must go: False)
+DEBUG 2026-07-07 10:57:58 t_client.py:477 Control loop (ms): 66.80
+DEBUG 2026-07-07 10:57:58 follower.py:188 so101_follower_a SOFollower read state: 1.3ms
+DEBUG 2026-07-07 10:57:58 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:57:58 t_client.py:198 Observation serialization time: 0.000122s
+DEBUG 2026-07-07 10:57:58 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+DEBUG 2026-07-07 10:57:58 ort/utils.py:69 [CLIENT] Observation Sent 922116/922116 bytes with state 3
+DEBUG 2026-07-07 10:57:58 ort/utils.py:71 [CLIENT] Observation Published 0.8793983459472656 MB
+DEBUG 2026-07-07 10:57:58 t_client.py:209 Sent observation #77 | 
+DEBUG 2026-07-07 10:57:58 t_client.py:434 QUEUE SIZE: 7 (Must go: False)
+DEBUG 2026-07-07 10:57:58 t_client.py:477 Control loop (ms): 70.34
+DEBUG 2026-07-07 10:57:58 follower.py:188 so101_follower_a SOFollower read state: 1.3ms
+DEBUG 2026-07-07 10:57:58 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:57:58 t_client.py:198 Observation serialization time: 0.000128s
+DEBUG 2026-07-07 10:57:58 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+DEBUG 2026-07-07 10:57:58 ort/utils.py:69 [CLIENT] Observation Sent 922116/922116 bytes with state 3
+DEBUG 2026-07-07 10:57:58 ort/utils.py:71 [CLIENT] Observation Published 0.8793983459472656 MB
+DEBUG 2026-07-07 10:57:58 t_client.py:209 Sent observation #78 | 
+DEBUG 2026-07-07 10:57:58 t_client.py:434 QUEUE SIZE: 6 (Must go: False)
+DEBUG 2026-07-07 10:57:58 t_client.py:477 Control loop (ms): 88.35
+DEBUG 2026-07-07 10:57:58 follower.py:188 so101_follower_a SOFollower read state: 1.2ms
+DEBUG 2026-07-07 10:57:58 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:57:58 t_client.py:198 Observation serialization time: 0.000190s
+DEBUG 2026-07-07 10:57:58 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+DEBUG 2026-07-07 10:57:58 ort/utils.py:69 [CLIENT] Observation Sent 922116/922116 bytes with state 3
+DEBUG 2026-07-07 10:57:58 ort/utils.py:71 [CLIENT] Observation Published 0.8793983459472656 MB
+DEBUG 2026-07-07 10:57:58 t_client.py:209 Sent observation #79 | 
+DEBUG 2026-07-07 10:57:58 t_client.py:434 QUEUE SIZE: 5 (Must go: False)
+DEBUG 2026-07-07 10:57:58 t_client.py:477 Control loop (ms): 83.76
+DEBUG 2026-07-07 10:57:58 follower.py:188 so101_follower_a SOFollower read state: 1.2ms
+DEBUG 2026-07-07 10:57:58 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:57:58 t_client.py:198 Observation serialization time: 0.000100s
+DEBUG 2026-07-07 10:57:58 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+DEBUG 2026-07-07 10:57:58 ort/utils.py:69 [CLIENT] Observation Sent 922116/922116 bytes with state 3
+DEBUG 2026-07-07 10:57:58 ort/utils.py:71 [CLIENT] Observation Published 0.8793983459472656 MB
+DEBUG 2026-07-07 10:57:58 t_client.py:209 Sent observation #80 | 
+DEBUG 2026-07-07 10:57:58 t_client.py:434 QUEUE SIZE: 4 (Must go: False)
+DEBUG 2026-07-07 10:57:58 t_client.py:477 Control loop (ms): 243.83
+DEBUG 2026-07-07 10:57:58 follower.py:188 so101_follower_a SOFollower read state: 1.3ms
+DEBUG 2026-07-07 10:57:58 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:57:58 t_client.py:198 Observation serialization time: 0.000253s
+DEBUG 2026-07-07 10:57:58 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+DEBUG 2026-07-07 10:57:58 ort/utils.py:69 [CLIENT] Observation Sent 922116/922116 bytes with state 3
+DEBUG 2026-07-07 10:57:58 ort/utils.py:71 [CLIENT] Observation Published 0.8793983459472656 MB
+DEBUG 2026-07-07 10:57:59 t_client.py:209 Sent observation #81 | 
+DEBUG 2026-07-07 10:57:59 t_client.py:434 QUEUE SIZE: 3 (Must go: False)
+DEBUG 2026-07-07 10:57:59 t_client.py:477 Control loop (ms): 75.22
+DEBUG 2026-07-07 10:57:59 follower.py:188 so101_follower_a SOFollower read state: 1.2ms
+DEBUG 2026-07-07 10:57:59 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:57:59 t_client.py:198 Observation serialization time: 0.000205s
+DEBUG 2026-07-07 10:57:59 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+DEBUG 2026-07-07 10:57:59 ort/utils.py:69 [CLIENT] Observation Sent 922116/922116 bytes with state 3
+DEBUG 2026-07-07 10:57:59 ort/utils.py:71 [CLIENT] Observation Published 0.8793983459472656 MB
+DEBUG 2026-07-07 10:57:59 t_client.py:209 Sent observation #82 | 
+DEBUG 2026-07-07 10:57:59 t_client.py:434 QUEUE SIZE: 2 (Must go: False)
+DEBUG 2026-07-07 10:57:59 t_client.py:477 Control loop (ms): 71.10
+DEBUG 2026-07-07 10:57:59 follower.py:188 so101_follower_a SOFollower read state: 1.2ms
+DEBUG 2026-07-07 10:57:59 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:57:59 t_client.py:198 Observation serialization time: 0.000106s
+DEBUG 2026-07-07 10:57:59 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+DEBUG 2026-07-07 10:57:59 ort/utils.py:69 [CLIENT] Observation Sent 922116/922116 bytes with state 3
+DEBUG 2026-07-07 10:57:59 ort/utils.py:71 [CLIENT] Observation Published 0.8793983459472656 MB
+DEBUG 2026-07-07 10:57:59 t_client.py:209 Sent observation #83 | 
+DEBUG 2026-07-07 10:57:59 t_client.py:434 QUEUE SIZE: 1 (Must go: False)
+DEBUG 2026-07-07 10:57:59 t_client.py:477 Control loop (ms): 134.50
+DEBUG 2026-07-07 10:57:59 follower.py:188 so101_follower_a SOFollower read state: 1.3ms
+DEBUG 2026-07-07 10:57:59 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:57:59 t_client.py:198 Observation serialization time: 0.000348s
+DEBUG 2026-07-07 10:57:59 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+DEBUG 2026-07-07 10:57:59 ort/utils.py:69 [CLIENT] Observation Sent 922116/922116 bytes with state 3
+DEBUG 2026-07-07 10:57:59 ort/utils.py:71 [CLIENT] Observation Published 0.8793983459472656 MB
+DEBUG 2026-07-07 10:57:59 t_client.py:209 Sent observation #84 | 
+DEBUG 2026-07-07 10:57:59 t_client.py:434 QUEUE SIZE: 0 (Must go: True)
+DEBUG 2026-07-07 10:57:59 t_client.py:477 Control loop (ms): 298.59
+DEBUG 2026-07-07 10:57:59 follower.py:188 so101_follower_a SOFollower read state: 1.4ms
+DEBUG 2026-07-07 10:57:59 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:57:59 t_client.py:198 Observation serialization time: 0.000319s
+DEBUG 2026-07-07 10:57:59 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+DEBUG 2026-07-07 10:57:59 ort/utils.py:69 [CLIENT] Observation Sent 922116/922116 bytes with state 3
+DEBUG 2026-07-07 10:57:59 ort/utils.py:71 [CLIENT] Observation Published 0.8793983459472656 MB
+DEBUG 2026-07-07 10:57:59 t_client.py:292 Received actions on device: cpu
+DEBUG 2026-07-07 10:57:59 t_client.py:302 Actions kept on device: cpu
+DEBUG 2026-07-07 10:57:59 t_client.py:209 Sent observation #84 | 
+DEBUG 2026-07-07 10:57:59 t_client.py:434 QUEUE SIZE: 0 (Must go: False)
+DEBUG 2026-07-07 10:57:59 t_client.py:477 Control loop (ms): 79.22
+DEBUG 2026-07-07 10:57:59 t_client.py:477 Control loop (ms): 0.55
+DEBUG 2026-07-07 10:57:59 t_client.py:477 Control loop (ms): 0.28
+DEBUG 2026-07-07 10:57:59 t_client.py:477 Control loop (ms): 0.31
+DEBUG 2026-07-07 10:57:59 t_client.py:477 Control loop (ms): 0.32
+DEBUG 2026-07-07 10:57:59 t_client.py:477 Control loop (ms): 0.38
+DEBUG 2026-07-07 10:57:59 t_client.py:477 Control loop (ms): 0.47
+DEBUG 2026-07-07 10:57:59 t_client.py:477 Control loop (ms): 0.33
+DEBUG 2026-07-07 10:57:59 t_client.py:477 Control loop (ms): 0.70
+DEBUG 2026-07-07 10:57:59 follower.py:188 so101_follower_a SOFollower read state: 1.3ms
+DEBUG 2026-07-07 10:57:59 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:57:59 t_client.py:198 Observation serialization time: 0.000577s
+DEBUG 2026-07-07 10:57:59 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+DEBUG 2026-07-07 10:57:59 ort/utils.py:69 [CLIENT] Observation Sent 922116/922116 bytes with state 3
+DEBUG 2026-07-07 10:57:59 ort/utils.py:71 [CLIENT] Observation Published 0.8793983459472656 MB
+DEBUG 2026-07-07 10:57:59 t_client.py:209 Sent observation #93 | 
+DEBUG 2026-07-07 10:57:59 t_client.py:434 QUEUE SIZE: 10 (Must go: False)
+DEBUG 2026-07-07 10:57:59 t_client.py:477 Control loop (ms): 84.09
+DEBUG 2026-07-07 10:57:59 follower.py:188 so101_follower_a SOFollower read state: 1.4ms
+DEBUG 2026-07-07 10:57:59 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:57:59 t_client.py:198 Observation serialization time: 0.000354s
+DEBUG 2026-07-07 10:57:59 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+DEBUG 2026-07-07 10:57:59 ort/utils.py:69 [CLIENT] Observation Sent 922116/922116 bytes with state 3
+DEBUG 2026-07-07 10:57:59 ort/utils.py:71 [CLIENT] Observation Published 0.8793983459472656 MB
+DEBUG 2026-07-07 10:58:00 t_client.py:209 Sent observation #94 | 
+DEBUG 2026-07-07 10:58:00 t_client.py:434 QUEUE SIZE: 9 (Must go: False)
+DEBUG 2026-07-07 10:58:00 t_client.py:477 Control loop (ms): 84.09
+DEBUG 2026-07-07 10:58:00 follower.py:188 so101_follower_a SOFollower read state: 1.3ms
+DEBUG 2026-07-07 10:58:00 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:58:00 t_client.py:198 Observation serialization time: 0.000305s
+DEBUG 2026-07-07 10:58:00 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+DEBUG 2026-07-07 10:58:00 ort/utils.py:69 [CLIENT] Observation Sent 922116/922116 bytes with state 3
+DEBUG 2026-07-07 10:58:00 ort/utils.py:71 [CLIENT] Observation Published 0.8793983459472656 MB
+DEBUG 2026-07-07 10:58:00 t_client.py:209 Sent observation #95 | 
+DEBUG 2026-07-07 10:58:00 t_client.py:434 QUEUE SIZE: 8 (Must go: False)
+DEBUG 2026-07-07 10:58:00 t_client.py:477 Control loop (ms): 84.61
+DEBUG 2026-07-07 10:58:00 follower.py:188 so101_follower_a SOFollower read state: 1.4ms
+DEBUG 2026-07-07 10:58:00 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:58:00 t_client.py:198 Observation serialization time: 0.000347s
+DEBUG 2026-07-07 10:58:00 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+DEBUG 2026-07-07 10:58:00 ort/utils.py:69 [CLIENT] Observation Sent 922116/922116 bytes with state 3
+DEBUG 2026-07-07 10:58:00 ort/utils.py:71 [CLIENT] Observation Published 0.8793983459472656 MB
+DEBUG 2026-07-07 10:58:00 t_client.py:209 Sent observation #96 | 
+DEBUG 2026-07-07 10:58:00 t_client.py:434 QUEUE SIZE: 7 (Must go: False)
+DEBUG 2026-07-07 10:58:00 t_client.py:477 Control loop (ms): 83.81
+DEBUG 2026-07-07 10:58:00 follower.py:188 so101_follower_a SOFollower read state: 1.2ms
+DEBUG 2026-07-07 10:58:00 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:58:00 t_client.py:198 Observation serialization time: 0.000301s
+DEBUG 2026-07-07 10:58:00 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+DEBUG 2026-07-07 10:58:00 ort/utils.py:69 [CLIENT] Observation Sent 922116/922116 bytes with state 3
+DEBUG 2026-07-07 10:58:00 ort/utils.py:71 [CLIENT] Observation Published 0.8793983459472656 MB
+DEBUG 2026-07-07 10:58:00 t_client.py:209 Sent observation #97 | 
+DEBUG 2026-07-07 10:58:00 t_client.py:434 QUEUE SIZE: 6 (Must go: False)
+DEBUG 2026-07-07 10:58:00 t_client.py:477 Control loop (ms): 76.75
+DEBUG 2026-07-07 10:58:00 follower.py:188 so101_follower_a SOFollower read state: 1.3ms
+DEBUG 2026-07-07 10:58:00 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:58:00 t_client.py:198 Observation serialization time: 0.000302s
+DEBUG 2026-07-07 10:58:00 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+DEBUG 2026-07-07 10:58:00 ort/utils.py:69 [CLIENT] Observation Sent 922116/922116 bytes with state 3
+DEBUG 2026-07-07 10:58:00 ort/utils.py:71 [CLIENT] Observation Published 0.8793983459472656 MB
+DEBUG 2026-07-07 10:58:00 t_client.py:209 Sent observation #98 | 
+DEBUG 2026-07-07 10:58:00 t_client.py:434 QUEUE SIZE: 5 (Must go: False)
+DEBUG 2026-07-07 10:58:00 t_client.py:477 Control loop (ms): 76.57
+DEBUG 2026-07-07 10:58:00 follower.py:188 so101_follower_a SOFollower read state: 1.3ms
+DEBUG 2026-07-07 10:58:00 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:58:00 t_client.py:198 Observation serialization time: 0.000328s
+DEBUG 2026-07-07 10:58:00 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+DEBUG 2026-07-07 10:58:00 ort/utils.py:69 [CLIENT] Observation Sent 922116/922116 bytes with state 3
+DEBUG 2026-07-07 10:58:00 ort/utils.py:71 [CLIENT] Observation Published 0.8793983459472656 MB
+DEBUG 2026-07-07 10:58:00 t_client.py:209 Sent observation #99 | 
+DEBUG 2026-07-07 10:58:00 t_client.py:434 QUEUE SIZE: 4 (Must go: False)
+DEBUG 2026-07-07 10:58:00 t_client.py:477 Control loop (ms): 88.26
+DEBUG 2026-07-07 10:58:00 follower.py:188 so101_follower_a SOFollower read state: 1.2ms
+DEBUG 2026-07-07 10:58:00 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:58:00 t_client.py:198 Observation serialization time: 0.000335s
+DEBUG 2026-07-07 10:58:00 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+DEBUG 2026-07-07 10:58:00 ort/utils.py:69 [CLIENT] Observation Sent 922116/922116 bytes with state 3
+DEBUG 2026-07-07 10:58:00 ort/utils.py:71 [CLIENT] Observation Published 0.8793983459472656 MB
+DEBUG 2026-07-07 10:58:00 t_client.py:209 Sent observation #100 | 
+DEBUG 2026-07-07 10:58:00 t_client.py:434 QUEUE SIZE: 3 (Must go: False)
+DEBUG 2026-07-07 10:58:00 t_client.py:477 Control loop (ms): 93.05
+DEBUG 2026-07-07 10:58:00 follower.py:188 so101_follower_a SOFollower read state: 1.3ms
+DEBUG 2026-07-07 10:58:00 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:58:00 t_client.py:198 Observation serialization time: 0.000101s
+DEBUG 2026-07-07 10:58:00 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+DEBUG 2026-07-07 10:58:00 ort/utils.py:69 [CLIENT] Observation Sent 922116/922116 bytes with state 3
+DEBUG 2026-07-07 10:58:00 ort/utils.py:71 [CLIENT] Observation Published 0.8793983459472656 MB
+DEBUG 2026-07-07 10:58:00 t_client.py:209 Sent observation #101 | 
+DEBUG 2026-07-07 10:58:00 t_client.py:434 QUEUE SIZE: 2 (Must go: False)
+DEBUG 2026-07-07 10:58:00 t_client.py:477 Control loop (ms): 91.03
+DEBUG 2026-07-07 10:58:00 follower.py:188 so101_follower_a SOFollower read state: 1.3ms
+DEBUG 2026-07-07 10:58:00 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:58:00 t_client.py:198 Observation serialization time: 0.000167s
+DEBUG 2026-07-07 10:58:00 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+DEBUG 2026-07-07 10:58:00 ort/utils.py:69 [CLIENT] Observation Sent 922116/922116 bytes with state 3
+DEBUG 2026-07-07 10:58:00 ort/utils.py:71 [CLIENT] Observation Published 0.8793983459472656 MB
+DEBUG 2026-07-07 10:58:00 t_client.py:209 Sent observation #102 | 
+DEBUG 2026-07-07 10:58:00 t_client.py:434 QUEUE SIZE: 1 (Must go: False)
+DEBUG 2026-07-07 10:58:00 t_client.py:477 Control loop (ms): 82.09
+DEBUG 2026-07-07 10:58:00 follower.py:188 so101_follower_a SOFollower read state: 1.3ms
+DEBUG 2026-07-07 10:58:00 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:58:00 t_client.py:198 Observation serialization time: 0.000156s
+DEBUG 2026-07-07 10:58:00 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+DEBUG 2026-07-07 10:58:00 ort/utils.py:69 [CLIENT] Observation Sent 922116/922116 bytes with state 3
+DEBUG 2026-07-07 10:58:00 ort/utils.py:71 [CLIENT] Observation Published 0.8793983459472656 MB
+DEBUG 2026-07-07 10:58:00 t_client.py:209 Sent observation #103 | 
+DEBUG 2026-07-07 10:58:00 t_client.py:434 QUEUE SIZE: 0 (Must go: True)
+DEBUG 2026-07-07 10:58:00 t_client.py:477 Control loop (ms): 90.52
+DEBUG 2026-07-07 10:58:00 follower.py:188 so101_follower_a SOFollower read state: 1.0ms
+DEBUG 2026-07-07 10:58:00 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:58:00 t_client.py:198 Observation serialization time: 0.000126s
+DEBUG 2026-07-07 10:58:00 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+DEBUG 2026-07-07 10:58:00 ort/utils.py:69 [CLIENT] Observation Sent 922116/922116 bytes with state 3
+DEBUG 2026-07-07 10:58:00 ort/utils.py:71 [CLIENT] Observation Published 0.8793983459472656 MB
+DEBUG 2026-07-07 10:58:00 t_client.py:292 Received actions on device: cpu
+DEBUG 2026-07-07 10:58:00 t_client.py:302 Actions kept on device: cpu
+DEBUG 2026-07-07 10:58:00 t_client.py:209 Sent observation #103 | 
+DEBUG 2026-07-07 10:58:00 t_client.py:434 QUEUE SIZE: 0 (Must go: False)
+DEBUG 2026-07-07 10:58:00 t_client.py:477 Control loop (ms): 77.74
+DEBUG 2026-07-07 10:58:00 t_client.py:477 Control loop (ms): 0.15
+DEBUG 2026-07-07 10:58:00 t_client.py:477 Control loop (ms): 0.18
+DEBUG 2026-07-07 10:58:00 t_client.py:477 Control loop (ms): 0.33
+DEBUG 2026-07-07 10:58:01 t_client.py:477 Control loop (ms): 0.37
+DEBUG 2026-07-07 10:58:01 t_client.py:477 Control loop (ms): 0.34
+DEBUG 2026-07-07 10:58:01 t_client.py:477 Control loop (ms): 0.36
+DEBUG 2026-07-07 10:58:01 t_client.py:477 Control loop (ms): 0.27
+DEBUG 2026-07-07 10:58:01 t_client.py:477 Control loop (ms): 0.27
+DEBUG 2026-07-07 10:58:01 follower.py:188 so101_follower_a SOFollower read state: 1.2ms
+DEBUG 2026-07-07 10:58:01 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:58:01 t_client.py:198 Observation serialization time: 0.000164s
+DEBUG 2026-07-07 10:58:01 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+DEBUG 2026-07-07 10:58:01 ort/utils.py:69 [CLIENT] Observation Sent 922116/922116 bytes with state 3
+DEBUG 2026-07-07 10:58:01 ort/utils.py:71 [CLIENT] Observation Published 0.8793983459472656 MB
+DEBUG 2026-07-07 10:58:01 t_client.py:209 Sent observation #112 | 
+DEBUG 2026-07-07 10:58:01 t_client.py:434 QUEUE SIZE: 10 (Must go: False)
+DEBUG 2026-07-07 10:58:01 t_client.py:477 Control loop (ms): 73.68
+DEBUG 2026-07-07 10:58:01 follower.py:188 so101_follower_a SOFollower read state: 1.3ms
+DEBUG 2026-07-07 10:58:01 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:58:01 t_client.py:198 Observation serialization time: 0.000201s
+DEBUG 2026-07-07 10:58:01 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+DEBUG 2026-07-07 10:58:01 ort/utils.py:69 [CLIENT] Observation Sent 922116/922116 bytes with state 3
+DEBUG 2026-07-07 10:58:01 ort/utils.py:71 [CLIENT] Observation Published 0.8793983459472656 MB
+DEBUG 2026-07-07 10:58:01 t_client.py:209 Sent observation #113 | 
+DEBUG 2026-07-07 10:58:01 t_client.py:434 QUEUE SIZE: 9 (Must go: False)
+DEBUG 2026-07-07 10:58:01 t_client.py:477 Control loop (ms): 100.21
+DEBUG 2026-07-07 10:58:01 follower.py:188 so101_follower_a SOFollower read state: 1.4ms
+DEBUG 2026-07-07 10:58:01 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:58:01 t_client.py:198 Observation serialization time: 0.000100s
+DEBUG 2026-07-07 10:58:01 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+DEBUG 2026-07-07 10:58:01 ort/utils.py:69 [CLIENT] Observation Sent 922116/922116 bytes with state 3
+DEBUG 2026-07-07 10:58:01 ort/utils.py:71 [CLIENT] Observation Published 0.8793983459472656 MB
+DEBUG 2026-07-07 10:58:01 t_client.py:209 Sent observation #114 | 
+DEBUG 2026-07-07 10:58:01 t_client.py:434 QUEUE SIZE: 8 (Must go: False)
+DEBUG 2026-07-07 10:58:01 t_client.py:477 Control loop (ms): 76.76
+DEBUG 2026-07-07 10:58:01 follower.py:188 so101_follower_a SOFollower read state: 1.3ms
+DEBUG 2026-07-07 10:58:01 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:58:01 t_client.py:198 Observation serialization time: 0.000160s
+DEBUG 2026-07-07 10:58:01 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+DEBUG 2026-07-07 10:58:01 ort/utils.py:69 [CLIENT] Observation Sent 922116/922116 bytes with state 3
+DEBUG 2026-07-07 10:58:01 ort/utils.py:71 [CLIENT] Observation Published 0.8793983459472656 MB
+DEBUG 2026-07-07 10:58:01 t_client.py:209 Sent observation #115 | 
+DEBUG 2026-07-07 10:58:01 t_client.py:434 QUEUE SIZE: 7 (Must go: False)
+DEBUG 2026-07-07 10:58:01 t_client.py:477 Control loop (ms): 130.64
+DEBUG 2026-07-07 10:58:01 follower.py:188 so101_follower_a SOFollower read state: 1.3ms
+DEBUG 2026-07-07 10:58:01 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:58:01 t_client.py:198 Observation serialization time: 0.000252s
+DEBUG 2026-07-07 10:58:01 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+DEBUG 2026-07-07 10:58:01 ort/utils.py:69 [CLIENT] Observation Sent 922116/922116 bytes with state 3
+DEBUG 2026-07-07 10:58:01 ort/utils.py:71 [CLIENT] Observation Published 0.8793983459472656 MB
+DEBUG 2026-07-07 10:58:01 t_client.py:209 Sent observation #116 | 
+DEBUG 2026-07-07 10:58:01 t_client.py:434 QUEUE SIZE: 6 (Must go: False)
+DEBUG 2026-07-07 10:58:01 t_client.py:477 Control loop (ms): 333.31
+DEBUG 2026-07-07 10:58:01 follower.py:188 so101_follower_a SOFollower read state: 1.3ms
+DEBUG 2026-07-07 10:58:01 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:58:01 t_client.py:198 Observation serialization time: 0.000534s
+DEBUG 2026-07-07 10:58:01 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+DEBUG 2026-07-07 10:58:01 ort/utils.py:69 [CLIENT] Observation Sent 922116/922116 bytes with state 3
+DEBUG 2026-07-07 10:58:01 ort/utils.py:71 [CLIENT] Observation Published 0.8793983459472656 MB
+DEBUG 2026-07-07 10:58:02 t_client.py:209 Sent observation #117 | 
+DEBUG 2026-07-07 10:58:02 t_client.py:434 QUEUE SIZE: 5 (Must go: False)
+DEBUG 2026-07-07 10:58:02 t_client.py:477 Control loop (ms): 105.28
+DEBUG 2026-07-07 10:58:02 follower.py:188 so101_follower_a SOFollower read state: 1.4ms
+DEBUG 2026-07-07 10:58:02 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:58:02 t_client.py:198 Observation serialization time: 0.000382s
+DEBUG 2026-07-07 10:58:02 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+DEBUG 2026-07-07 10:58:02 ort/utils.py:69 [CLIENT] Observation Sent 922116/922116 bytes with state 3
+DEBUG 2026-07-07 10:58:02 ort/utils.py:71 [CLIENT] Observation Published 0.8793983459472656 MB
+DEBUG 2026-07-07 10:58:02 t_client.py:209 Sent observation #118 | 
+DEBUG 2026-07-07 10:58:02 t_client.py:434 QUEUE SIZE: 4 (Must go: False)
+DEBUG 2026-07-07 10:58:02 t_client.py:477 Control loop (ms): 87.20
+DEBUG 2026-07-07 10:58:02 follower.py:188 so101_follower_a SOFollower read state: 1.3ms
+DEBUG 2026-07-07 10:58:02 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:58:02 t_client.py:198 Observation serialization time: 0.000337s
+DEBUG 2026-07-07 10:58:02 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+DEBUG 2026-07-07 10:58:02 ort/utils.py:69 [CLIENT] Observation Sent 922116/922116 bytes with state 3
+DEBUG 2026-07-07 10:58:02 ort/utils.py:71 [CLIENT] Observation Published 0.8793983459472656 MB
+DEBUG 2026-07-07 10:58:02 t_client.py:209 Sent observation #119 | 
+DEBUG 2026-07-07 10:58:02 t_client.py:434 QUEUE SIZE: 3 (Must go: False)
+DEBUG 2026-07-07 10:58:02 t_client.py:477 Control loop (ms): 108.53
+DEBUG 2026-07-07 10:58:02 follower.py:188 so101_follower_a SOFollower read state: 1.3ms
+DEBUG 2026-07-07 10:58:02 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:58:02 t_client.py:198 Observation serialization time: 0.000310s
+DEBUG 2026-07-07 10:58:02 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+DEBUG 2026-07-07 10:58:02 ort/utils.py:69 [CLIENT] Observation Sent 922116/922116 bytes with state 3
+DEBUG 2026-07-07 10:58:02 ort/utils.py:71 [CLIENT] Observation Published 0.8793983459472656 MB
+DEBUG 2026-07-07 10:58:02 t_client.py:209 Sent observation #120 | 
+DEBUG 2026-07-07 10:58:02 t_client.py:434 QUEUE SIZE: 2 (Must go: False)
+DEBUG 2026-07-07 10:58:02 t_client.py:477 Control loop (ms): 111.82
+DEBUG 2026-07-07 10:58:02 follower.py:188 so101_follower_a SOFollower read state: 1.3ms
+DEBUG 2026-07-07 10:58:02 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:58:02 t_client.py:198 Observation serialization time: 0.000350s
+DEBUG 2026-07-07 10:58:02 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+DEBUG 2026-07-07 10:58:02 ort/utils.py:69 [CLIENT] Observation Sent 922116/922116 bytes with state 3
+DEBUG 2026-07-07 10:58:02 ort/utils.py:71 [CLIENT] Observation Published 0.8793983459472656 MB
+DEBUG 2026-07-07 10:58:02 t_client.py:209 Sent observation #121 | 
+DEBUG 2026-07-07 10:58:02 t_client.py:434 QUEUE SIZE: 1 (Must go: False)
+DEBUG 2026-07-07 10:58:02 t_client.py:477 Control loop (ms): 88.29
+DEBUG 2026-07-07 10:58:02 follower.py:188 so101_follower_a SOFollower read state: 1.3ms
+DEBUG 2026-07-07 10:58:02 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:58:02 t_client.py:198 Observation serialization time: 0.000611s
+DEBUG 2026-07-07 10:58:02 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+DEBUG 2026-07-07 10:58:02 ort/utils.py:69 [CLIENT] Observation Sent 922116/922116 bytes with state 3
+DEBUG 2026-07-07 10:58:02 ort/utils.py:71 [CLIENT] Observation Published 0.8793983459472656 MB
+DEBUG 2026-07-07 10:58:02 t_client.py:209 Sent observation #122 | 
+DEBUG 2026-07-07 10:58:02 t_client.py:434 QUEUE SIZE: 0 (Must go: True)
+DEBUG 2026-07-07 10:58:02 t_client.py:477 Control loop (ms): 97.64
+DEBUG 2026-07-07 10:58:02 follower.py:188 so101_follower_a SOFollower read state: 1.3ms
+DEBUG 2026-07-07 10:58:02 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:58:02 t_client.py:198 Observation serialization time: 0.000487s
+DEBUG 2026-07-07 10:58:02 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+DEBUG 2026-07-07 10:58:02 ort/utils.py:69 [CLIENT] Observation Sent 922116/922116 bytes with state 3
+DEBUG 2026-07-07 10:58:02 ort/utils.py:71 [CLIENT] Observation Published 0.8793983459472656 MB
+DEBUG 2026-07-07 10:58:02 t_client.py:292 Received actions on device: cpu
+DEBUG 2026-07-07 10:58:02 t_client.py:302 Actions kept on device: cpu
+ERROR 2026-07-07 10:58:02 t_client.py:214 Error sending observation #122: <_InactiveRpcError of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "Stream removed (Received RST_STREAM with error code 7 (RST_STREAM))"
+	debug_error_string = "UNAVAILABLE:Stream removed (Received RST_STREAM with error code 7 (RST_STREAM))"
+>
+DEBUG 2026-07-07 10:58:02 t_client.py:434 QUEUE SIZE: 0 (Must go: False)
+DEBUG 2026-07-07 10:58:02 t_client.py:477 Control loop (ms): 40.52
+DEBUG 2026-07-07 10:58:02 t_client.py:477 Control loop (ms): 0.62
+DEBUG 2026-07-07 10:58:02 t_client.py:477 Control loop (ms): 0.27
+DEBUG 2026-07-07 10:58:02 t_client.py:477 Control loop (ms): 0.57
+DEBUG 2026-07-07 10:58:02 t_client.py:477 Control loop (ms): 0.62
+DEBUG 2026-07-07 10:58:02 t_client.py:477 Control loop (ms): 0.42
+DEBUG 2026-07-07 10:58:02 t_client.py:477 Control loop (ms): 0.45
+DEBUG 2026-07-07 10:58:02 t_client.py:477 Control loop (ms): 0.32
+DEBUG 2026-07-07 10:58:02 t_client.py:477 Control loop (ms): 0.45
+DEBUG 2026-07-07 10:58:02 follower.py:188 so101_follower_a SOFollower read state: 1.4ms
+DEBUG 2026-07-07 10:58:02 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:58:02 t_client.py:198 Observation serialization time: 0.000192s
+DEBUG 2026-07-07 10:58:02 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+DEBUG 2026-07-07 10:58:02 ort/utils.py:69 [CLIENT] Observation Sent 922116/922116 bytes with state 3
+DEBUG 2026-07-07 10:58:02 ort/utils.py:71 [CLIENT] Observation Published 0.8793983459472656 MB
+ERROR 2026-07-07 10:58:02 t_client.py:214 Error sending observation #131: <_InactiveRpcError of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "Stream removed (Received RST_STREAM with error code 7 (RST_STREAM))"
+	debug_error_string = "UNAVAILABLE:Stream removed (Received RST_STREAM with error code 7 (RST_STREAM))"
+>
+DEBUG 2026-07-07 10:58:02 t_client.py:434 QUEUE SIZE: 10 (Must go: False)
+DEBUG 2026-07-07 10:58:02 t_client.py:477 Control loop (ms): 32.02
+DEBUG 2026-07-07 10:58:02 follower.py:188 so101_follower_a SOFollower read state: 1.3ms
+DEBUG 2026-07-07 10:58:02 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:58:02 t_client.py:198 Observation serialization time: 0.000170s
+DEBUG 2026-07-07 10:58:02 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+ERROR 2026-07-07 10:58:03 t_client.py:214 Error sending observation #132: <_InactiveRpcError of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "Stream removed (Received RST_STREAM with error code 7 (RST_STREAM))"
+	debug_error_string = "UNAVAILABLE:Stream removed (Received RST_STREAM with error code 7 (RST_STREAM))"
+>
+DEBUG 2026-07-07 10:58:03 t_client.py:434 QUEUE SIZE: 9 (Must go: False)
+DEBUG 2026-07-07 10:58:03 t_client.py:477 Control loop (ms): 127.74
+DEBUG 2026-07-07 10:58:03 follower.py:188 so101_follower_a SOFollower read state: 1.3ms
+DEBUG 2026-07-07 10:58:03 follower.py:196 so101_follower_a SOFollower read front: 0.0ms
+DEBUG 2026-07-07 10:58:03 t_client.py:198 Observation serialization time: 0.000176s
+DEBUG 2026-07-07 10:58:03 ort/utils.py:54 [CLIENT] Observation Buffer size 0.8793983459472656 MB with
+DEBUG 2026-07-07 10:58:03 ort/utils.py:69 [CLIENT] Observation Sent 922116/922116 bytes with state 3
+DEBUG 2026-07-07 10:58:03 ort/utils.py:71 [CLIENT] Observation Published 0.8793983459472656 MB
+DEBUG 2026-07-07 10:58:06 tors_bus.py:561 FeetechMotorsBus disconnected.
+INFO 2026-07-07 10:58:06 a_opencv.py:601 OpenCVCamera(0) disconnected.
+INFO 2026-07-07 10:58:06 follower.py:240 so101_follower_a SOFollower disconnected.
+DEBUG 2026-07-07 10:58:06 t_client.py:178 Robot disconnected
+DEBUG 2026-07-07 10:58:06 t_client.py:181 Client stopped, channel closed
+ERROR 2026-07-07 10:58:06 t_client.py:359 Error receiving actions: <_InactiveRpcError of RPC that terminated with:
+	status = StatusCode.CANCELLED
+	details = "Channel closed!"
+	debug_error_string = "CANCELLED:Channel closed!"
+>
+INFO 2026-07-07 10:58:06 t_client.py:512 Client stopped

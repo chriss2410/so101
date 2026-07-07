@@ -300,6 +300,12 @@ def teleoperate(
 @app.command()
 def record(
     ctx: typer.Context,
+    name: Optional[str] = typer.Option(
+        None,
+        "--name",
+        help="One-off dataset name (overrides DATASET_NAME from .env). "
+             "Cannot be combined with --auto-name.",
+    ),
     upload: bool = typer.Option(
         True, "--upload/--no-upload", help="Push the finished dataset to HF Hub."
     ),
@@ -313,6 +319,14 @@ def record(
         "--prefix",
         help="Prefix for --auto-name (default: 'd-com' -> 'd-com-0', 'd-com-1', ...).",
     ),
+    manual: bool = typer.Option(
+        False,
+        "--manual",
+        help="Fully manual pacing: no per-episode timer, no reset countdown. "
+             "You control every transition with the keyboard "
+             "(Right = next/end episode, Left = redo, Escape = stop). "
+             "Overrides EPISODE_TIME_SEC / RESET_TIME_SEC / NUM_EPISODES.",
+    ),
 ) -> None:
     """Record a LeRobot v3 dataset by teleoperating the follower."""
     cfg = Config.load()
@@ -321,9 +335,20 @@ def record(
     _check_port_platform("FOLLOWER_PORT", follower_port)
     _check_port_platform("LEADER_PORT", leader_port)
 
-    # Auto-naming: query the Hub for the next free `<prefix>-N` under HF_USER.
+    if name and auto_name:
+        typer.echo(
+            "[so101] ERROR: --name and --auto-name are mutually exclusive. "
+            "Pick one.",
+            err=True,
+        )
+        raise typer.Exit(2)
+
+    # Precedence: --name > --auto-name > DATASET_NAME from .env.
     dataset_name = cfg.dataset_name
-    if auto_name:
+    if name:
+        dataset_name = name
+        typer.echo(f"[so101] --name -> {cfg.hf_user}/{dataset_name}")
+    elif auto_name:
         from so101.hf import next_dataset_name, resolve_token
 
         token = resolve_token()
@@ -343,6 +368,25 @@ def record(
 
     repo_id = f"{cfg.hf_user}/{dataset_name}"
 
+    # LeRobot's `lerobot-record` always applies both the per-episode timer
+    # (`episode_time_s`) and the between-episode reset countdown
+    # (`reset_time_s`) - there is no flag to disable them. In --manual mode
+    # we pass values so large they can never fire, and cap num_episodes at
+    # something practical (still bounded so the process eventually exits if
+    # the user forgets to press Escape).
+    if manual:
+        episode_time_s = 24 * 3600  # 1 day
+        reset_time_s = 0            # no forced reset countdown
+        num_episodes = max(cfg.num_episodes, 500)
+        typer.echo(
+            "[so101] --manual: keyboard-driven. "
+            "Right=next episode, Left=redo, Escape=stop."
+        )
+    else:
+        episode_time_s = cfg.episode_time_sec
+        reset_time_s = cfg.reset_time_sec
+        num_episodes = cfg.num_episodes
+
     args = [
         "--robot.type=so101_follower",
         f"--robot.port={follower_port}",
@@ -352,9 +396,9 @@ def record(
         f"--teleop.id={cfg.leader_id}",
         "--display_data=true",
         f"--dataset.repo_id={repo_id}",
-        f"--dataset.num_episodes={cfg.num_episodes}",
-        f"--dataset.episode_time_s={cfg.episode_time_sec}",
-        f"--dataset.reset_time_s={cfg.reset_time_sec}",
+        f"--dataset.num_episodes={num_episodes}",
+        f"--dataset.episode_time_s={episode_time_s}",
+        f"--dataset.reset_time_s={reset_time_s}",
         f"--dataset.single_task={cfg.task_description}",
         f"--dataset.push_to_hub={'true' if upload else 'false'}",
     ]
@@ -363,7 +407,10 @@ def record(
         args.insert(3, cam)
     args.extend(ctx.args)
 
-    typer.echo(f"[so101] recording {cfg.num_episodes} episodes -> {repo_id}")
+    if manual:
+        typer.echo(f"[so101] recording (manual mode, up to {num_episodes} eps) -> {repo_id}")
+    else:
+        typer.echo(f"[so101] recording {num_episodes} episodes -> {repo_id}")
     typer.echo(f"[so101] task: {cfg.task_description}")
 
     def _print_links() -> None:

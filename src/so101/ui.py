@@ -301,9 +301,15 @@ def _spawn_inference(
         env["CLIENT_DEVICE"] = client_device
 
     # Prefer the current interpreter's `so101` script (it lives in .venv/bin
-    # when installed with `uv sync`). Fall back to `so101` on PATH.
-    so101_bin = Path(sys.executable).parent / "so101"
-    argv = [str(so101_bin), "infer-remote"] if so101_bin.exists() else ["so101", "infer-remote"]
+    # on POSIX, .venv\Scripts on Windows when installed with `uv sync`).
+    # Fall back to `so101` on PATH.
+    bin_dir = Path(sys.executable).parent
+    if os.name == "nt":
+        candidates = [bin_dir / "so101.exe", bin_dir / "so101"]
+    else:
+        candidates = [bin_dir / "so101"]
+    so101_bin = next((p for p in candidates if p.exists()), None)
+    argv = [str(so101_bin), "infer-remote"] if so101_bin else ["so101", "infer-remote"]
 
     log_path = cfg.project_root / "logs" / "ui-infer-remote.log"
     log_path.parent.mkdir(parents=True, exist_ok=True)
@@ -320,14 +326,57 @@ def _spawn_inference(
     )
     log_fh.write(header.encode())
 
+    # On POSIX we want a fresh session so we can killpg the whole tree
+    # (LeRobot spawns children). On Windows we want a new process group so
+    # we can send CTRL_BREAK_EVENT to the whole tree instead.
+    popen_kwargs = {}
+    if os.name == "nt":
+        popen_kwargs["creationflags"] = subprocess.CREATE_NEW_PROCESS_GROUP
+    else:
+        popen_kwargs["start_new_session"] = True
+
     proc = subprocess.Popen(
         argv,
         env=env,
         stdout=log_fh,
         stderr=subprocess.STDOUT,
-        start_new_session=True,  # so we can killpg on timeout
+        **popen_kwargs,
     )
     return proc, log_path
+
+def _signal_process_tree(proc: subprocess.Popen, level: str) -> None:
+    """Signal `proc` and its children in a cross-platform way.
+
+    On POSIX we use `killpg(getpgid(pid), sig)` because LeRobot spawns
+    grpc worker threads/processes that would otherwise linger. On Windows
+    the `CREATE_NEW_PROCESS_GROUP` set at spawn time lets us fire
+    CTRL_BREAK_EVENT at the whole tree; TERM/KILL both map to Popen.kill()
+    (Windows has no graceful gradient - CTRL_BREAK is the only "polite"
+    signal available to a child process).
+
+    `level` is one of: "int" (SIGINT/CTRL_BREAK), "term" (SIGTERM/Popen.kill),
+    "kill" (SIGKILL/Popen.kill).
+    """
+    try:
+        if os.name == "nt":
+            if level == "int":
+                # CTRL_BREAK_EVENT is deliverable to a spawned process group
+                # (CTRL_C_EVENT can't be, hence the choice).
+                proc.send_signal(signal.CTRL_BREAK_EVENT)
+            else:
+                proc.kill()
+        else:
+            sig = {
+                "int": signal.SIGINT,
+                "term": signal.SIGTERM,
+                "kill": signal.SIGKILL,
+            }[level]
+            os.killpg(os.getpgid(proc.pid), sig)
+    except (ProcessLookupError, OSError):
+        # Process already dead, or the group is gone (Windows raises OSError
+        # if the group has already exited). Not a problem - we were trying
+        # to stop it anyway.
+        pass
 
 
 def _tail(path: Path, max_lines: int = 40, max_bytes: int = 16_384) -> str:
@@ -487,26 +536,17 @@ def run_inference(
     if not early_exit and _inference_proc is not None:
         yield "sending SIGINT to client...", _tail(log_path)
         proc = _inference_proc
-        try:
-            os.killpg(os.getpgid(proc.pid), signal.SIGINT)
-        except ProcessLookupError:
-            pass
+        _signal_process_tree(proc, "int")
         try:
             proc.wait(timeout=10)
         except subprocess.TimeoutExpired:
             yield "did not exit on SIGINT; sending SIGTERM...", _tail(log_path)
-            try:
-                os.killpg(os.getpgid(proc.pid), signal.SIGTERM)
-            except ProcessLookupError:
-                pass
+            _signal_process_tree(proc, "term")
             try:
                 proc.wait(timeout=5)
             except subprocess.TimeoutExpired:
                 yield "did not exit on SIGTERM; sending SIGKILL.", _tail(log_path)
-                try:
-                    os.killpg(os.getpgid(proc.pid), signal.SIGKILL)
-                except ProcessLookupError:
-                    pass
+                _signal_process_tree(proc, "kill")
                 proc.wait()
         _inference_proc = None
         yield (
@@ -596,7 +636,7 @@ def build_app() -> gr.Blocks:
 
             with gr.Column(scale=1):
                 gr.Markdown("### inference parameters")
-                seconds = gr.Number(label="seconds", value=7.0, precision=1)
+                seconds = gr.Number(label="seconds", value=30.0, precision=1)
                 fps = gr.Number(label="control fps", value=cfg.cam_fps, precision=0)
                 actions_per_chunk = gr.Number(
                     label="actions per chunk", value=cfg.actions_per_chunk, precision=0

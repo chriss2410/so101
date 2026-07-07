@@ -8,16 +8,14 @@ Everyday recipe for going from empty state to a trained-and-deployed policy. Rea
    ┌──────────────┐     ┌──────────────┐     ┌──────────────┐     ┌──────────────┐
    │ 1. Teleop    │────►│ 2. Record    │────►│ 3. Train     │────►│ 4. Deploy    │
    │              │     │              │     │              │     │              │
-   │ leader arm   │     │ leader drives│     │ AWS L40S/A10 │     │ policy runs  │
-   │ moves        │     │ follower,    │     │ ACT training │     │ on GPU, arm  │
-   │ follower     │     │ record video │     │ on HF        │     │ on Mac       │
-   │ (sanity      │     │ + state to   │     │ dataset      │     │              │
-   │  check only) │     │ HF Hub       │     │              │     │              │
+   │ leader arm   │     │ leader drives│     │ AWS L40S/A10 │     │ policy on    │
+   │ moves        │     │ follower,    │     │ ACT training │     │ AWS GPU, arm │
+   │ follower     │     │ record video │     │ on HF        │     │ + camera on  │
+   │ (sanity      │     │ + state to   │     │ dataset      │     │ Mac (via UI  │
+   │  check only) │     │ HF Hub       │     │              │     │ or CLI)      │
    └──────────────┘     └──────────────┘     └──────────────┘     └──────────────┘
-       so101              so101              so101              so101
-     teleoperate          record             train             infer-remote
-                                                              (or infer for
-                                                               local-only)
+       so101              so101              so101              so101 ui  /
+     teleoperate          record             train             so101 infer-remote
 ```
 
 ## Prerequisites (once per machine)
@@ -79,10 +77,10 @@ EPISODE_TIME_SEC=30
 RESET_TIME_SEC=10
 
 # --- Inference ---
-POLICY_PATH=chris241094/act-d-com-0
+POLICY_PATH=chris241094/act-cup-0
 
 # --- Runtime ---
-DEVICE=mps                                    # local training/inference device: cpu | mps | cuda
+DEVICE=mps                                    # local training device (`so101 train`): cpu | mps | cuda
 
 # --- Weights & Biases (optional) ---
 WANDB_API_KEY=
@@ -210,26 +208,9 @@ lerobot-train \
 
 ---
 
-## Step 4a — Local inference (simplest)
+## Step 4 — Deploy (remote inference)
 
-Runs everything on your Mac — the policy, camera, arm control. **No GPU needed**; ACT at 6 DoF / 30 Hz is comfortable on Apple Silicon (MPS) or even CPU.
-
-```bash
-uv run so101 infer
-```
-
-Under the hood: `lerobot-rollout --policy.pretrained_path=<POLICY_PATH>`. Records the rollouts to `chris241094/eval_<DATASET_NAME>` locally by default.
-
-Use this when:
-- Testing locally without the AWS complexity
-- Latency is critical (no network round-trip)
-- You just want to see if the model does *anything* useful
-
----
-
-## Step 4b — Remote inference (GPU on AWS, arm on Mac)
-
-Full workflow in [DEPLOYMENT.md](DEPLOYMENT.md). Short version:
+Local inference is not supported: the policy always runs on the AWS GPU while the arm + camera stay on the Mac. Full runbook is in [DEPLOYMENT.md](DEPLOYMENT.md); daily operation looks like:
 
 ```bash
 # One-time per boot: start the AWS instance + policy server
@@ -240,19 +221,26 @@ ecm ec2 info research-1xA10 | grep "Public IP"
 
 uv run so101 serve start                    # bring up the policy server
 uv run so101 serve status                   # sanity check: port bound, model configured
+```
 
-# The actual inference (arm + camera on Mac, model runs on AWS GPU)
+Then choose one of two clients:
+
+**Gradio dashboard (recommended):**
+```bash
+uv run so101 ui                             # http://127.0.0.1:7861
+```
+Live camera preview, green/red pill for server reachability, buttons for **Release arm** / **Record start position** / **Reset to start** / **Run inference** (with per-run overrides for seconds / fps / actions-per-chunk / chunk threshold / aggregate fn / policy path). Every field pre-fills from `.env`. See the README's "Inference dashboard" section for the operator flow.
+
+**Bare CLI (for scripting or debug):**
+```bash
 uv run so101 infer-remote                   # runs until Ctrl-C
+```
 
-# When done for the day:
+When done for the day:
+```bash
 uv run so101 serve stop                     # free GPU memory
 ecm ec2 stop research-1xA10                 # stop paying $1.20/hr
 ```
-
-Use this when:
-- Training a bigger model where CPU/MPS inference is too slow
-- Want to experiment with different policies without redownloading each time
-- Comparing local vs remote latency
 
 ---
 
@@ -326,9 +314,9 @@ uv run so101 record --no-upload               # local only
 # --- Training (locally) ---
 uv run so101 train                            # uses DEVICE from .env
 
-# --- Inference ---
-uv run so101 infer                            # local (Mac CPU/MPS)
-uv run so101 infer-remote                     # remote (AWS GPU)
+# --- Inference (remote only) ---
+uv run so101 ui                               # gradio dashboard (recommended)
+uv run so101 infer-remote                     # bare CLI client
 
 # --- Remote inference lifecycle ---
 uv run so101 serve start

@@ -30,7 +30,7 @@ This is the concrete step-by-step for taking a trained ACT policy and running it
 |---|---|---|
 | SO-101 arms assembled, motors flashed with `setup-motors`, calibrated | Local machine | Done. Calibration files at `~/.cache/huggingface/lerobot/calibration/` |
 | Dataset recorded | `chris241094/d-com-0_20260707_083022` on HF Hub | 10 episodes, 5379 frames, RGB + 6-DoF state |
-| ACT policy trained (10k steps) | `chris241094/act-d-com-0` on HF Hub | Undertrained but functional pipeline validation |
+| ACT policy trained | `chris241094/act-cup-0` (current default), earlier `chris241094/act-d-com-0` | Latest = 10 episodes, 10k steps on the cup-stack task |
 | AWS instance `research-1xA10` provisioned | eu-central-1, g5.2xlarge, A10G 24GB | Managed via `ecm` |
 | `serve.sh` control script installed on box | `/opt/dlami/nvme/train-so101/serve.sh` | Managed by `scripts/setup-remote-server.sh` |
 | Port 7860 open to SAP VPN in `sap-vpn-http` SG | `sg-07175299d3d9e5bcc` | Verified end-to-end |
@@ -49,7 +49,7 @@ CAM_HEIGHT=480
 CAM_FPS=30
 
 # Policy
-POLICY_PATH=chris241094/act-d-com-0
+POLICY_PATH=chris241094/act-cup-0
 
 # Remote inference
 SERVER_SSH_HOST=research-1xA10
@@ -138,11 +138,31 @@ Expected:
 ```
 policy-server: RUNNING
 LISTEN 0      4096               *:7860             *:*    users:(("python",pid=XXXXX,fd=7))
-  policy: chris241094/act-d-com-0 on cuda
+  policy: chris241094/act-cup-0 on cuda
   fps: 30   inference_latency: 0.033s
 ```
 
-### Step 3 — start inference (recommended: two terminals)
+### Step 3 — start inference
+
+Two clients are supported: the Gradio dashboard (`so101 ui`) or the bare `so101 infer-remote` CLI. The UI is the recommended path; the CLI is what it wraps internally, useful for scripting or when the log needs to be piped somewhere.
+
+#### Option A — Gradio dashboard (recommended)
+
+```bash
+cd /Users/i539735/dev/physical-ai/research/so101
+uv run so101 ui                               # http://127.0.0.1:7861
+```
+
+You get:
+- Live camera preview (opencv at `CAM_INDEX`)
+- Green/red pill for policy-server reachability (TCP probe every 3s)
+- Buttons: **Release arm** (torque off) → hand-pose the follower → **Record start position** → **Reset to start** → **Run inference** (with a countdown, then auto-return-to-start)
+- Sidebar overrides: seconds / fps / actions-per-chunk / chunk threshold / aggregate fn / policy path — all pre-filled from `.env`
+- Tail of the client log below the buttons so you can debug in-place
+
+Under the hood the UI spawns `so101 infer-remote` as a subprocess with the sidebar values exported as env vars, waits for LeRobot's "Robot connected and ready" line, then times the run.
+
+#### Option B — bare CLI (two terminals for debug)
 
 **Terminal 1** — stream server logs so we can see what the model is doing:
 
@@ -166,7 +186,7 @@ uv run so101 infer-remote
 Expected output:
 ```
 [so101] remote inference
-  policy:  chris241094/act-d-com-0
+  policy:  chris241094/act-cup-0
   server:  52.59.241.221:7860  (policy on cuda)
   client:  cpu   fps: 30
   chunk:   20 actions, refill @ 0.5 full
@@ -395,8 +415,6 @@ uv run so101 serve restart                    # after config changes
 uv run so101 serve stop
 
 # --- Inference ---
-uv run so101 infer-remote                     # runs until Ctrl-C
-
-# --- Locally on Mac (no AWS) ---
-uv run so101 infer                            # policy runs on Mac CPU/MPS, slower but simpler
+uv run so101 ui                               # gradio dashboard (recommended)
+uv run so101 infer-remote                     # bare CLI, runs until Ctrl-C
 ```

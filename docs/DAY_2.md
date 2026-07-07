@@ -31,7 +31,7 @@ Assuming instance is up and Public IP hasn't changed from `52.59.241.221`:
 cd /Users/i539735/dev/physical-ai/research/so101
 uv run so101 serve start                    # ~2s, brings up policy server
 uv run so101 serve status                   # confirm RUNNING, port bound
-uv run so101 infer-remote                   # goes forever until Ctrl-C
+uv run so101 ui                             # gradio dashboard (or `so101 infer-remote` for the bare CLI)
 ```
 
 If the exec line in `so101 infer-remote` output shows a `.venv/bin/python` path that is NOT `/Users/i539735/dev/physical-ai/research/so101/.venv/bin/python`, see [DEPLOYMENT.md § Troubleshooting](DEPLOYMENT.md) — wrong-venv issue.

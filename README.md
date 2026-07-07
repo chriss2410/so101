@@ -1,6 +1,6 @@
 # SO-101
 
-Minimal uv-managed project for teleoperating, recording and running inference on the [SO-101 arm](https://github.com/TheRobotStudio/SO-ARM100) using [LeRobot](https://github.com/huggingface/lerobot). Exposes a single `so101` CLI whose subcommands are thin wrappers around the `lerobot-*` binaries.
+Minimal uv-managed project for teleoperating, recording and running inference on the [SO-101 arm](https://github.com/TheRobotStudio/SO-ARM100) using [LeRobot](https://github.com/huggingface/lerobot). Exposes a single `so101` CLI whose subcommands are thin wrappers around the `lerobot-*` binaries, plus a Gradio dashboard for operator-friendly remote inference.
 
 Two arms are needed: a **leader** (moved by hand) and a **follower** (the robot). A USB webcam on the workspace is the default sensor.
 
@@ -44,8 +44,7 @@ Run `uv run so101 --help` for the full list. All of them:
 ```bash
 NUM_EPISODES=5 EPISODE_TIME_SEC=15 uv run so101 record
 DEVICE=cuda uv run so101 train --batch_size=16
-POLICY_PATH=./outputs/train/act_so101/checkpoints/last/pretrained_model \
-  uv run so101 infer
+POLICY_PATH=chris241094/act-cup-0 uv run so101 infer-remote
 ```
 
 | Command | Wraps | Notes |
@@ -58,9 +57,9 @@ POLICY_PATH=./outputs/train/act_so101/checkpoints/last/pretrained_model \
 | `so101 teleoperate [--with-cam]` | `lerobot-teleoperate` | Live leader-follower mirroring |
 | `so101 record [--name N] [--no-upload] [--auto-name] [--prefix P] [--timed]` | `lerobot-record` | Record LeRobot v3 dataset. Manual pacing is the default (keyboard-driven: Right=next, Left=redo, Escape=stop); pass `--timed` to use EPISODE_TIME_SEC / RESET_TIME_SEC / NUM_EPISODES from `.env`. `--name` sets a one-off dataset name; `--auto-name` picks the next free `<prefix>-N` under HF_USER. |
 | `so101 train` | `lerobot-train` | ACT policy training |
-| `so101 infer [--no-record]` | `lerobot-rollout --policy.pretrained_path=...` | Policy-driven rollouts (local inference) |
 | `so101 serve <start\|stop\|status\|logs\|restart>` | SSH + `serve.sh` on GPU box | Manage the remote policy server |
 | `so101 infer-remote` | `python -m lerobot.async_inference.robot_client` | Client-side of split inference. Talks to a policy server running on a remote GPU via gRPC. |
+| `so101 ui` | (gradio dashboard) | Operator UI: camera preview, record/reset/release start pose, timed inference with param overrides. |
 
 ## Recording datasets
 
@@ -104,7 +103,7 @@ If LeRobot appended a `_YYYYMMDD_HHMMSS` suffix (local cache collision), the pri
 
 ## Remote inference (policy on AWS GPU, arm on Mac)
 
-`so101 infer` runs everything locally (policy + camera + arm) — great for latency but caps out at Mac CPU/MPS throughput. For heavy models or long chunk horizons where you want a beefier GPU running the policy, use LeRobot's async inference client/server split:
+Inference runs split: the policy sits on a GPU box, the arm and camera stay on the Mac. This is the only inference path we support - local inference (policy + camera + arm on the Mac) was dropped because MPS/CPU throughput isn't worth the code path.
 
 - **Policy server** runs on the GPU box, downloads the model from HF, listens on a TCP port for gRPC.
 - **Robot client** runs on your Mac, reads camera + follower state, sends observations to the server, receives action chunks, applies them.
@@ -126,7 +125,7 @@ CHUNK_SIZE_THRESHOLD=0.5
 AGGREGATE_FN=weighted_average
 ```
 
-`POLICY_PATH` (already used by `so101 infer`) is what the client tells the server to load.
+`POLICY_PATH` is the HF repo id of a trained policy checkpoint; the client sends it to the server, which loads the weights from HF on first request.
 
 ### Operating
 
@@ -140,17 +139,43 @@ uv run so101 serve stop        # shut server down
 
 The first `infer-remote` invocation triggers a model download on the server (~10-20s). Subsequent ones are near-instant since the model stays resident on the GPU.
 
+## Inference dashboard (`so101 ui`)
+
+Operator-friendly Gradio UI on top of `so101 infer-remote`. Launch:
+
+```bash
+uv run so101 ui                              # http://127.0.0.1:7861
+```
+
+What you get:
+
+- **Live camera preview** (opencv at `CAM_INDEX`) with a small header pill that TCP-probes `SERVER_ADDRESS` every 3s — green = policy server up, red = down.
+- **Release arm (torque off)** — drops motor torque so you can pose the follower by hand.
+- **Record start position** — snapshots the follower's joint values; motors stay energized so the arm holds.
+- **Reset to start** — writes the saved joints back and keeps torque on so the arm doesn't drop.
+- **Run inference / Stop inference** — reserves the camera, spawns `so101 infer-remote`, waits for LeRobot's "Robot connected and ready" line, then runs for N seconds. After SIGINT the arm auto-returns to the recorded start pose and holds. A live tail of the client log appears below the buttons.
+- **Sidebar overrides** — seconds (default 30), fps, actions-per-chunk, chunk threshold, aggregate fn, policy path, server address, devices. Every field pre-fills from `.env`; edits apply per-run only.
+
+Typical operator flow: **Release arm** → hand-pose to start → **Record start position** → set up the scene → **Run inference** → arm executes for N seconds → auto-return-to-start → repeat. When done, **Release arm** to stow.
+
+Logs land in `so101/logs/ui-infer-remote.log` (truncated per run).
+
 ## Layout
 
 ```
 so101/
-  pyproject.toml          # lerobot[feetech] + typer + python-dotenv
-  .env.example            # ports, ids, HF user, camera, task
+  pyproject.toml          # lerobot[feetech] + typer + python-dotenv + gradio
+  .env.example            # ports, ids, HF user, camera, task, server, policy
   README.md
+  docs/                   # WORKFLOW / DEPLOYMENT / DAY_2
+  scripts/
+    setup-remote-server.sh
   src/so101/
     __init__.py
     config.py             # dataclass loaded from .env / env vars
     cli.py                # typer app, entrypoint: so101 = so101.cli:app
+    hf.py                 # HF Hub helpers (auto-name, cache lookups)
+    ui.py                 # gradio dashboard for `so101 ui`
 ```
 
 No shell scripts, no submodules, no Docker.
@@ -167,12 +192,12 @@ Community-tested on LeRobot 0.4.0+, but **not officially supported by upstream**
 ```
 FOLLOWER_PORT=COM3
 LEADER_PORT=COM4
-DEVICE=cpu
+DEVICE=cpu                                    # local `so101 train` only; inference always runs on AWS (see Remote inference)
 ```
 
-**Why `cpu` on Windows?** As of 2026 AMD's official ROCm-on-Windows PyTorch build ([release notes](https://www.amd.com/en/resources/support-articles/release-notes/RN-AMDGPU-WINDOWS-PYTORCH-7-2.html)) supports only a handful of desktop dGPUs (RX 7900 XTX, 7700, and the 9000 series). Laptop iGPUs / APUs are not on that list. `torch-directml` works on any DX12 GPU but pins PyTorch to 2.4.1, which is incompatible with LeRobot 0.6+.
+`so101 ui` and `so101 infer-remote` both work on Windows: subprocess control uses `CREATE_NEW_PROCESS_GROUP` + `CTRL_BREAK_EVENT` under the hood instead of POSIX process groups.
 
-For SO-101 this is fine: ACT is a small model, and at 30 Hz control / 100-step chunks the effective inference rate is under 1 Hz. Modern laptop CPUs handle that with room to spare. If profiling later shows you need GPU inference, the clean path is: train on the AWS L40S (via VTP or plain `lerobot-train`), export the checkpoint to ONNX, and run inference through `onnxruntime` with the DirectML execution provider - that decouples inference from LeRobot's PyTorch stack entirely and works on any DX12 AMD GPU.
+**Why `cpu` on Windows?** `DEVICE` here only controls the client-side path for `so101 train`; inference always runs on the AWS GPU via `so101 ui` / `so101 infer-remote`, so the Windows Mac has zero inference workload. That said, if you ever *do* want to train locally on Windows, AMD's official ROCm-on-Windows PyTorch build ([release notes](https://www.amd.com/en/resources/support-articles/release-notes/RN-AMDGPU-WINDOWS-PYTORCH-7-2.html)) supports only a handful of desktop dGPUs (RX 7900 XTX, 7700, 9000 series). Laptop iGPUs / APUs are not on that list. `torch-directml` works on any DX12 GPU but pins PyTorch to 2.4.1, which is incompatible with LeRobot 0.6+. So `DEVICE=cpu` is the honest default.
 
 **WSL2 is not recommended** for record/teleop: [users report](https://zenn.dev/komination/articles/464cb07be1b77f) that `usbipd-win` adds enough latency to cause motor bus disconnects during calibration.
 

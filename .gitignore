@@ -10,6 +10,7 @@
 # LeRobot / training outputs
 outputs/
 wandb/
+logs/
 
 # Python
 __pycache__/

@@ -51,6 +51,36 @@ class ServeAction(str, Enum):
 # --- helpers ----------------------------------------------------------------
 
 
+def _own_python() -> str:
+    """Return the Python interpreter of the venv that so101 itself is installed in.
+
+    We deliberately do NOT use sys.executable here: when the user has a
+    DIFFERENT project's venv activated (VIRTUAL_ENV points elsewhere) and
+    launched so101 via `uv run`, sys.executable can be that other venv's
+    interpreter, which won't have lerobot's async deps installed.
+
+    so101 is imported from its own venv's site-packages, so walking up
+    from our __file__ locates the venv root:
+
+        <venv>/lib/python3.X/site-packages/so101/cli.py
+                                  ^ parents[3]        ^ parents[0]
+
+    Then bin/python (or Scripts/python.exe on Windows) is the right one.
+    Falls back to sys.executable if the path shape looks wrong (dev install,
+    editable-anywhere, etc.) - better a wrong-venv error than a hard crash.
+    """
+    here = Path(__file__).resolve()
+    try:
+        venv = here.parents[4]  # so101/cli.py -> so101/ -> site-packages/ -> pythonX.Y/ -> lib/ -> <venv>
+    except IndexError:
+        return sys.executable
+    if os.name == "nt":
+        candidate = venv / "Scripts" / "python.exe"
+    else:
+        candidate = venv / "bin" / "python"
+    return str(candidate) if candidate.exists() else sys.executable
+
+
 def _lerobot(binary: str, args: List[str], on_exit=None) -> None:
     """Execute a `lerobot-*` binary with the given args, forwarding stdio.
 
@@ -625,7 +655,7 @@ def infer_remote(ctx: typer.Context) -> None:
     _check_port_platform("FOLLOWER_PORT", follower_port)
 
     argv = [
-        sys.executable,
+        _own_python(),
         "-m",
         "lerobot.async_inference.robot_client",
         # Robot config

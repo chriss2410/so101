@@ -126,6 +126,15 @@ case "${1:-status}" in
       echo "policy-server: RUNNING"
       ss -tlnp 2>/dev/null | grep ":$SERVER_PORT" || echo "  (port $SERVER_PORT not yet bound)"
       echo "  fps: $SERVER_FPS   inference_latency: ${INFERENCE_LATENCY}s"
+      # The model name is dictated by the client via SendPolicyInstructions,
+      # not stored anywhere on the server side. We can't display which model
+      # is loaded by name, but we can report whether SOMETHING is on the GPU.
+      vram_mb=$(nvidia-smi --query-gpu=memory.used --format=csv,noheader,nounits 2>/dev/null | head -1)
+      if [[ -n "$vram_mb" && "$vram_mb" -gt 100 ]]; then
+        echo "  model:  loaded (${vram_mb} MiB on GPU) - name known only to the client"
+      else
+        echo "  model:  not loaded yet (waiting for a client to send policy instructions)"
+      fi
     else
       echo "policy-server: STOPPED"
     fi

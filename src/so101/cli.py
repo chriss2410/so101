@@ -172,7 +172,8 @@ def init() -> None:
         "  so101 teleoperate --with-cam\n"
         "  so101 record\n"
         "  so101 train\n"
-        "  so101 infer"
+        "  so101 serve start               # policy server on the GPU box\n"
+        "  so101 ui                        # inference dashboard"
     )
 
 
@@ -526,71 +527,6 @@ def train(ctx: typer.Context) -> None:
     else:
         typer.echo("[so101] wandb: off (WANDB_API_KEY not set)")
     _lerobot("lerobot-train", args)
-
-
-@app.command()
-def infer(
-    ctx: typer.Context,
-    record_eval: bool = typer.Option(
-        True,
-        "--record/--no-record",
-        help="Save each rollout as an eval_<dataset> episode.",
-    ),
-) -> None:
-    """Drive the follower with a trained policy (wraps `lerobot-rollout`).
-
-    LeRobot 0.6 split policy deployment out of `lerobot-record` into a
-    dedicated `lerobot-rollout` command. This subcommand wraps it, reading
-    POLICY_PATH from .env and using the same camera + arm config as
-    `so101 record`.
-    """
-    cfg = Config.load()
-    _require("POLICY_PATH", cfg.policy_path)
-    follower_port = _require("FOLLOWER_PORT", cfg.follower_port)
-    _check_port_platform("FOLLOWER_PORT", follower_port)
-
-    args = [
-        "--robot.type=so101_follower",
-        f"--robot.port={follower_port}",
-        f"--robot.id={cfg.follower_id}",
-        "--display_data=true",
-        f"--policy.pretrained_path={cfg.policy_path}",
-        f"--policy.device={cfg.device}",
-        f"--fps={cfg.cam_fps}",
-    ]
-    cam = cfg.camera_flag()
-    if cam:
-        args.insert(3, cam)
-
-    if record_eval:
-        args.extend(
-            [
-                f"--dataset.repo_id={cfg.eval_repo_id}",
-                f"--dataset.num_episodes={cfg.num_episodes}",
-                f"--dataset.episode_time_s={cfg.episode_time_sec}",
-                f"--dataset.reset_time_s={cfg.reset_time_sec}",
-                f"--dataset.single_task={cfg.task_description}",
-                "--dataset.push_to_hub=false",
-            ]
-        )
-    else:
-        # Effectively "run forever" - one long episode, never uploaded.
-        args.extend(
-            [
-                f"--dataset.repo_id={cfg.eval_repo_id}-scratch",
-                "--dataset.num_episodes=1",
-                "--dataset.episode_time_s=99999",
-                f"--dataset.single_task={cfg.task_description}",
-                "--dataset.push_to_hub=false",
-            ]
-        )
-    args.extend(ctx.args)
-
-    typer.echo(f"[so101] inference with policy: {cfg.policy_path}")
-    typer.echo(f"[so101] device: {cfg.device}   fps: {cfg.cam_fps}")
-    if record_eval:
-        typer.echo(f"[so101] saving eval episodes -> {cfg.eval_repo_id}")
-    _lerobot("lerobot-rollout", args)
 
 
 @app.command()

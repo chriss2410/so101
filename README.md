@@ -27,7 +27,8 @@ uv run so101 calibrate leader
 uv run so101 teleoperate --with-cam  # sanity check
 uv run so101 record                  # record NUM_EPISODES demos
 uv run so101 train                   # ACT training (needs GPU or MPS)
-uv run so101 infer                   # policy drives the follower
+uv run so101 serve start             # start policy server on the GPU box
+uv run so101 ui                      # inference dashboard
 ```
 
 Install globally with `uv tool install .` if you want a bare `so101` command.

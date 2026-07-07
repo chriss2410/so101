@@ -4,8 +4,12 @@ Small operator UI that lives on top of the existing CLI:
 
   - Live camera preview (opencv/CAM_INDEX from .env)
   - "Record start position" reads the follower's current joint positions
-    and stashes them in memory.
-  - "Reset to start" writes those positions back to the follower.
+    and stashes them in memory. The arm is left with torque enabled so
+    it holds pose.
+  - "Reset to start" writes those positions back to the follower, torque
+    stays on so it keeps holding.
+  - "Release arm (torque off)" drops torque so you can move the arm by
+    hand to (re)pose it for the next snapshot.
   - "Run inference" spawns `so101 infer-remote` for N seconds with the
     fields in the sidebar exported as env vars, then sends SIGINT.
 
@@ -20,10 +24,12 @@ from __future__ import annotations
 
 import os
 import signal
+import socket
 import subprocess
 import sys
 import threading
 import time
+import warnings
 from dataclasses import asdict
 from pathlib import Path
 from typing import Optional
@@ -42,11 +48,55 @@ from so101.config import Config
 
 _capture: Optional[cv2.VideoCapture] = None
 _capture_lock = threading.Lock()
+# When set, `_open_capture` refuses to open the camera and `_grab_frame`
+# returns None. This is the ONLY reliable way to keep the preview timer
+# from racing with LeRobot for `/dev/video0` at inference startup.
+_camera_reserved = threading.Event()
 
 _start_position: Optional[dict[str, float]] = None
 
 _inference_proc: Optional[subprocess.Popen] = None
 _inference_stop_event = threading.Event()
+
+
+# --- Remote server status ---------------------------------------------------
+
+
+def _probe_server(address: str, timeout: float = 0.8) -> bool:
+    """Return True if `host:port` accepts a TCP connection.
+
+    We don't send the gRPC handshake here - a bound socket on the box is a
+    strong-enough signal that the policy server is up (serve.sh's tmux
+    session either has it running or the port is closed). Keep the timeout
+    short so the poll doesn't wedge the UI when the VPN is down.
+    """
+    if not address or ":" not in address:
+        return False
+    host, _, port_s = address.partition(":")
+    try:
+        port = int(port_s)
+    except ValueError:
+        return False
+    try:
+        with socket.create_connection((host, port), timeout=timeout):
+            return True
+    except (OSError, socket.timeout):
+        return False
+
+
+def _server_status_html(cfg: Config) -> str:
+    """Little colored pill for the header."""
+    up = _probe_server(cfg.server_address)
+    color = "#16a34a" if up else "#dc2626"  # green / red
+    label = "policy server: UP" if up else "policy server: DOWN"
+    addr = cfg.server_address or "(no SERVER_ADDRESS set)"
+    return (
+        f'<div style="display:inline-flex;align-items:center;gap:8px;'
+        f'padding:4px 10px;border-radius:999px;background:{color};'
+        f'color:white;font-family:monospace;font-size:12px;">'
+        f'<span style="width:8px;height:8px;border-radius:50%;background:white;'
+        f'display:inline-block;"></span>{label} - {addr}</div>'
+    )
 
 
 # --- Camera preview ---------------------------------------------------------
@@ -62,6 +112,8 @@ def _open_capture(cfg: Config) -> Optional[cv2.VideoCapture]:
     """
     global _capture
     with _capture_lock:
+        if _camera_reserved.is_set():
+            return None
         if _capture is not None and _capture.isOpened():
             return _capture
         if cfg.camera_type != "opencv":
@@ -92,6 +144,8 @@ def _close_capture() -> None:
 
 def _grab_frame(cfg: Config) -> Optional[np.ndarray]:
     """Read one BGR frame and convert to RGB for Gradio."""
+    if _camera_reserved.is_set():
+        return None
     if _inference_proc is not None and _inference_proc.poll() is None:
         # LeRobot owns the camera during inference; do not fight it.
         return None
@@ -108,23 +162,31 @@ def _grab_frame(cfg: Config) -> Optional[np.ndarray]:
 # --- Follower helpers -------------------------------------------------------
 
 
-def _connect_follower(cfg: Config):
+def _connect_follower(cfg: Config, hold_on_disconnect: bool = False):
     """Open the follower bus with NO cameras attached.
 
     We only need joint reads/writes here - keeping cameras out of the
     follower's config means we can leave the OpenCV preview running and
     they won't fight over the USB device.
+
+    When `hold_on_disconnect=True` we override the default and keep torque
+    ON at disconnect. That's what makes 'Reset to start' actually hold the
+    pose - LeRobot disables torque on disconnect by default, which drops
+    the arm the moment we release the bus.
     """
     from lerobot.robots.so_follower.config_so_follower import SOFollowerRobotConfig
     from lerobot.robots.so_follower.so_follower import SOFollower
 
     if not cfg.follower_port:
         raise RuntimeError("FOLLOWER_PORT is empty - fill it in so101/.env.")
+    # `type` on RobotConfig is a derived @property, not a field - the class
+    # already maps to so101_follower via @register_subclass. Passing type=
+    # here trips a TypeError.
     robot_cfg = SOFollowerRobotConfig(
-        type="so101_follower",
         port=cfg.follower_port,
         id=cfg.follower_id,
         cameras={},
+        disable_torque_on_disconnect=not hold_on_disconnect,
     )
     robot = SOFollower(robot_cfg)
     robot.connect(calibrate=False)
@@ -132,7 +194,9 @@ def _connect_follower(cfg: Config):
 
 
 def _read_positions(cfg: Config) -> dict[str, float]:
-    robot = _connect_follower(cfg)
+    # Read-only - do NOT change torque state. If the arm was being held by a
+    # prior write, we want it to keep holding.
+    robot = _connect_follower(cfg, hold_on_disconnect=True)
     try:
         obs = robot.get_observation()
         # `so_follower.get_observation` returns `<motor>.pos` keys - keep the
@@ -143,7 +207,9 @@ def _read_positions(cfg: Config) -> dict[str, float]:
 
 
 def _write_positions(cfg: Config, positions: dict[str, float]) -> None:
-    robot = _connect_follower(cfg)
+    # Keep torque ON at disconnect so the arm actually stays at `positions`
+    # instead of falling limp when we release the bus.
+    robot = _connect_follower(cfg, hold_on_disconnect=True)
     try:
         robot.send_action(positions)
         # send_action returns immediately after issuing the goal_pos write;
@@ -180,6 +246,24 @@ def reset_to_start() -> str:
     return "reset: follower commanded to start position."
 
 
+def release_arm() -> str:
+    """Drop torque on the follower so you can move it by hand.
+
+    Reverses the 'hold' side-effect of Reset/Record: connects with
+    `disable_torque_on_disconnect=True` and disconnects immediately, which
+    switches the motors off. The arm becomes freely movable.
+    """
+    if _inference_proc is not None and _inference_proc.poll() is None:
+        return "inference is running - stop inference first."
+    cfg = Config.load()
+    try:
+        robot = _connect_follower(cfg, hold_on_disconnect=False)
+        robot.disconnect()
+    except Exception as exc:  # noqa: BLE001
+        return f"error: {exc}"
+    return "arm released - torque off, safe to move by hand."
+
+
 def _spawn_inference(
     cfg: Config,
     seconds: float,
@@ -191,13 +275,22 @@ def _spawn_inference(
     server_address: str,
     server_policy_device: str,
     client_device: str,
-) -> subprocess.Popen:
-    """Fire off `so101 infer-remote` with UI values exported as env vars."""
+) -> tuple[subprocess.Popen, Path]:
+    """Fire off `so101 infer-remote` with UI values exported as env vars.
+
+    Returns (proc, log_path). Log is truncated on every run so the UI can
+    tail it cleanly.
+    """
     env = os.environ.copy()
     env["CAM_FPS"] = str(fps)
     env["ACTIONS_PER_CHUNK"] = str(actions_per_chunk)
     env["CHUNK_SIZE_THRESHOLD"] = str(chunk_size_threshold)
     env["AGGREGATE_FN"] = aggregate_fn
+    # Force LeRobot's loggers to speak up. `helpers.get_logger` in the async
+    # module honors LEROBOT_LOG_LEVEL; setting DEBUG here means the UI's tail
+    # actually sees the client's per-tick observations + action-chunk lines.
+    env.setdefault("LEROBOT_LOG_LEVEL", "DEBUG")
+    env.setdefault("PYTHONUNBUFFERED", "1")
     if policy_path:
         env["POLICY_PATH"] = policy_path
     if server_address:
@@ -214,16 +307,87 @@ def _spawn_inference(
 
     log_path = cfg.project_root / "logs" / "ui-infer-remote.log"
     log_path.parent.mkdir(parents=True, exist_ok=True)
-    log_fh = open(log_path, "ab", buffering=0)
-    log_fh.write(f"\n\n=== {time.strftime('%Y-%m-%d %H:%M:%S')} start ===\n".encode())
+    # Truncate on each run so the tail widget only shows THIS run's output.
+    log_fh = open(log_path, "wb", buffering=0)
+    header = (
+        f"=== {time.strftime('%Y-%m-%d %H:%M:%S')} inference start ===\n"
+        f"argv: {' '.join(argv)}\n"
+        f"policy={policy_path} server={server_address} "
+        f"device(server)={server_policy_device} device(client)={client_device}\n"
+        f"fps={fps} actions_per_chunk={actions_per_chunk} "
+        f"chunk_threshold={chunk_size_threshold} agg={aggregate_fn}\n"
+        f"--\n"
+    )
+    log_fh.write(header.encode())
 
-    return subprocess.Popen(
+    proc = subprocess.Popen(
         argv,
         env=env,
         stdout=log_fh,
         stderr=subprocess.STDOUT,
         start_new_session=True,  # so we can killpg on timeout
     )
+    return proc, log_path
+
+
+def _tail(path: Path, max_lines: int = 40, max_bytes: int = 16_384) -> str:
+    """Cheap tail: read the last ~max_bytes, split, keep the last N lines."""
+    try:
+        size = path.stat().st_size
+    except OSError:
+        return ""
+    with open(path, "rb") as fh:
+        if size > max_bytes:
+            fh.seek(size - max_bytes)
+            _ = fh.readline()  # drop the partial line at the seek point
+        chunk = fh.read().decode("utf-8", errors="replace")
+    lines = chunk.splitlines()
+    return "\n".join(lines[-max_lines:])
+
+
+def _wait_for_client_ready(
+    proc: subprocess.Popen,
+    log_path: Path,
+    timeout: float,
+):
+    """Poll the log until LeRobot says the client is connected.
+
+    Yields (status, log_tail) tuples while we wait so the UI stays live.
+    Returns True on ready, False on early exit or timeout. We watch for
+    "Robot connected and ready" (RobotClient) or "Connected to policy
+    server" (start handshake) - either is proof cam+arm+server are up.
+    """
+    ready_markers = (
+        "Robot connected and ready",
+        "Connected to policy server",
+    )
+    deadline = time.time() + timeout
+    last_status = ""
+    while time.time() < deadline:
+        rc = proc.poll()
+        if rc is not None:
+            yield (
+                f"client exited during startup (rc={rc}). "
+                f"see logs/ui-infer-remote.log",
+                _tail(log_path, max_lines=80, max_bytes=32_768),
+            )
+            return False
+        tail = _tail(log_path, max_lines=200, max_bytes=65_536)
+        if any(marker in tail for marker in ready_markers):
+            yield "client connected. starting countdown...", tail
+            return True
+        remaining = deadline - time.time()
+        status = f"waiting for client (cam + arm + server)... {remaining:4.1f}s"
+        if status != last_status:
+            yield status, tail
+            last_status = status
+        time.sleep(0.3)
+    yield (
+        f"client did not report ready within {timeout:.0f}s. "
+        f"continuing anyway - see log.",
+        _tail(log_path, max_lines=80, max_bytes=32_768),
+    )
+    return True  # give it the benefit of the doubt
 
 
 def run_inference(
@@ -237,25 +401,34 @@ def run_inference(
     server_policy_device: str,
     client_device: str,
 ):
-    """Long-running handler: yield status lines while inference runs.
+    """Long-running handler: yield (status, log_tail) tuples while inference runs.
 
-    Streams a countdown to Gradio so the user sees progress instead of a
-    frozen button. Releases the camera before spawning so LeRobot can open
-    it, and re-opens on exit.
+    Streams a countdown + tail of the client log to Gradio so the user can
+    debug live. Reserves the camera BEFORE spawning so the preview timer
+    can't race LeRobot for `/dev/video0`, waits for the client to actually
+    connect, then starts the N-second timer. After exit the arm is
+    returned to the recorded start pose with torque held.
     """
     global _inference_proc
 
     if _inference_proc is not None and _inference_proc.poll() is None:
-        yield "inference already running - stop it first."
+        yield "inference already running - stop it first.", ""
         return
 
     cfg = Config.load()
 
-    _close_capture()  # LeRobot needs exclusive access to the camera.
-    yield "starting remote inference client..."
+    # Reserve + release the camera BEFORE the spawn. The reservation gate
+    # in `_open_capture` / `_grab_frame` guarantees the timer can't slip in
+    # and reopen the device between us releasing and LeRobot connecting.
+    _camera_reserved.set()
+    _close_capture()
+    # Give the OS a beat to actually release the USB handle. macOS in
+    # particular is slow to drop a v4l/AVFoundation grab.
+    time.sleep(0.4)
+    yield "camera released. starting remote inference client...", ""
 
     try:
-        _inference_proc = _spawn_inference(
+        _inference_proc, log_path = _spawn_inference(
             cfg,
             seconds,
             fps,
@@ -268,56 +441,101 @@ def run_inference(
             client_device,
         )
     except Exception as exc:  # noqa: BLE001
-        yield f"failed to spawn subprocess: {exc}"
+        _camera_reserved.clear()
+        yield f"failed to spawn subprocess: {exc}", ""
         return
 
-    yield f"client started (pid={_inference_proc.pid}). running for {seconds:.1f}s..."
+    yield (
+        f"client spawned (pid={_inference_proc.pid}). waiting for connect...",
+        _tail(log_path),
+    )
+
+    # Block-yielding wait until we see the "ready" marker. Model download
+    # + camera warmup + gRPC handshake can take 15-30s on the first run,
+    # so we give it up to 90s before we start the countdown.
+    ready = yield from _wait_for_client_ready(_inference_proc, log_path, timeout=90.0)
+
+    if not ready or _inference_proc is None or _inference_proc.poll() is not None:
+        _inference_proc = None
+        _camera_reserved.clear()
+        return
 
     _inference_stop_event.clear()
     deadline = time.time() + seconds
     last_status = ""
+    early_exit = False
     while time.time() < deadline:
         rc = _inference_proc.poll()
         if rc is not None:
-            yield f"client exited early (rc={rc}). see logs/ui-infer-remote.log"
+            yield (
+                f"client exited early (rc={rc}). see logs/ui-infer-remote.log",
+                _tail(log_path, max_lines=80, max_bytes=32_768),
+            )
             _inference_proc = None
-            return
+            early_exit = True
+            break
         if _inference_stop_event.is_set():
-            yield "stop requested."
+            yield "stop requested.", _tail(log_path)
             break
         remaining = deadline - time.time()
         status = f"running... {remaining:4.1f}s remaining"
         if status != last_status:
-            yield status
+            yield status, _tail(log_path)
             last_status = status
         time.sleep(0.25)
 
-    yield "sending SIGINT to client..."
-    proc = _inference_proc
-    try:
-        os.killpg(os.getpgid(proc.pid), signal.SIGINT)
-    except ProcessLookupError:
-        pass
-    try:
-        proc.wait(timeout=10)
-    except subprocess.TimeoutExpired:
-        yield "did not exit on SIGINT; sending SIGTERM..."
+    if not early_exit and _inference_proc is not None:
+        yield "sending SIGINT to client...", _tail(log_path)
+        proc = _inference_proc
         try:
-            os.killpg(os.getpgid(proc.pid), signal.SIGTERM)
+            os.killpg(os.getpgid(proc.pid), signal.SIGINT)
         except ProcessLookupError:
             pass
         try:
-            proc.wait(timeout=5)
+            proc.wait(timeout=10)
         except subprocess.TimeoutExpired:
-            yield "did not exit on SIGTERM; sending SIGKILL."
+            yield "did not exit on SIGINT; sending SIGTERM...", _tail(log_path)
             try:
-                os.killpg(os.getpgid(proc.pid), signal.SIGKILL)
+                os.killpg(os.getpgid(proc.pid), signal.SIGTERM)
             except ProcessLookupError:
                 pass
-            proc.wait()
+            try:
+                proc.wait(timeout=5)
+            except subprocess.TimeoutExpired:
+                yield "did not exit on SIGTERM; sending SIGKILL.", _tail(log_path)
+                try:
+                    os.killpg(os.getpgid(proc.pid), signal.SIGKILL)
+                except ProcessLookupError:
+                    pass
+                proc.wait()
+        _inference_proc = None
+        yield (
+            f"inference done (rc={proc.returncode}). returning arm to start...",
+            _tail(log_path, max_lines=80, max_bytes=32_768),
+        )
 
-    _inference_proc = None
-    yield f"inference done (rc={proc.returncode}). see logs/ui-infer-remote.log for detail."
+    # Let the camera become grab-able again for the preview.
+    _camera_reserved.clear()
+
+    # Return arm to the recorded start pose and hold torque so it doesn't
+    # drop. If no start was recorded, skip the move.
+    if _start_position is not None:
+        try:
+            _write_positions(cfg, _start_position)
+            yield (
+                "inference done. arm returned to start and held (torque on).",
+                _tail(log_path, max_lines=80, max_bytes=32_768),
+            )
+        except Exception as exc:  # noqa: BLE001
+            yield (
+                f"inference done but return-to-start failed: {exc}",
+                _tail(log_path, max_lines=80, max_bytes=32_768),
+            )
+    else:
+        yield (
+            "inference done. no start position recorded - arm left where it landed.",
+            _tail(log_path, max_lines=80, max_bytes=32_768),
+        )
 
 
 def stop_inference() -> str:
@@ -340,6 +558,7 @@ def build_app() -> gr.Blocks:
             f"| camera: `{cfg.camera_type} idx={cfg.cam_index}`  "
             f"| server: `{cfg.server_address or '(unset)'}`"
         )
+        server_pill = gr.HTML(_server_status_html(cfg))
 
         with gr.Row():
             with gr.Column(scale=2):
@@ -354,6 +573,7 @@ def build_app() -> gr.Blocks:
                 with gr.Row():
                     btn_record = gr.Button("Record start position", variant="secondary")
                     btn_reset = gr.Button("Reset to start", variant="secondary")
+                    btn_release = gr.Button("Release arm (torque off)", variant="secondary")
 
                 start_pose_view = gr.Textbox(
                     label="recorded start position",
@@ -365,6 +585,14 @@ def build_app() -> gr.Blocks:
                 with gr.Row():
                     btn_infer = gr.Button("Run inference", variant="primary")
                     btn_stop = gr.Button("Stop inference", variant="stop")
+
+                log_view = gr.Textbox(
+                    label="inference log (tail)",
+                    value="",
+                    interactive=False,
+                    lines=18,
+                    max_lines=18,
+                )
 
             with gr.Column(scale=1):
                 gr.Markdown("### inference parameters")
@@ -405,8 +633,14 @@ def build_app() -> gr.Blocks:
         timer = gr.Timer(tick_interval)
         timer.tick(_tick, outputs=cam_view)
 
+        # Independent slower timer for the server pill - one TCP probe every
+        # 3s is cheap and avoids hammering the box.
+        server_timer = gr.Timer(3.0)
+        server_timer.tick(lambda: _server_status_html(cfg), outputs=server_pill)
+
         btn_record.click(record_start, outputs=[status, start_pose_view])
         btn_reset.click(reset_to_start, outputs=status)
+        btn_release.click(release_arm, outputs=status)
         btn_infer.click(
             run_inference,
             inputs=[
@@ -420,7 +654,7 @@ def build_app() -> gr.Blocks:
                 server_policy_device,
                 client_device,
             ],
-            outputs=status,
+            outputs=[status, log_view],
         )
         btn_stop.click(stop_inference, outputs=status)
 
@@ -429,6 +663,18 @@ def build_app() -> gr.Blocks:
 
 def launch(host: str = "127.0.0.1", port: int = 7861) -> None:
     """Entry point used by `so101 ui`."""
+    # Silence noisy Starlette deprecation spam from Gradio 6 / Starlette >0.35.
+    # It's fired on every request; hides real errors in the terminal.
+    warnings.filterwarnings(
+        "ignore",
+        message=r".*HTTP_422_UNPROCESSABLE_ENTITY.*",
+    )
+    try:
+        from starlette.exceptions import StarletteDeprecationWarning  # noqa: WPS433
+        warnings.filterwarnings("ignore", category=StarletteDeprecationWarning)
+    except Exception:  # noqa: BLE001 - starlette version may not expose this class
+        pass
+
     demo = build_app()
     demo.queue()  # required for generator handlers (run_inference streams)
     demo.launch(server_name=host, server_port=port, show_error=True)

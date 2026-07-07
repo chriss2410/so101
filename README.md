@@ -49,7 +49,7 @@ POLICY_PATH=./outputs/train/act_so101/checkpoints/last/pretrained_model \
 | `so101 setup-motors {follower,leader}` | `lerobot-setup-motors` | Flash motor ids + baudrate (one time) |
 | `so101 calibrate {follower,leader}` | `lerobot-calibrate` | Range-of-motion calibration |
 | `so101 teleoperate [--with-cam]` | `lerobot-teleoperate` | Live leader-follower mirroring |
-| `so101 record [--name N] [--no-upload] [--auto-name] [--prefix P]` | `lerobot-record` | Record LeRobot v3 dataset, optional Hub push. `--name` sets a one-off dataset name; `--auto-name` picks the next free `<prefix>-N` under HF_USER |
+| `so101 record [--name N] [--no-upload] [--auto-name] [--prefix P] [--timed]` | `lerobot-record` | Record LeRobot v3 dataset. Manual pacing is the default (keyboard-driven: Right=next, Left=redo, Escape=stop); pass `--timed` to use EPISODE_TIME_SEC / RESET_TIME_SEC / NUM_EPISODES from `.env`. `--name` sets a one-off dataset name; `--auto-name` picks the next free `<prefix>-N` under HF_USER. |
 | `so101 train` | `lerobot-train` | ACT policy training |
 | `so101 infer [--no-record]` | `lerobot-rollout --policy.pretrained_path=...` | Policy-driven rollouts (local inference) |
 | `so101 serve <start\|stop\|status\|logs\|restart>` | SSH + `serve.sh` on GPU box | Manage the remote policy server |

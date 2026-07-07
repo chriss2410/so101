@@ -87,6 +87,15 @@ class Config:
     wandb_project: str
     wandb_entity: str
 
+    # Remote inference (async client/server; see `so101 infer-remote`)
+    server_ssh_host: str      # ssh alias, e.g. "research-1xA10"
+    server_address: str       # "host:port", e.g. "52.59.241.221:7860"
+    server_policy_device: str # "cuda" | "mps" | "cpu" - device the SERVER uses
+    client_device: str        # "cpu" | "mps" - device the CLIENT uses for aggregation
+    actions_per_chunk: int
+    chunk_size_threshold: float
+    aggregate_fn: str         # "weighted_average" | "latest_only" | "average" | "conservative"
+
     project_root: Path = field(default_factory=_project_root)
 
     @classmethod
@@ -121,6 +130,13 @@ class Config:
             wandb_api_key=_env("WANDB_API_KEY", "").strip(),
             wandb_project=_env("WANDB_PROJECT", "so101").strip(),
             wandb_entity=_env("WANDB_ENTITY", "").strip(),
+            server_ssh_host=_env("SERVER_SSH_HOST", "research-1xA10").strip(),
+            server_address=_env("SERVER_ADDRESS", "").strip(),
+            server_policy_device=_env("SERVER_POLICY_DEVICE", "cuda").strip(),
+            client_device=_env("CLIENT_DEVICE", "cpu").strip(),
+            actions_per_chunk=_env_int("ACTIONS_PER_CHUNK", 20),
+            chunk_size_threshold=float(_env("CHUNK_SIZE_THRESHOLD", "0.5")),
+            aggregate_fn=_env("AGGREGATE_FN", "weighted_average").strip(),
         )
 
     @property

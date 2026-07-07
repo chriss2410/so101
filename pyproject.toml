@@ -14,7 +14,10 @@ dependencies = [
     #                    pyarrow, torchcodec, rerun-sdk, pynput, pyserial,
     #                    deepdiff.
     #   training       - wandb + accelerate, needed for lerobot-train.
-    "lerobot[feetech,intelrealsense,core-scripts,training]>=0.6.0",
+    #   async          - grpcio + matplotlib, needed for the async client
+    #                    (`so101 infer-remote`) which talks to a policy
+    #                    server running on a remote GPU.
+    "lerobot[feetech,intelrealsense,core-scripts,training,async]>=0.6.0",
     # CLI
     "typer>=0.12.0",
     "python-dotenv>=1.0.0",

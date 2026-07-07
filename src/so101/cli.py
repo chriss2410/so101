@@ -40,15 +40,28 @@ class CameraBackend(str, Enum):
     realsense = "realsense"
 
 
+class ServeAction(str, Enum):
+    start = "start"
+    stop = "stop"
+    restart = "restart"
+    status = "status"
+    logs = "logs"
+
+
 # --- helpers ----------------------------------------------------------------
 
 
-def _lerobot(binary: str, args: List[str]) -> None:
+def _lerobot(binary: str, args: List[str], on_exit=None) -> None:
     """Execute a `lerobot-*` binary with the given args, forwarding stdio.
 
-    We use `os.execvp` on POSIX so the child fully replaces us (Ctrl-C reaches
-    LeRobot directly, no double-signal handling). On Windows we fall back to
-    subprocess.
+    Default path uses `os.execvp` on POSIX so the child fully replaces us
+    (Ctrl-C reaches LeRobot directly, no double-signal handling). On Windows
+    we fall back to subprocess.
+
+    When `on_exit` is provided (zero-arg callable), we always spawn as a
+    subprocess (even on POSIX) so we can run the callback after LeRobot
+    exits. Ctrl-C is forwarded to the child via the shared terminal process
+    group.
     """
     resolved = shutil.which(binary)
     if resolved is None:
@@ -61,10 +74,12 @@ def _lerobot(binary: str, args: List[str]) -> None:
 
     argv = [binary, *args]
     typer.echo(f"[so101] exec: {' '.join(argv)}")
-    if os.name == "posix":
+    if on_exit is None and os.name == "posix":
         os.execvp(binary, argv)
     else:
         completed = subprocess.run(argv)
+        if on_exit is not None:
+            on_exit()
         raise typer.Exit(completed.returncode)
 
 
@@ -350,7 +365,46 @@ def record(
 
     typer.echo(f"[so101] recording {cfg.num_episodes} episodes -> {repo_id}")
     typer.echo(f"[so101] task: {cfg.task_description}")
-    _lerobot("lerobot-record", args)
+
+    def _print_links() -> None:
+        # LeRobot appends `_YYYYMMDD_HHMMSS` to the repo id whenever it
+        # detects a local-cache collision, so the actual uploaded name may
+        # differ from `dataset_name`. Look at the local cache for the newest
+        # dir matching `<dataset_name>` or `<dataset_name>_YYYYMMDD_HHMMSS`
+        # and prefer that name.
+        from so101.hf import _lerobot_cache_dir  # local import (avoid import-time cost)
+
+        actual_name = dataset_name
+        try:
+            user_cache = _lerobot_cache_dir() / cfg.hf_user
+            if user_cache.exists():
+                import re as _re
+
+                pat = _re.compile(
+                    rf"^{_re.escape(dataset_name)}(?:_\d{{8}}_\d{{6}})?$"
+                )
+                candidates = [
+                    p for p in user_cache.iterdir()
+                    if p.is_dir() and pat.match(p.name)
+                ]
+                if candidates:
+                    newest = max(candidates, key=lambda p: p.stat().st_mtime)
+                    actual_name = newest.name
+        except Exception:  # noqa: BLE001 - never let link-printing break exit
+            pass
+
+        actual_repo = f"{cfg.hf_user}/{actual_name}"
+        typer.echo("")
+        if upload:
+            typer.echo(f"[so101] Dataset:    https://huggingface.co/datasets/{actual_repo}")
+            typer.echo(
+                f"[so101] Visualizer: https://huggingface.co/spaces/lerobot/visualize_dataset"
+                f"?path={actual_repo}"
+            )
+        else:
+            typer.echo(f"[so101] Local dataset: {actual_repo} (upload disabled)")
+
+    _lerobot("lerobot-record", args, on_exit=_print_links)
 
 
 @app.command(
@@ -454,6 +508,115 @@ def infer(
     if record_eval:
         typer.echo(f"[so101] saving eval episodes -> {cfg.eval_repo_id}")
     _lerobot("lerobot-rollout", args)
+
+
+@app.command()
+def serve(
+    action: ServeAction = typer.Argument(
+        ServeAction.status,
+        help="Server action: start | stop | restart | status | logs",
+    ),
+    lines: int = typer.Option(
+        100, "--lines", "-n", help="Lines to show for `logs` (ignored otherwise)"
+    ),
+    follow: bool = typer.Option(
+        False, "--follow", "-f", help="Follow the log (for `logs`)"
+    ),
+) -> None:
+    """Control the remote policy server running on the GPU box.
+
+    Uses SSH to invoke `/opt/dlami/nvme/train-so101/serve.sh` on the box named
+    by SERVER_SSH_HOST. The remote script wraps LeRobot's
+    lerobot.async_inference.policy_server in a tmux session.
+    """
+    cfg = Config.load()
+    host = _require("SERVER_SSH_HOST", cfg.server_ssh_host)
+
+    remote = "/opt/dlami/nvme/train-so101/serve.sh"
+
+    if action is ServeAction.logs:
+        remote_cmd = f"{remote} logs {'-f' if follow else lines}"
+    else:
+        remote_cmd = f"{remote} {action.value}"
+
+    argv = ["ssh"]
+    if action is ServeAction.logs and follow:
+        argv += ["-t"]  # allocate a TTY so Ctrl-C reaches tail
+    argv += [host, remote_cmd]
+
+    typer.echo(f"[so101] {' '.join(argv)}")
+    if os.name == "posix":
+        os.execvp("ssh", argv)
+    else:
+        completed = subprocess.run(argv)
+        raise typer.Exit(completed.returncode)
+
+
+@app.command("infer-remote")
+def infer_remote(ctx: typer.Context) -> None:
+    """Drive the follower with a policy running on a remote GPU.
+
+    Uses LeRobot's async inference client/server split. The GPU server
+    (started via `so101 serve start`) loads the ACT policy on CUDA and
+    responds to observation streams over gRPC; this command runs the
+    client on the Mac, reading local camera + arm state and applying the
+    aggregated action chunks in real time.
+
+    Everything is read from .env - policy path, arm config, camera,
+    server address, chunking parameters.
+    """
+    cfg = Config.load()
+    _require("POLICY_PATH", cfg.policy_path)
+    _require("SERVER_ADDRESS", cfg.server_address)
+    follower_port = _require("FOLLOWER_PORT", cfg.follower_port)
+    _check_port_platform("FOLLOWER_PORT", follower_port)
+
+    argv = [
+        sys.executable,
+        "-m",
+        "lerobot.async_inference.robot_client",
+        # Robot config
+        "--robot.type=so101_follower",
+        f"--robot.port={follower_port}",
+        f"--robot.id={cfg.follower_id}",
+        # Task string - shown in logs, not used by ACT since it has no lang input
+        f"--task={cfg.task_description}",
+        # Server / policy
+        f"--server_address={cfg.server_address}",
+        "--policy_type=act",
+        f"--pretrained_name_or_path={cfg.policy_path}",
+        f"--policy_device={cfg.server_policy_device}",
+        f"--client_device={cfg.client_device}",
+        # Control chunking
+        f"--fps={cfg.cam_fps}",
+        f"--actions_per_chunk={cfg.actions_per_chunk}",
+        f"--chunk_size_threshold={cfg.chunk_size_threshold}",
+        f"--aggregate_fn_name={cfg.aggregate_fn}",
+    ]
+
+    cam = cfg.camera_flag()
+    if cam:
+        # camera_flag() returns "--robot.cameras=..." - the client uses the
+        # same schema as the record CLI, so we forward it verbatim.
+        argv.append(cam)
+
+    # Any extras the user passed on the command line
+    argv.extend(ctx.args)
+
+    typer.echo(
+        f"[so101] remote inference"
+        f"\n  policy:  {cfg.policy_path}"
+        f"\n  server:  {cfg.server_address}  (policy on {cfg.server_policy_device})"
+        f"\n  client:  {cfg.client_device}   fps: {cfg.cam_fps}"
+        f"\n  chunk:   {cfg.actions_per_chunk} actions, refill @ {cfg.chunk_size_threshold} full"
+    )
+
+    typer.echo(f"[so101] exec: {' '.join(argv)}")
+    if os.name == "posix":
+        os.execvp(argv[0], argv)
+    else:
+        completed = subprocess.run(argv)
+        raise typer.Exit(completed.returncode)
 
 
 if __name__ == "__main__":

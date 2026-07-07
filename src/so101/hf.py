@@ -59,7 +59,12 @@ def next_dataset_name(
     """
     from huggingface_hub import HfApi
 
-    exact_pattern = re.compile(rf"^{re.escape(prefix)}-(\d+)$")
+    # Match `<prefix>-<N>` exactly OR `<prefix>-<N>_YYYYMMDD_HHMMSS`
+    # (LeRobot appends the latter on cache collisions). Either way, slot
+    # N is considered taken so we skip it.
+    slot_pattern = re.compile(
+        rf"^{re.escape(prefix)}-(\d+)(?:_\d{{8}}_\d{{6}})?$"
+    )
 
     # 1) HF Hub side
     api = HfApi(token=token)
@@ -78,7 +83,7 @@ def next_dataset_name(
     for ds in datasets:
         if not ds.id.startswith(full_prefix):
             continue
-        m = exact_pattern.match(ds.id[len(full_prefix):])
+        m = slot_pattern.match(ds.id[len(full_prefix):])
         if m:
             taken.add(int(m.group(1)))
 
@@ -88,7 +93,7 @@ def next_dataset_name(
         for entry in cache_dir.iterdir():
             if not entry.is_dir():
                 continue
-            m = exact_pattern.match(entry.name)
+            m = slot_pattern.match(entry.name)
             if m:
                 taken.add(int(m.group(1)))
 

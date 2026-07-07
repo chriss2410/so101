@@ -51,7 +51,9 @@ POLICY_PATH=./outputs/train/act_so101/checkpoints/last/pretrained_model \
 | `so101 teleoperate [--with-cam]` | `lerobot-teleoperate` | Live leader-follower mirroring |
 | `so101 record [--no-upload] [--auto-name] [--prefix P]` | `lerobot-record` | Record LeRobot v3 dataset, optional Hub push. `--auto-name` picks the next free `<prefix>-N` under HF_USER |
 | `so101 train` | `lerobot-train` | ACT policy training |
-| `so101 infer [--no-record]` | `lerobot-rollout --policy.pretrained_path=...` | Policy-driven rollouts |
+| `so101 infer [--no-record]` | `lerobot-rollout --policy.pretrained_path=...` | Policy-driven rollouts (local inference) |
+| `so101 serve <start\|stop\|status\|logs\|restart>` | SSH + `serve.sh` on GPU box | Manage the remote policy server |
+| `so101 infer-remote` | `python -m lerobot.async_inference.robot_client` | Client-side of split inference. Talks to a policy server running on a remote GPU via gRPC. |
 
 ## Recording datasets
 
@@ -79,6 +81,44 @@ Auto-naming queries the Hub live rather than counting locally, so recording sess
 ```
 uv run so101 record --no-upload
 ```
+
+## Remote inference (policy on AWS GPU, arm on Mac)
+
+`so101 infer` runs everything locally (policy + camera + arm) — great for latency but caps out at Mac CPU/MPS throughput. For heavy models or long chunk horizons where you want a beefier GPU running the policy, use LeRobot's async inference client/server split:
+
+- **Policy server** runs on the GPU box, downloads the model from HF, listens on a TCP port for gRPC.
+- **Robot client** runs on your Mac, reads camera + follower state, sends observations to the server, receives action chunks, applies them.
+- Chunking amortizes network latency: the client always has actions to execute while waiting for the next chunk.
+
+### One-time server setup
+
+The GPU box needs `lerobot[async]` installed and a control script. This is baked into the training-time bootstrap: after `so101 train` succeeds, the venv on `/opt/dlami/nvme/venvs/act-so101` already has the deps. The control script lives at `/opt/dlami/nvme/train-so101/serve.sh`. See [scripts/setup-remote-server.sh](scripts/setup-remote-server.sh) to (re-)install both.
+
+### `.env` fields (set once)
+
+```
+SERVER_SSH_HOST=research-1xA10
+SERVER_ADDRESS=52.59.241.221:7860       # host:port; 7860 is SG-allowed via SAP VPN
+SERVER_POLICY_DEVICE=cuda
+CLIENT_DEVICE=cpu
+ACTIONS_PER_CHUNK=20
+CHUNK_SIZE_THRESHOLD=0.5
+AGGREGATE_FN=weighted_average
+```
+
+`POLICY_PATH` (already used by `so101 infer`) is what the client tells the server to load.
+
+### Operating
+
+```bash
+uv run so101 serve start       # SSH in, launch policy server in tmux
+uv run so101 serve status      # check it's running + which port
+uv run so101 serve logs -f     # follow server logs (Ctrl-C to detach)
+uv run so101 infer-remote      # run the client on the Mac (arm plugged in)
+uv run so101 serve stop        # shut server down
+```
+
+The first `infer-remote` invocation triggers a model download on the server (~10-20s). Subsequent ones are near-instant since the model stays resident on the GPU.
 
 ## Layout
 

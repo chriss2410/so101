@@ -320,12 +320,12 @@ def record(
         help="Prefix for --auto-name (default: 'd-com' -> 'd-com-0', 'd-com-1', ...).",
     ),
     manual: bool = typer.Option(
-        False,
-        "--manual",
-        help="Fully manual pacing: no per-episode timer, no reset countdown. "
-             "You control every transition with the keyboard "
-             "(Right = next/end episode, Left = redo, Escape = stop). "
-             "Overrides EPISODE_TIME_SEC / RESET_TIME_SEC / NUM_EPISODES.",
+        True,
+        "--manual/--timed",
+        help="Manual pacing (default): keyboard-driven transitions, no "
+             "per-episode timer, no reset countdown. Right=end/next, "
+             "Left=redo, Escape=stop. Pass `--timed` to fall back to "
+             "EPISODE_TIME_SEC / RESET_TIME_SEC / NUM_EPISODES from .env.",
     ),
 ) -> None:
     """Record a LeRobot v3 dataset by teleoperating the follower."""

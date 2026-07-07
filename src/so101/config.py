@@ -83,6 +83,10 @@ class Config:
     policy_path: str
     device: str
 
+    wandb_api_key: str
+    wandb_project: str
+    wandb_entity: str
+
     project_root: Path = field(default_factory=_project_root)
 
     @classmethod
@@ -114,6 +118,9 @@ class Config:
             reset_time_sec=_env_int("RESET_TIME_SEC", 10),
             policy_path=_env("POLICY_PATH", ""),
             device=_env("DEVICE", "cpu"),
+            wandb_api_key=_env("WANDB_API_KEY", "").strip(),
+            wandb_project=_env("WANDB_PROJECT", "so101").strip(),
+            wandb_entity=_env("WANDB_ENTITY", "").strip(),
         )
 
     @property

@@ -51,7 +51,7 @@ POLICY_PATH=./outputs/train/act_so101/checkpoints/last/pretrained_model \
 | `so101 teleoperate [--with-cam]` | `lerobot-teleoperate` | Live leader-follower mirroring |
 | `so101 record [--no-upload] [--auto-name] [--prefix P]` | `lerobot-record` | Record LeRobot v3 dataset, optional Hub push. `--auto-name` picks the next free `<prefix>-N` under HF_USER |
 | `so101 train` | `lerobot-train` | ACT policy training |
-| `so101 infer [--no-record]` | `lerobot-record --policy.path=...` | Policy-driven rollouts |
+| `so101 infer [--no-record]` | `lerobot-rollout --policy.pretrained_path=...` | Policy-driven rollouts |
 
 ## Recording datasets
 

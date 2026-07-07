@@ -353,7 +353,9 @@ def record(
     _lerobot("lerobot-record", args)
 
 
-@app.command()
+@app.command(
+    context_settings={"allow_extra_args": True, "ignore_unknown_options": True},
+)
 def train(ctx: typer.Context) -> None:
     """Train an ACT policy on the recorded dataset."""
     cfg = Config.load()
@@ -368,10 +370,24 @@ def train(ctx: typer.Context) -> None:
         f"--output_dir={output_dir}",
         f"--job_name={job_name}",
     ]
+    if cfg.wandb_api_key:
+        # lerobot-train reads WANDB_API_KEY from env for login.
+        os.environ.setdefault("WANDB_API_KEY", cfg.wandb_api_key)
+        args += [
+            "--wandb.enable=true",
+            f"--wandb.project={cfg.wandb_project}",
+        ]
+        if cfg.wandb_entity:
+            args.append(f"--wandb.entity={cfg.wandb_entity}")
     args.extend(ctx.args)
 
     typer.echo(f"[so101] training ACT on {cfg.repo_id}")
     typer.echo(f"[so101] device: {cfg.device}   output: {output_dir}")
+    if cfg.wandb_api_key:
+        entity = cfg.wandb_entity or "(default entity)"
+        typer.echo(f"[so101] wandb: on   project: {cfg.wandb_project}   entity: {entity}")
+    else:
+        typer.echo("[so101] wandb: off (WANDB_API_KEY not set)")
     _lerobot("lerobot-train", args)
 
 
@@ -384,7 +400,13 @@ def infer(
         help="Save each rollout as an eval_<dataset> episode.",
     ),
 ) -> None:
-    """Drive the follower with a trained policy (wraps `lerobot-record`)."""
+    """Drive the follower with a trained policy (wraps `lerobot-rollout`).
+
+    LeRobot 0.6 split policy deployment out of `lerobot-record` into a
+    dedicated `lerobot-rollout` command. This subcommand wraps it, reading
+    POLICY_PATH from .env and using the same camera + arm config as
+    `so101 record`.
+    """
     cfg = Config.load()
     _require("POLICY_PATH", cfg.policy_path)
     follower_port = _require("FOLLOWER_PORT", cfg.follower_port)
@@ -395,7 +417,9 @@ def infer(
         f"--robot.port={follower_port}",
         f"--robot.id={cfg.follower_id}",
         "--display_data=true",
-        f"--policy.path={cfg.policy_path}",
+        f"--policy.pretrained_path={cfg.policy_path}",
+        f"--policy.device={cfg.device}",
+        f"--fps={cfg.cam_fps}",
     ]
     cam = cfg.camera_flag()
     if cam:
@@ -426,9 +450,10 @@ def infer(
     args.extend(ctx.args)
 
     typer.echo(f"[so101] inference with policy: {cfg.policy_path}")
+    typer.echo(f"[so101] device: {cfg.device}   fps: {cfg.cam_fps}")
     if record_eval:
         typer.echo(f"[so101] saving eval episodes -> {cfg.eval_repo_id}")
-    _lerobot("lerobot-record", args)
+    _lerobot("lerobot-rollout", args)
 
 
 if __name__ == "__main__":

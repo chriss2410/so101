@@ -5,15 +5,19 @@ description = "Teleop, record and run inference on the SO-101 arm using LeRobot"
 readme = "README.md"
 requires-python = ">=3.12,<3.13"
 dependencies = [
-    # LeRobot core + Feetech SDK (STS3215 motors on SO-101)
-    # `intelrealsense` extra pulls pyrealsense2 (Linux/Windows) or
-    # pyrealsense2-macosx (macOS) for D405/D415/D435 support.
-    "lerobot[feetech,intelrealsense]>=0.6.0",
+    # LeRobot core + all optional dependencies the CLI scripts need:
+    #   feetech        - STS3215 motors on SO-101
+    #   intelrealsense - pyrealsense2 (Linux/Windows) / pyrealsense2-macosx
+    #   core-scripts   - meta-extra pulling `dataset` + `hardware` + `viz`;
+    #                    required for lerobot-record / lerobot-teleoperate /
+    #                    lerobot-calibrate. Pulls in HuggingFace `datasets`,
+    #                    pyarrow, torchcodec, rerun-sdk, pynput, pyserial,
+    #                    deepdiff.
+    #   training       - wandb + accelerate, needed for lerobot-train.
+    "lerobot[feetech,intelrealsense,core-scripts,training]>=0.6.0",
     # CLI
     "typer>=0.12.0",
     "python-dotenv>=1.0.0",
-    # Rerun viewer used by --display_data=true
-    "rerun-sdk>=0.20.0",
 ]
 
 [project.optional-dependencies]

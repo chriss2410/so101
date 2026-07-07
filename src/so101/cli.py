@@ -371,16 +371,22 @@ def record(
     # LeRobot's `lerobot-record` always applies both the per-episode timer
     # (`episode_time_s`) and the between-episode reset countdown
     # (`reset_time_s`) - there is no flag to disable them. In --manual mode
-    # we pass values so large they can never fire, and cap num_episodes at
-    # something practical (still bounded so the process eventually exits if
-    # the user forgets to press Escape).
+    # we pass values so large they can never fire in practice, so the only
+    # things that end a phase are the keyboard events (Right = advance,
+    # Left = redo, Escape = stop). num_episodes is bumped to a safety cap
+    # so the process still terminates on its own if the user forgets.
+    #
+    # reset_time_s=0 is deliberately WRONG - it would end the reset window
+    # immediately after each episode and jump straight to recording again,
+    # leaving no time to reposition objects.
     if manual:
         episode_time_s = 24 * 3600  # 1 day
-        reset_time_s = 0            # no forced reset countdown
+        reset_time_s = 24 * 3600    # 1 day
         num_episodes = max(cfg.num_episodes, 500)
         typer.echo(
             "[so101] --manual: keyboard-driven. "
-            "Right=next episode, Left=redo, Escape=stop."
+            "Right=advance (during recording: end episode; during reset: start next), "
+            "Left=redo current episode, Escape=stop."
         )
     else:
         episode_time_s = cfg.episode_time_sec

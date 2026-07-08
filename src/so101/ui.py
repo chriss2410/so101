@@ -394,6 +394,47 @@ def _tail(path: Path, max_lines: int = 40, max_bytes: int = 16_384) -> str:
     return "\n".join(lines[-max_lines:])
 
 
+# --- Countdown banner ------------------------------------------------------
+
+# HTML fragment used for the big red "inference running" banner shown during
+# the N-second window. Gradient goes darker red as the timer drains so it's
+# obvious at a glance the arm is still active. Empty string = banner hidden.
+
+
+def _countdown_banner(remaining: float, total: float) -> str:
+    """Render the 'inference running' banner. `remaining` and `total` in seconds.
+
+    Passing remaining <= 0 renders "TIME UP" (yellow); useful for the
+    moment between the timer expiring and SIGINT actually completing.
+    """
+    pct = max(0.0, min(1.0, remaining / total)) if total > 0 else 0.0
+    # Bar fill: green at the start, red near the end. HSL hue 120→0.
+    hue = int(pct * 120)
+    fill_pct = int(pct * 100)
+    if remaining <= 0:
+        label = "TIME UP - stopping..."
+        bg = "#f59e0b"  # amber
+    else:
+        label = f"INFERENCE RUNNING - {remaining:.1f}s remaining"
+        bg = "#dc2626"  # red
+    return (
+        f'<div style="width:100%;padding:18px 20px;border-radius:8px;'
+        f'background:{bg};color:white;font-weight:800;font-size:22px;'
+        f'letter-spacing:0.5px;font-family:system-ui,sans-serif;'
+        f'box-shadow:0 4px 12px rgba(220,38,38,0.35);'
+        f'text-align:center;margin:8px 0;">'
+        f'{label}'
+        f'<div style="height:8px;width:100%;background:rgba(255,255,255,0.25);'
+        f'border-radius:4px;margin-top:10px;overflow:hidden;">'
+        f'<div style="height:100%;width:{fill_pct}%;'
+        f'background:hsl({hue},80%,55%);transition:width 0.25s linear;">'
+        f'</div></div></div>'
+    )
+
+
+_BANNER_EMPTY = ""  # hidden state: no HTML at all so it collapses to nothing.
+
+
 def _wait_for_client_ready(
     proc: subprocess.Popen,
     log_path: Path,
@@ -401,10 +442,12 @@ def _wait_for_client_ready(
 ):
     """Poll the log until LeRobot says the client is connected.
 
-    Yields (status, log_tail) tuples while we wait so the UI stays live.
-    Returns True on ready, False on early exit or timeout. We watch for
-    "Robot connected and ready" (RobotClient) or "Connected to policy
-    server" (start handshake) - either is proof cam+arm+server are up.
+    Yields (status, log_tail, banner_html) tuples while we wait so the UI
+    stays live. Returns True on ready, False on early exit or timeout. We
+    watch for "Robot connected and ready" (RobotClient) or "Connected to
+    policy server" (start handshake) - either is proof cam+arm+server are
+    up. Banner is always empty during the wait phase - it only lights up
+    once the N-second countdown actually starts.
     """
     ready_markers = (
         "Robot connected and ready",
@@ -419,22 +462,24 @@ def _wait_for_client_ready(
                 f"client exited during startup (rc={rc}). "
                 f"see logs/ui-infer-remote.log",
                 _tail(log_path, max_lines=80, max_bytes=32_768),
+                _BANNER_EMPTY,
             )
             return False
         tail = _tail(log_path, max_lines=200, max_bytes=65_536)
         if any(marker in tail for marker in ready_markers):
-            yield "client connected. starting countdown...", tail
+            yield "client connected. starting countdown...", tail, _BANNER_EMPTY
             return True
         remaining = deadline - time.time()
         status = f"waiting for client (cam + arm + server)... {remaining:4.1f}s"
         if status != last_status:
-            yield status, tail
+            yield status, tail, _BANNER_EMPTY
             last_status = status
         time.sleep(0.3)
     yield (
         f"client did not report ready within {timeout:.0f}s. "
         f"continuing anyway - see log.",
         _tail(log_path, max_lines=80, max_bytes=32_768),
+        _BANNER_EMPTY,
     )
     return True  # give it the benefit of the doubt
 
@@ -450,18 +495,19 @@ def run_inference(
     server_policy_device: str,
     client_device: str,
 ):
-    """Long-running handler: yield (status, log_tail) tuples while inference runs.
+    """Long-running handler: yield (status, log_tail, banner_html) tuples.
 
-    Streams a countdown + tail of the client log to Gradio so the user can
-    debug live. Reserves the camera BEFORE spawning so the preview timer
-    can't race LeRobot for `/dev/video0`, waits for the client to actually
-    connect, then starts the N-second timer. After exit the arm is
-    returned to the recorded start pose with torque held.
+    Streams a countdown + tail of the client log + a big red banner to
+    Gradio so the user can see the timer at a glance. Reserves the camera
+    BEFORE spawning so the preview timer can't race LeRobot for
+    `/dev/video0`, waits for the client to actually connect, then starts
+    the N-second timer. After exit the arm is returned to the recorded
+    start pose with torque held.
     """
     global _inference_proc
 
     if _inference_proc is not None and _inference_proc.poll() is None:
-        yield "inference already running - stop it first.", ""
+        yield "inference already running - stop it first.", "", _BANNER_EMPTY
         return
 
     cfg = Config.load()
@@ -474,7 +520,7 @@ def run_inference(
     # Give the OS a beat to actually release the USB handle. macOS in
     # particular is slow to drop a v4l/AVFoundation grab.
     time.sleep(0.4)
-    yield "camera released. starting remote inference client...", ""
+    yield "camera released. starting remote inference client...", "", _BANNER_EMPTY
 
     try:
         _inference_proc, log_path = _spawn_inference(
@@ -491,12 +537,13 @@ def run_inference(
         )
     except Exception as exc:  # noqa: BLE001
         _camera_reserved.clear()
-        yield f"failed to spawn subprocess: {exc}", ""
+        yield f"failed to spawn subprocess: {exc}", "", _BANNER_EMPTY
         return
 
     yield (
         f"client spawned (pid={_inference_proc.pid}). waiting for connect...",
         _tail(log_path),
+        _BANNER_EMPTY,
     )
 
     # Block-yielding wait until we see the "ready" marker. Model download
@@ -519,39 +566,60 @@ def run_inference(
             yield (
                 f"client exited early (rc={rc}). see logs/ui-infer-remote.log",
                 _tail(log_path, max_lines=80, max_bytes=32_768),
+                _BANNER_EMPTY,
             )
             _inference_proc = None
             early_exit = True
             break
         if _inference_stop_event.is_set():
-            yield "stop requested.", _tail(log_path)
+            yield "stop requested.", _tail(log_path), _BANNER_EMPTY
             break
         remaining = deadline - time.time()
         status = f"running... {remaining:4.1f}s remaining"
+        # Refresh the banner every tick (log tail only when status changes,
+        # to keep log_view stable). The banner is what the user cares about.
+        banner = _countdown_banner(remaining, seconds)
         if status != last_status:
-            yield status, _tail(log_path)
+            yield status, _tail(log_path), banner
             last_status = status
+        else:
+            # Same status text, but banner needs the new remaining time.
+            # Skip re-reading the log to keep it cheap.
+            yield status, gr.update(), banner
         time.sleep(0.25)
 
     if not early_exit and _inference_proc is not None:
-        yield "sending SIGINT to client...", _tail(log_path)
+        # "TIME UP" banner during teardown so the user knows why the arm
+        # keeps moving for a second - LeRobot is still consuming the last
+        # action chunk before responding to SIGINT.
+        teardown_banner = _countdown_banner(0.0, seconds)
+        yield "sending SIGINT to client...", _tail(log_path), teardown_banner
         proc = _inference_proc
         _signal_process_tree(proc, "int")
         try:
             proc.wait(timeout=10)
         except subprocess.TimeoutExpired:
-            yield "did not exit on SIGINT; sending SIGTERM...", _tail(log_path)
+            yield (
+                "did not exit on SIGINT; sending SIGTERM...",
+                _tail(log_path),
+                teardown_banner,
+            )
             _signal_process_tree(proc, "term")
             try:
                 proc.wait(timeout=5)
             except subprocess.TimeoutExpired:
-                yield "did not exit on SIGTERM; sending SIGKILL.", _tail(log_path)
+                yield (
+                    "did not exit on SIGTERM; sending SIGKILL.",
+                    _tail(log_path),
+                    teardown_banner,
+                )
                 _signal_process_tree(proc, "kill")
                 proc.wait()
         _inference_proc = None
         yield (
             f"inference done (rc={proc.returncode}). returning arm to start...",
             _tail(log_path, max_lines=80, max_bytes=32_768),
+            _BANNER_EMPTY,
         )
 
     # Let the camera become grab-able again for the preview.
@@ -565,16 +633,19 @@ def run_inference(
             yield (
                 "inference done. arm returned to start and held (torque on).",
                 _tail(log_path, max_lines=80, max_bytes=32_768),
+                _BANNER_EMPTY,
             )
         except Exception as exc:  # noqa: BLE001
             yield (
                 f"inference done but return-to-start failed: {exc}",
                 _tail(log_path, max_lines=80, max_bytes=32_768),
+                _BANNER_EMPTY,
             )
     else:
         yield (
             "inference done. no start position recorded - arm left where it landed.",
             _tail(log_path, max_lines=80, max_bytes=32_768),
+            _BANNER_EMPTY,
         )
 
 
@@ -626,6 +697,10 @@ def build_app() -> gr.Blocks:
                     btn_infer = gr.Button("Run inference", variant="primary")
                     btn_stop = gr.Button("Stop inference", variant="stop")
 
+                # Big red countdown bar. Empty HTML = collapsed, so it
+                # takes zero space while idle and only appears mid-run.
+                countdown_bar = gr.HTML(_BANNER_EMPTY)
+
                 log_view = gr.Textbox(
                     label="inference log (tail)",
                     value="",
@@ -636,7 +711,7 @@ def build_app() -> gr.Blocks:
 
             with gr.Column(scale=1):
                 gr.Markdown("### inference parameters")
-                seconds = gr.Number(label="seconds", value=30.0, precision=1)
+                seconds = gr.Number(label="seconds", value=20.0, precision=1)
                 fps = gr.Number(label="control fps", value=cfg.cam_fps, precision=0)
                 actions_per_chunk = gr.Number(
                     label="actions per chunk", value=cfg.actions_per_chunk, precision=0
@@ -694,7 +769,7 @@ def build_app() -> gr.Blocks:
                 server_policy_device,
                 client_device,
             ],
-            outputs=[status, log_view],
+            outputs=[status, log_view, countdown_bar],
         )
         btn_stop.click(stop_inference, outputs=status)
 

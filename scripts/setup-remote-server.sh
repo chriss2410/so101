@@ -62,6 +62,9 @@ PYPROJ
 echo "[remote] uv sync (may take a minute if venv is missing)"
 uv sync --quiet
 
+# Put the venv's python on PATH so the sanity check + downstream tools resolve.
+export PATH="$UV_PROJECT_ENVIRONMENT/bin:$PATH"
+
 python -c "from lerobot.async_inference import policy_server; print('[remote] policy_server imports OK')"
 
 # ---- serve.sh: idempotent start/stop/status ----
@@ -89,7 +92,7 @@ case "${1:-status}" in
     tmux new-session -d -s "$SESSION" "\
       cd /opt/dlami/nvme/train-so101 && \
       source $ENVFILE && \
-      export PATH='$UV_BIN:$VENV/bin:\$PATH' && \
+      export PATH="$UV_BIN:$VENV/bin:\$PATH" && \
       export HF_HOME=/opt/dlami/nvme/hf-cache && \
       [[ -f /opt/dlami/nvme/train-so101/hf_token ]] && export HF_TOKEN=\$(cat /opt/dlami/nvme/train-so101/hf_token); \
       python -m lerobot.async_inference.policy_server \
